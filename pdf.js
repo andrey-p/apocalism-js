@@ -3,7 +3,7 @@
 
 var phantom = require("node-phantom");
 
-exports.generate = function (markup, path, callback) {
+exports.generateFromHtml = function (markup, path, callback) {
   var ph,
     page;
 

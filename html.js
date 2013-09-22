@@ -3,7 +3,7 @@
 
 var pandoc = require("pdc");
 
-exports.generate = function (markdown, callback) {
+exports.generateFromMarkdown = function (markdown, callback) {
   pandoc(markdown, "markdown", "html", function (err, result) {
     if (err) {
       callback(err);

@@ -36,7 +36,7 @@ function compilePdf(file) {
       fail(err);
     }
 
-    pdf.generate(htmlMarkup, program.output, generatedPdf);
+    pdf.generateFromHtml(htmlMarkup, program.output, generatedPdf);
   }
 
   function readFile(err, markdown) {
@@ -44,7 +44,7 @@ function compilePdf(file) {
       fail(err);
     }
 
-    html.generate(markdown, generatedHtml);
+    html.generateFromMarkdown(markdown, generatedHtml);
   }
 
   fs.readFile(file, readFile);
