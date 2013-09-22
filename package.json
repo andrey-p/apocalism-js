@@ -5,6 +5,7 @@
     "typogr": "*",
     "hypher": "*",
     "pdc": "*",
-    "commander": "*"
+    "commander": "*",
+    "node-sass": "*"
   }
 }
