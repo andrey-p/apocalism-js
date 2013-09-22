@@ -7,20 +7,35 @@ exports.generateFromHtml = function (markup, path, callback) {
   var ph,
     page;
 
+  function killPhantom(callback) {
+    ph.exit(function () {
+      ph._phantom.kill("SIGTERM", function () {
+        callback();
+      });
+    });
+  }
+
+  function pageRendered(err) {
+    killPhantom(function () {
+      callback(err);
+    });
+  }
+
   function setContent(err) {
     if (err) {
-      callback(err);
-    } else {
-      page.render(path, callback);
+      killPhantom(function () {
+        callback(err);
+      });
+      return;
     }
-
-    ph.exit();
+    page.render(path, pageRendered);
   }
 
   function setPaperSize(err) {
     if (err) {
-      ph.exit();
-      callback(err);
+      killPhantom(function () {
+        callback(err);
+      });
       return;
     }
 
@@ -29,8 +44,9 @@ exports.generateFromHtml = function (markup, path, callback) {
 
   function createdPage(err, phantomPage) {
     if (err) {
-      ph.exit();
-      callback(err);
+      killPhantom(function () {
+        callback(err);
+      });
       return;
     }
 
@@ -40,7 +56,6 @@ exports.generateFromHtml = function (markup, path, callback) {
 
   function createdPhantom(err, phantomInstance) {
     if (err) {
-      ph.exit();
       callback(err);
       return;
     }
