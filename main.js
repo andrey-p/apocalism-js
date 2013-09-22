@@ -5,15 +5,16 @@
 var program = require("commander"),
   pdf = require("./pdf.js"),
   html = require("./html.js"),
+  util = require("util"),
   fs = require("fs");
 
 function fail(msg) {
-  console.log(msg);
+  util.error(msg);
   process.exit(1);
 }
 
 function success(msg) {
-  console.log(msg);
+  util.puts(msg);
   process.exit();
 }
 
