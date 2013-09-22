@@ -1,0 +1,10 @@
+{
+  "name": "apocalism-js",
+  "dependencies": {
+    "node-phantom": "*",
+    "typogr": "*",
+    "hypher": "*",
+    "pandoc": "*",
+    "commander": "*"
+  }
+}
