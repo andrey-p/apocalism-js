@@ -9,7 +9,8 @@ exports.generateFromMarkdown = function (markdown, callback) {
   var htmlMarkup;
 
   function convertedSassToCss(err, result) {
-    var styleTag;
+    var styleTag,
+      allMarkup;
     if (err) {
       callback(err);
       return;
@@ -17,7 +18,14 @@ exports.generateFromMarkdown = function (markdown, callback) {
 
     styleTag = "<style type='text/css'>" + result + "</style>";
 
-    callback(null, styleTag + htmlMarkup);
+    allMarkup = "<head>";
+    allMarkup += styleTag;
+    allMarkup += "</head>";
+    allMarkup += "<body>";
+    allMarkup += htmlMarkup;
+    allMarkup += "</body>";
+
+    callback(null, allMarkup);
   }
 
   function convertedMarkdownToHtml(err, result) {

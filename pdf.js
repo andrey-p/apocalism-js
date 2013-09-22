@@ -51,7 +51,7 @@ exports.generateFromHtml = function (markup, path, callback) {
     }
 
     page = phantomPage;
-    page.set("paperSize", { format: 'A4', orientation: 'portrait', border: '1cm' }, setPaperSize);
+    page.set("paperSize", { format: 'A5', orientation: 'portrait', border: "1cm" }, setPaperSize);
   }
 
   function createdPhantom(err, phantomInstance) {
