@@ -1,4 +1,4 @@
-/*jslint indent: 2, node: true*/
+/*jslint indent: 2, nomen:true, node: true*/
 "use strict";
 
 var phantom = require("node-phantom");
