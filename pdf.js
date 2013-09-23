@@ -9,9 +9,8 @@ exports.generateFromHtml = function (markup, path, callback) {
 
   function killPhantom(callback) {
     ph.exit(function () {
-      ph._phantom.kill("SIGTERM", function () {
-        callback();
-      });
+      ph._phantom.kill("SIGTERM");
+      callback();
     });
   }
 
