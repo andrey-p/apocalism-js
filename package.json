@@ -7,5 +7,10 @@
     "pdc": "*",
     "commander": "*",
     "node-sass": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "w3c-validate": "*"
   }
 }
