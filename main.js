@@ -47,7 +47,7 @@ function compilePdf(file) {
     html.generateFromMarkdown(markdown, generatedHtml);
   }
 
-  fs.readFile(file, readFile);
+  fs.readFile(file, { encoding: "utf-8" }, readFile);
 }
 
 program

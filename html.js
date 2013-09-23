@@ -6,7 +6,8 @@ var pandoc = require("pdc"),
   sass = require("node-sass");
 
 exports.generateFromMarkdown = function (markdown, callback) {
-  var htmlMarkup;
+  var headMarkup,
+    bodyMarkup;
 
   function convertedSassToCss(err, result) {
     var styleTag,
@@ -19,22 +20,23 @@ exports.generateFromMarkdown = function (markdown, callback) {
     styleTag = "<style type='text/css'>" + result + "</style>";
 
     allMarkup = "<head>";
+    allMarkup += headMarkup;
     allMarkup += styleTag;
     allMarkup += "</head>";
     allMarkup += "<body>";
-    allMarkup += htmlMarkup;
+    allMarkup += bodyMarkup;
     allMarkup += "</body>";
 
     callback(null, allMarkup);
   }
 
-  function convertedMarkdownToHtml(err, result) {
+  function gotHeadMarkup(err, result) {
     if (err) {
       callback(err);
       return;
     }
 
-    htmlMarkup = result;
+    headMarkup = result;
 
     sass.render({
       file: "./template/style.scss",
@@ -45,7 +47,17 @@ exports.generateFromMarkdown = function (markdown, callback) {
         convertedSassToCss(err);
       }
     });
-    callback(null, result);
+  }
+
+  function convertedMarkdownToHtml(err, result) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    bodyMarkup = result;
+
+    fs.readFile("./template/head.html", { encoding: "utf-8" }, gotHeadMarkup);
   }
   pandoc(markdown, "markdown", "html", convertedMarkdownToHtml);
 };
