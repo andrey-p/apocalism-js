@@ -3,7 +3,57 @@
 
 var pandoc = require("pdc"),
   fs = require("fs"),
-  sass = require("node-sass");
+  sass = require("node-sass"),
+  stock = require("./dimensions.js").stock,
+  margin = require("./dimensions.js").margin;
+
+function getNewEmptyPageMarkup(args) {
+  var htmlMarkup,
+    dimensionsInlineCss,
+    width = stock.width + stock.bleed * 2 - (margin.outer + margin.spine),
+    height = stock.height + stock.bleed * 2 - (margin.top + margin.bottom);
+
+  dimensionsInlineCss = "width:" + width + "mm;"
+    + "height:" + height + "mm;"
+    + "margin:" + margin.top + "mm " + margin.spine + "mm " + margin.bottom + "mm " + margin.outer + "mm;";
+
+  htmlMarkup = "<html>";
+  htmlMarkup += "<head>";
+  if (args.headMarkup) {
+    htmlMarkup += args.headMarkup;
+  }
+  if (args.css) {
+    htmlMarkup += "<style type='text/css'>" + args.css + "</style>";
+  }
+  htmlMarkup += "</head>";
+  htmlMarkup += "<body style='" + dimensionsInlineCss + "'>";
+  htmlMarkup += "<div id='container' style='width: 100%; height: 100%; oveflow: hidden;'>";
+  htmlMarkup += "</div>";
+  htmlMarkup += "</body>";
+  htmlMarkup += "</html>";
+
+  return htmlMarkup;
+}
+
+// args at this point:
+// - bodyMarkup (required)
+// - headMarkup (optional)
+// - css (optional)
+exports.paginate = function (args, callback) {
+  var htmlMarkup,
+    pages = [];
+
+  if (!args.bodyMarkup) {
+    callback("bodyMarkup wasn't passed in");
+    return;
+  }
+
+  function beginNewPage(markup) {
+
+  }
+
+  beginNewPage(args.bodyMarkup);
+};
 
 exports.generateFromMarkdown = function (markdown, callback) {
   var headMarkup,
@@ -16,16 +66,6 @@ exports.generateFromMarkdown = function (markdown, callback) {
       callback(err);
       return;
     }
-
-    styleTag = "<style type='text/css'>" + result + "</style>";
-
-    allMarkup = "<head>";
-    allMarkup += headMarkup;
-    allMarkup += styleTag;
-    allMarkup += "</head>";
-    allMarkup += "<body>";
-    allMarkup += bodyMarkup;
-    allMarkup += "</body>";
 
     callback(null, allMarkup);
   }
