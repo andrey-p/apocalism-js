@@ -5,17 +5,26 @@
 var program = require("commander"),
   pdf = require("./pdf.js"),
   html = require("./html.js"),
+  phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs");
 
+function cleanup(callback) {
+  phantomWrapper.cleanup(callback);
+}
+
 function fail(msg) {
-  util.error(msg);
-  process.exit(1);
+  cleanup(function () {
+    util.error(msg);
+    process.exit(1);
+  });
 }
 
 function success(msg) {
-  util.puts(msg);
-  process.exit();
+  cleanup(function () {
+    util.puts(msg);
+    process.exit();
+  });
 }
 
 function compilePdf(file) {
