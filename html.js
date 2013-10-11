@@ -5,9 +5,7 @@ var pandoc = require("pdc"),
   fs = require("fs"),
   sass = require("node-sass"),
   paginator = require("./paginator.js"),
-  template = require("./template.js"),
-  stock = require("./dimensions.js").stock,
-  margin = require("./dimensions.js").margin;
+  template = require("./template.js");
 
 exports.generateFromMarkdown = function (markdown, callback) {
   var headMarkup,

@@ -3,10 +3,7 @@
 "use strict";
 
 var phantomWrapper = require("./phantom-wrapper.js"),
-  template = require("./template.js"),
-  dimensions = require("./dimensions.js"),
-  stock = dimensions.stock,
-  margin = dimensions.margin;
+  template = require("./template.js");
 
 exports.createPage = function (emptyPage, markup, callback) {
   var page,

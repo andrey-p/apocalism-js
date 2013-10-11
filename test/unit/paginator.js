@@ -7,8 +7,7 @@ var should = require("should"),
   template = require("../../template.js"),
   phantomWrapper = require("../../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
-  helper = require("../helper.js"),
-  dimensions;
+  helper = require("../helper.js");
 
 describe("paginator", function () {
   after(function (done) {
@@ -22,7 +21,6 @@ describe("paginator", function () {
       emptyPageMarkup;
 
     beforeEach(function () {
-      dimensions = require("../../dimensions.js");
       lipsumOptions = {
         format: "html",
         units: "paragraph"
@@ -78,7 +76,6 @@ describe("paginator", function () {
     var lipsumOptions,
       markup;
     beforeEach(function () {
-      dimensions = require("../../dimensions.js");
       lipsumOptions = {
         format: "html",
         units: "paragraph"
