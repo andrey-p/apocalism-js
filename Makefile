@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 lint:
 	jslint ./*.js
+	jslint ./test/*/*.js
 
 unit-test:
 	mocha -R spec test/unit/*
