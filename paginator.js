@@ -5,7 +5,7 @@
 var phantomWrapper = require("./phantom-wrapper.js"),
   template = require("./template.js");
 
-exports.createPage = function (emptyPage, markup, callback) {
+exports.createPage = function (blankPage, content, callback) {
   var page,
     pageMarkup = "",
     leftoverMarkup = "";
@@ -88,7 +88,7 @@ exports.createPage = function (emptyPage, markup, callback) {
         }
 
         return leftover; // to be populated with leftover text
-      }, filledPage, markup);
+      }, filledPage, content);
     }, 500);
   }
 
@@ -98,7 +98,7 @@ exports.createPage = function (emptyPage, markup, callback) {
       return;
     }
 
-    page.set("content", emptyPage, setContent);
+    page.set("content", blankPage, setContent);
   }
 
   function gotPage(err, pageInstance) {
@@ -111,8 +111,8 @@ exports.createPage = function (emptyPage, markup, callback) {
 
     page = pageInstance;
 
-    width = (stock.width + stock.bleed * 2 - (margin.outer + margin.spine)) * 300 / 25.4;
-    height = (stock.height + stock.bleed * 2 - (margin.top + margin.bottom)) * 300 / 25.4;
+    width = (template.stock.width + template.stock.bleed * 2 - (template.margin.outer + template.margin.spine)) * 300 / 25.4;
+    height = (template.stock.height + template.stock.bleed * 2 - (template.margin.top + template.margin.bottom)) * 300 / 25.4;
 
     page.set("viewportSize", { width: width, height: height }, setViewSize);
   }
@@ -120,19 +120,9 @@ exports.createPage = function (emptyPage, markup, callback) {
   phantomWrapper.getPage(gotPage);
 };
 
-// args at this point:
-// - bodyMarkup (required)
-// - headMarkup (optional)
-// - css (optional)
-exports.paginate = function (args, callback) {
+exports.paginate = function (blankPage, content, callback) {
   var htmlMarkup,
-    pages = [],
-    emptyPage = template.getNewEmptyPageMarkup(args);
-
-  if (!args.bodyMarkup) {
-    callback("bodyMarkup wasn't passed in");
-    return;
-  }
+    pages = [];
 
   function createdPage(err, page, leftover) {
     if (err) {
@@ -143,11 +133,11 @@ exports.paginate = function (args, callback) {
     pages.push(page);
 
     if (leftover && leftover.length) {
-      exports.createPage(emptyPage, leftover, createdPage);
+      exports.createPage(blankPage, leftover, createdPage);
     } else {
       callback(null, pages);
     }
   }
 
-  exports.createPage(emptyPage, args.bodyMarkup, createdPage);
+  exports.createPage(blankPage, content, createdPage);
 };

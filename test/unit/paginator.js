@@ -1,31 +1,37 @@
 /*jslint indent: 2, node: true*/
-/*globals it, describe, beforeEach, before*/
+/*globals it, describe, after, beforeEach, before*/
 "use strict";
 
 var should = require("should"),
-  paginator = require("../../paginator.js"),
   template = require("../../template.js"),
+  paginator = require("../../paginator.js"),
   phantomWrapper = require("../../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
-  helper = require("../helper.js");
+  helper = require("../helper.js"),
+  emptyPageMarkup;
 
 describe("paginator", function () {
+  before(function (done) {
+    template.init("default", function (err) {
+      should.not.exist(err);
+      emptyPageMarkup = template.getBlankPage();
+      done();
+    });
+  });
   after(function (done) {
     phantomWrapper.cleanup(function () {
-      helper.killProcess("phantomjs", done)
+      helper.killProcess("phantomjs", done);
     });
   });
   describe("#createPage()", function () {
     var lipsumOptions,
-      markup,
-      emptyPageMarkup;
+      markup;
 
     beforeEach(function () {
       lipsumOptions = {
         format: "html",
         units: "paragraph"
       };
-      emptyPageMarkup = template.getNewEmptyPageMarkup();
     });
 
     it("should output a filled out page", function (done) {
@@ -36,7 +42,7 @@ describe("paginator", function () {
         should.exist(page);
         should.exist(leftoverMarkup);
         page.should.not.equal(emptyPageMarkup);
-        leftoverMarkup.should.be.empty;
+        leftoverMarkup.length.should.equal(0);
         done();
       });
     });
@@ -46,7 +52,7 @@ describe("paginator", function () {
       paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
         should.not.exist(err);
         should.exist(leftoverMarkup);
-        leftoverMarkup.should.not.be.empty;
+        leftoverMarkup.length.should.be.above(0);
         done();
       });
     });
@@ -86,7 +92,7 @@ describe("paginator", function () {
       lipsumOptions.units = "sentence";
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.should.have.length(1);
         done();
@@ -96,7 +102,7 @@ describe("paginator", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.length.should.be.above(1);
         done();
@@ -106,7 +112,7 @@ describe("paginator", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.forEach(function (page) {
           page.should.include("<html>");
