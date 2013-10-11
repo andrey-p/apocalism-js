@@ -10,6 +10,11 @@ var should = require("should"),
   dimensions;
 
 describe("html", function () {
+  after(function (done) {
+    phantomWrapper.cleanup(function () {
+      helper.killProcess("phantomjs", done)
+    });
+  });
   describe("#createPage()", function () {
     var lipsumOptions,
       markup,
@@ -22,11 +27,6 @@ describe("html", function () {
         units: "paragraph"
       };
       emptyPageMarkup = html.getNewEmptyPageMarkup();
-    });
-    after(function (done) {
-      phantomWrapper.cleanup(function () {
-        helper.killProcess("phantomjs", done)
-      });
     });
 
     it("should output a filled out page", function (done) {
@@ -114,16 +114,11 @@ describe("html", function () {
           page.should.include("<html>");
           page.should.include("<head>");
           page.should.include("</head>");
-          page.should.include("<body>");
+          page.should.include("<body");
           page.should.include("</body>");
         });
         done();
       });
     });
-    it("should not leave any content overflowing from the page when images are not involved");
-    it("should not split self-closing tags");
-    it("should close and reopen paragraph tags if it splits a paragraph");
-    it("should keep the images on the same page as the text they are around");
-    it("should not leave any content overflowing from the page when images are involved");
   });
 });
