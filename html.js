@@ -173,11 +173,11 @@ exports.paginate = function (args, callback) {
 
     pages.push(page);
 
-    // if (leftover && leftover.length) {
-      // createPage(emptyPage, leftover, createdPage);
-    // } else {
-    callback(null, pages);
-    // }
+    if (leftover && leftover.length) {
+      exports.createPage(emptyPage, leftover, createdPage);
+    } else {
+      callback(null, pages);
+    }
   }
 
   exports.createPage(emptyPage, args.bodyMarkup, createdPage);
