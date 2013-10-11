@@ -4,10 +4,54 @@
 
 var should = require("should"),
   html = require("../../html.js"),
+  phantomWrapper = require("../../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
+  helper = require("../helper.js"),
   dimensions;
 
 describe("html", function () {
+  describe("#createPage()", function () {
+    var lipsumOptions,
+      markup,
+      emptyPageMarkup;
+
+    beforeEach(function () {
+      dimensions = require("../../dimensions.js");
+      lipsumOptions = {
+        format: "html",
+        units: "paragraph"
+      };
+      emptyPageMarkup = html.getNewEmptyPageMarkup();
+    });
+    after(function (done) {
+      phantomWrapper.cleanup(function () {
+        helper.killProcess("phantomjs", done)
+      });
+    });
+
+    it("should output a filled out page", function (done) {
+      lipsumOptions.count = 1;
+      markup = lipsum(lipsumOptions);
+      html.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+        page.should.not.equal(emptyPageMarkup);
+        leftoverMarkup.should.be.empty;
+        done();
+      });
+    });
+    it("should output a page and leftovers if passed a long text", function (done) {
+      lipsumOptions.count = 100;
+      markup = lipsum(lipsumOptions);
+      html.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(leftoverMarkup);
+        leftoverMarkup.should.not.be.empty;
+        done();
+      });
+    });
+  });
   describe("#paginate()", function () {
     var lipsumOptions,
       markup;
@@ -20,6 +64,7 @@ describe("html", function () {
     });
     it("should output a single page if the content is small enough to fit", function (done) {
       lipsumOptions.count = 1;
+      lipsumOptions.units = "sentence";
       markup = lipsum(lipsumOptions);
 
       html.paginate({ bodyMarkup: markup }, function (err, pages) {

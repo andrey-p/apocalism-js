@@ -6,7 +6,7 @@ var phantom = require("node-phantom"),
 
 exports.getInstance = function (callback) {
   if (phantomInstance) {
-    callback(phantomInstance);
+    callback(null, phantomInstance);
   } else {
     phantom.create(function (err, phantom) {
       phantomInstance = phantom;
