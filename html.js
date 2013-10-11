@@ -66,7 +66,7 @@ exports.createPage = function (emptyPage, markup, callback) {
     page.get("content", gotContent);
   }
 
-  function injectedJs(err) {
+  function setContent(err) {
     if (err) {
       callback(err);
       return;
@@ -79,16 +79,41 @@ exports.createPage = function (emptyPage, markup, callback) {
           container,
           body;
 
+        function removeParagraph() {
+          var lastWordIndex;
+
+          // return if container doesn't overflow anymore
+          if (container.clientHeight >= container.scrollHeight) {
+            return;
+          }
+
+          lastElement = container.lastChild;
+          container.removeChild(lastElement);
+          // if this last paragraph was the difference between container overflowing or not
+          if (container.clientHeight >= container.scrollHeight) {
+            // readd it...
+            container.appendChild(lastElement);
+
+            // and remove words one by one until it stops overflowing again
+            while (container.clientHeight < container.scrollHeight) {
+              lastWordIndex = lastElement.innerHTML.lastIndexOf(" ");
+              leftover = lastElement.innerHTML.substring(lastWordIndex + 1) + " " + leftover;
+              lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
+            }
+          } else {
+            leftover += lastElement.outerHTML;
+            removeParagraph();
+          }
+        }
+
         try {
+          // add all of the content to the container element
           body = document.body;
           container = document.getElementById("container");
           container.innerHTML = markup;
 
-          while (container.clientHeight < container.scrollHeight) {
-            lastElement = container.lastChild;
-            leftover += lastElement.outerHTML;
-            container.removeChild(lastElement);
-          }
+          // remove paragraphs until it doesn't overflow anymore
+          removeParagraph();
         } catch (e) {
           return "Error: " + e.toString();
         }
@@ -96,15 +121,6 @@ exports.createPage = function (emptyPage, markup, callback) {
         return leftover; // to be populated with leftover text
       }, filledPage, markup);
     }, 500);
-  }
-
-  function setContent(err) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    page.injectJs("./template/jquery-2.0.3.min.js", injectedJs);
   }
 
   function setViewSize(err) {

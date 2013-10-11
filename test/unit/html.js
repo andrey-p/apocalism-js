@@ -51,6 +51,27 @@ describe("html", function () {
         done();
       });
     });
+    it("should be able to split paragraphs at page break", function (done) {
+      var i, wordsInPage, wordsInLeftover, numberWords = 500;
+      markup = "<p>start ";
+      for (i = 0; i < numberWords; i += 1) {
+        markup += "word ";
+      }
+      markup += "end</p>";
+      html.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+        // "word" should be the first word in leftover
+        leftoverMarkup.indexOf("word").should.equal(0);
+
+        // check no words have been left out
+        wordsInPage = (page.match(/word/g) || []).length;
+        wordsInLeftover = (leftoverMarkup.match(/word/g) || []).length;
+        (wordsInPage + wordsInLeftover).should.equal(numberWords);
+        done();
+      });
+    });
   });
   describe("#paginate()", function () {
     var lipsumOptions,
