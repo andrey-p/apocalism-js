@@ -59,7 +59,7 @@ exports.createPage = function (blankPage, content, callback) {
           lastElement = container.lastChild;
           container.removeChild(lastElement);
           // if this last paragraph was the difference between container overflowing or not
-          if (container.clientHeight >= container.scrollHeight) {
+          if (container.clientHeight >= container.scrollHeight && lastElement.tagName === "P") {
             // readd it...
             container.appendChild(lastElement);
 
