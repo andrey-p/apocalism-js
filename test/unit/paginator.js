@@ -1,53 +1,79 @@
 /*jslint indent: 2, node: true*/
-/*globals it, describe, beforeEach, before*/
+/*globals it, describe, after, beforeEach, before*/
 "use strict";
 
 var should = require("should"),
-  html = require("../../html.js"),
+  template = require("../../template.js"),
+  paginator = require("../../paginator.js"),
   phantomWrapper = require("../../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("../helper.js"),
-  dimensions;
+  emptyPageMarkup;
 
-describe("html", function () {
+describe("paginator", function () {
+  before(function (done) {
+    template.init("default", function (err) {
+      should.not.exist(err);
+      emptyPageMarkup = template.getBlankPage();
+      done();
+    });
+  });
+  after(function (done) {
+    phantomWrapper.cleanup(function () {
+      helper.killProcess("phantomjs", done);
+    });
+  });
   describe("#createPage()", function () {
     var lipsumOptions,
-      markup,
-      emptyPageMarkup;
+      markup;
 
     beforeEach(function () {
-      dimensions = require("../../dimensions.js");
       lipsumOptions = {
         format: "html",
         units: "paragraph"
       };
-      emptyPageMarkup = html.getNewEmptyPageMarkup();
-    });
-    after(function (done) {
-      phantomWrapper.cleanup(function () {
-        helper.killProcess("phantomjs", done)
-      });
     });
 
     it("should output a filled out page", function (done) {
       lipsumOptions.count = 1;
       markup = lipsum(lipsumOptions);
-      html.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
         should.not.exist(err);
         should.exist(page);
         should.exist(leftoverMarkup);
         page.should.not.equal(emptyPageMarkup);
-        leftoverMarkup.should.be.empty;
+        leftoverMarkup.length.should.equal(0);
         done();
       });
     });
     it("should output a page and leftovers if passed a long text", function (done) {
       lipsumOptions.count = 100;
       markup = lipsum(lipsumOptions);
-      html.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
         should.not.exist(err);
         should.exist(leftoverMarkup);
-        leftoverMarkup.should.not.be.empty;
+        leftoverMarkup.length.should.be.above(0);
+        done();
+      });
+    });
+    it("should be able to split paragraphs at page break", function (done) {
+      var i, wordsInPage, wordsInLeftover, numberWords = 500;
+      markup = "<p>start ";
+      for (i = 0; i < numberWords; i += 1) {
+        markup += "word ";
+      }
+      markup += "end</p>";
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+        // "word" should be the first word in leftover
+        leftoverMarkup.indexOf("word").should.equal(0);
+
+        // check no words have been left out
+        wordsInPage = (page.match(/word/g) || []).length;
+        wordsInLeftover = (leftoverMarkup.match(/word/g) || []).length;
+        (wordsInPage + wordsInLeftover).should.equal(numberWords);
         done();
       });
     });
@@ -56,7 +82,6 @@ describe("html", function () {
     var lipsumOptions,
       markup;
     beforeEach(function () {
-      dimensions = require("../../dimensions.js");
       lipsumOptions = {
         format: "html",
         units: "paragraph"
@@ -67,7 +92,7 @@ describe("html", function () {
       lipsumOptions.units = "sentence";
       markup = lipsum(lipsumOptions);
 
-      html.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.should.have.length(1);
         done();
@@ -77,7 +102,7 @@ describe("html", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      html.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.length.should.be.above(1);
         done();
@@ -87,22 +112,17 @@ describe("html", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      html.paginate({ bodyMarkup: markup }, function (err, pages) {
+      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
         should.not.exist(err);
         pages.forEach(function (page) {
           page.should.include("<html>");
           page.should.include("<head>");
           page.should.include("</head>");
-          page.should.include("<body>");
+          page.should.include("<body");
           page.should.include("</body>");
         });
         done();
       });
     });
-    it("should not leave any content overflowing from the page when images are not involved");
-    it("should not split self-closing tags");
-    it("should close and reopen paragraph tags if it splits a paragraph");
-    it("should keep the images on the same page as the text they are around");
-    it("should not leave any content overflowing from the page when images are involved");
   });
 });
