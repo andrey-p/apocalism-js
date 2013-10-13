@@ -2,10 +2,11 @@
 "use strict";
 
 var phantomWrapper = require("./phantom-wrapper.js"),
+  pdftkWrapper = require("./pdftk-wrapper.js"),
   os = require("os"),
   template = require("./template.js");
 
-exports.generateFromHtml = function (markup, path, callback) {
+exports.generatePdfPage = function (markup, path, callback) {
   var page;
 
   function pageRendered(err) {
@@ -47,7 +48,7 @@ exports.generateFromHtml = function (markup, path, callback) {
   phantomWrapper.getPage(gotPage);
 };
 
-exports.generatePagesFromHtml = function (pages, callback) {
+exports.generatePdfFromPages = function (pages, callback) {
   var page,
     pathsToPdfs = [],
     path;
@@ -59,7 +60,11 @@ exports.generatePagesFromHtml = function (pages, callback) {
 
   page = pages.shift();
 
-  function generatedPdf(err, pathToPdf) {
+  function concatenatedPages(err, pathToPdf) {
+    callback(err, pathToPdf);
+  }
+
+  function generatedPdfPage(err, pathToPdf) {
     if (err) {
       callback(err);
       return;
@@ -68,16 +73,16 @@ exports.generatePagesFromHtml = function (pages, callback) {
     pathsToPdfs.push(pathToPdf);
 
     if (pages.length === 0) {
-      callback(null, pathsToPdfs);
+      pdftkWrapper.concatenatePages(pathsToPdfs, concatenatedPages);
       return;
     }
 
     page = pages.shift();
     path = os.tmpDir() + "/apoc_js_" + Date.now() + ".pdf";
-    exports.generateFromHtml(page, path, generatedPdf);
+    exports.generatePdfPage(page, path, generatedPdfPage);
   }
 
   path = os.tmpDir() + "/apoc_js_" + Date.now() + ".pdf";
 
-  exports.generateFromHtml(page, path, generatedPdf);
+  exports.generatePdfPage(page, path, generatedPdfPage);
 };

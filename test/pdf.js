@@ -23,9 +23,9 @@ describe("pdf", function () {
       phantomWrapper.cleanup(done);
     });
   });
-  describe("#generateFromHtml()", function () {
+  describe("#generatePdfPage()", function () {
     it("should generate a pdf from an html string", function (done) {
-      pdf.generateFromHtml(htmlMarkup, pathToPdf, function (err) {
+      pdf.generatePdfPage(htmlMarkup, pathToPdf, function (err) {
         should.not.exist(err);
         // check if file is a pdf - this has the side effect of checking if file exists, too
         helper.getFileMimeType(pathToPdf, function (err, mimetype) {
@@ -36,15 +36,18 @@ describe("pdf", function () {
       });
     });
   });
-  describe("#generatePagesFromHtml()", function () {
-    it("should generate a series of pdfs from an array of html strings", function (done) {
+  describe("#generatePdfFromPages()", function () {
+    it("should generate a pdf from an array of html strings", function (done) {
       var pages = [htmlMarkup, htmlMarkup, htmlMarkup];
-      pdf.generatePagesFromHtml(pages, function (err, pathsToPdfs) {
+      pdf.generatePdfFromPages(pages, function (err, pathToPdf) {
         should.not.exist(err);
-        should.exist(pathsToPdfs);
-        pathsToPdfs.should.be.an.instanceOf(Array);
-        pathsToPdfs.length.should.equal(3);
-        done();
+        should.exist(pathToPdf);
+        pathToPdf.should.be.a("string");
+        helper.getFileMimeType(pathToPdf, function (err, mimetype) {
+          should.not.exist(err);
+          mimetype.should.include("application/pdf");
+          done();
+        });
       });
     });
   });
