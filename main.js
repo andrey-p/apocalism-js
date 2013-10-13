@@ -27,17 +27,17 @@ function success(msg) {
   });
 }
 
-function compilePdf(file) {
+function compileBook(file) {
   if (!program.output) {
     fail("needs to specify output file (-o flag)");
   }
 
-  function generatedPdf(err) {
+  function generatedPdf(err, pathToPdf) {
     if (err) {
       fail(err);
     }
 
-    success("pdf generated at: " + program.output);
+    success("pdf generated at: " + pathToPdf);
   }
 
   function generatedHtml(err, htmlMarkup) {
@@ -45,7 +45,7 @@ function compilePdf(file) {
       fail(err);
     }
 
-    pdf.generateFromHtml(htmlMarkup, program.output, generatedPdf);
+    pdf.generatePdfFromPages(htmlMarkup, generatedPdf);
   }
 
   function readFile(err, markdown) {
@@ -65,11 +65,11 @@ program
   .option("-o, --output <outputFile>");
 
 program
-  .command("pdf <file>")
-  .action(compilePdf);
+  .command("book <file>")
+  .action(compileBook);
 
 program
   .command("*")
-  .action(compilePdf);
+  .action(compileBook);
 
 program.parse(process.argv);
