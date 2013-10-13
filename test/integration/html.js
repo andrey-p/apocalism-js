@@ -19,9 +19,9 @@ describe("html", function () {
       html.generateFromMarkdown(validMarkdown, function (err, result) {
         should.not.exist(err);
         // the above should at the very least generate the following:
-        result.should.include("<p>Hello <em>world</em>.</p>");
-        result.should.include("<ul>");
-        w3c.validate(result, done);
+        result[0].should.include("<p>Hello <em>world</em>.</p>");
+        result[0].should.include("<ul>");
+        w3c.validate(result[0], done);
       });
     });
   });
