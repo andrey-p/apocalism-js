@@ -3,11 +3,11 @@
 "use strict";
 
 var should = require("should"),
-  template = require("../../template.js"),
-  paginator = require("../../paginator.js"),
-  phantomWrapper = require("../../phantom-wrapper.js"),
+  template = require("../template.js"),
+  paginator = require("../paginator.js"),
+  phantomWrapper = require("../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
-  helper = require("../helper.js"),
+  helper = require("./helper.js"),
   emptyPageMarkup;
 
 describe("paginator", function () {

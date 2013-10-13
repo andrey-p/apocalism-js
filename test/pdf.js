@@ -3,16 +3,16 @@
 "use strict";
 
 var should = require("should"),
-  template = require("../../template.js"),
-  pdf = require("../../pdf.js"),
-  helper = require("../helper.js"),
-  phantomWrapper = require("../../phantom-wrapper.js"),
+  template = require("../template.js"),
+  pdf = require("../pdf.js"),
+  helper = require("./helper.js"),
+  phantomWrapper = require("../phantom-wrapper.js"),
   fs = require("fs"),
-  os = require("os");
+  os = require("os"),
+  pathToPdf,
+  htmlMarkup;
 
 describe("pdf", function () {
-  var pathToPdf,
-    htmlMarkup;
   before(function (done) {
     pathToPdf = os.tmpdir() + "/output.pdf";
     htmlMarkup = "<p>Hello!</p>";

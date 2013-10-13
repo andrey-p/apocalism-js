@@ -3,8 +3,10 @@
 "use strict";
 
 var should = require("should"),
-  html = require("../../html.js"),
-  w3c = require("w3c-validate").createValidator();
+  html = require("../html.js"),
+  w3c = require("w3c-validate").createValidator(),
+  helper = require("./helper.js"),
+  phantomWrapper = require("../phantom-wrapper.js");
 
 describe("html", function () {
   describe("#generateFromMarkdown()", function () {
@@ -14,6 +16,11 @@ describe("html", function () {
       validMarkdown += "This is a list:\n\n";
       validMarkdown += "- item 1\n";
       validMarkdown += "- item 2\n";
+    });
+    after(function (done) {
+      phantomWrapper.cleanup(function () {
+        helper.killProcess("phantomjs", done);
+      });
     });
     it("should take markdown and produce a valid HTML string", function (done) {
       html.generateFromMarkdown(validMarkdown, function (err, result) {

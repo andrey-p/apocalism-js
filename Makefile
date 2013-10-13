@@ -2,10 +2,9 @@ SHELL := /bin/bash
 
 lint:
 	jslint ./*.js
-	jslint ./test/*/*.js
+	jslint ./test/*.js
 
-unit-test:
-	mocha -R spec test/unit/*
-
-integration-test:
-	mocha -R spec -t 10000 test/integration/*
+tests:
+	@mocha -R spec -t 10000 test/html.js
+	@mocha -R spec -t 10000 test/paginator.js
+	@mocha -R spec -t 10000 test/pdf.js
