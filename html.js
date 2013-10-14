@@ -1,13 +1,13 @@
 /*jslint indent: 2, node: true*/
 "use strict";
 
-var pandoc = require("pdc"),
+var namp = require("namp"),
   fs = require("fs"),
   sass = require("node-sass"),
   paginator = require("./paginator.js"),
   template = require("./template.js");
 
-exports.generateFromMarkdown = function (markdown, callback) {
+exports.generateFromMarkdown = function (bodyMarkdown, callback) {
   var bodyMarkup;
 
   function initialisedTemplate(err) {
@@ -19,15 +19,7 @@ exports.generateFromMarkdown = function (markdown, callback) {
     paginator.paginate(template.getBlankPage(), bodyMarkup, callback);
   }
 
-  function convertedMarkdownToHtml(err, result) {
-    if (err) {
-      callback(err);
-      return;
-    }
+  bodyMarkup = namp(bodyMarkdown).html;
 
-    bodyMarkup = result;
-
-    template.init("default", initialisedTemplate);
-  }
-  pandoc(markdown, "markdown", "html", convertedMarkdownToHtml);
+  template.init("default", initialisedTemplate);
 };
