@@ -70,7 +70,7 @@ exports.createPage = function (blankPage, content, callback) {
               lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
             }
           } else {
-            leftover += lastElement.outerHTML;
+            leftover = lastElement.outerHTML + leftover;
             removeParagraph();
           }
         }

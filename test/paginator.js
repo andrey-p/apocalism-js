@@ -77,6 +77,24 @@ describe("paginator", function () {
         done();
       });
     });
+    it("should output paragraphs in leftover in the correct order", function (done) {
+      // this is an issue that only seems to crop up in later paragraphs
+      var i, numberParas = 500;
+      markup = "<p>start</p>";
+      for (i = 0; i < numberParas; i += 1) {
+        markup += "<p>para" + i + "</p>";
+      }
+      markup += "<p>end</p>";
+
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        leftoverMarkup.indexOf("para450").should.not.be.above(leftoverMarkup.indexOf("para451"));
+        done();
+      });
+    });
   });
   describe("#paginate()", function () {
     var lipsumOptions,
