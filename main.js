@@ -5,43 +5,56 @@
 var program = require("commander"),
   pdf = require("./pdf.js"),
   html = require("./html.js"),
+  phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs");
 
+function cleanup(callback) {
+  phantomWrapper.cleanup(callback);
+}
+
 function fail(msg) {
-  util.error(msg);
-  process.exit(1);
+  cleanup(function () {
+    util.error(msg);
+    process.exit(1);
+  });
 }
 
 function success(msg) {
-  util.puts(msg);
-  process.exit();
+  cleanup(function () {
+    util.puts(msg);
+    process.exit();
+  });
 }
 
-function compilePdf(file) {
+function compileBook(file) {
   if (!program.output) {
     fail("needs to specify output file (-o flag)");
+    return;
   }
 
-  function generatedPdf(err) {
+  function generatedPdf(err, pathToPdf) {
     if (err) {
       fail(err);
+      return;
     }
 
-    success("pdf generated at: " + program.output);
+    success("pdf generated at: " + pathToPdf);
   }
 
   function generatedHtml(err, htmlMarkup) {
     if (err) {
       fail(err);
+      return;
     }
 
-    pdf.generateFromHtml(htmlMarkup, program.output, generatedPdf);
+    pdf.generatePdfFromPages(htmlMarkup, program.output, generatedPdf);
   }
 
   function readFile(err, markdown) {
     if (err) {
       fail(err);
+      return;
     }
 
     html.generateFromMarkdown(markdown, generatedHtml);
@@ -56,11 +69,11 @@ program
   .option("-o, --output <outputFile>");
 
 program
-  .command("pdf <file>")
-  .action(compilePdf);
+  .command("book <file>")
+  .action(compileBook);
 
 program
   .command("*")
-  .action(compilePdf);
+  .action(compileBook);
 
 program.parse(process.argv);

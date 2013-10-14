@@ -9,10 +9,21 @@ exports.checkIfProcessExists = function (processName, callback) {
     // error code 1 means no matches
     if (error && error.code !== 1) {
       callback(error);
-    } if (stderr) {
-      callback(stderr);
     } else {
       callback(null, !!stdout.length);
+    }
+  });
+};
+
+// kills all instances of process
+exports.killProcess = function (processName, callback) {
+  exec("pkill " + processName, function (error, stdout, stderr) {
+    // error code 1 means no process of that name found,
+    // which is ok for cleaning up
+    if (error && error.code !== 1) {
+      callback(error);
+    } else {
+      callback(null, stdout);
     }
   });
 };
@@ -22,8 +33,6 @@ exports.getFileMimeType = function (path, callback) {
   exec("file -b --mime-type " + path, function (error, stdout, stderr) {
     if (error) {
       callback(error);
-    } if (stderr) {
-      callback(stderr);
     } else {
       callback(null, stdout);
     }

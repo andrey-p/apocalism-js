@@ -3,50 +3,20 @@
 
 var pandoc = require("pdc"),
   fs = require("fs"),
-  sass = require("node-sass");
+  sass = require("node-sass"),
+  paginator = require("./paginator.js"),
+  template = require("./template.js");
 
 exports.generateFromMarkdown = function (markdown, callback) {
-  var headMarkup,
-    bodyMarkup;
+  var bodyMarkup;
 
-  function convertedSassToCss(err, result) {
-    var styleTag,
-      allMarkup;
+  function initialisedTemplate(err) {
     if (err) {
       callback(err);
       return;
     }
 
-    styleTag = "<style type='text/css'>" + result + "</style>";
-
-    allMarkup = "<head>";
-    allMarkup += headMarkup;
-    allMarkup += styleTag;
-    allMarkup += "</head>";
-    allMarkup += "<body>";
-    allMarkup += bodyMarkup;
-    allMarkup += "</body>";
-
-    callback(null, allMarkup);
-  }
-
-  function gotHeadMarkup(err, result) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    headMarkup = result;
-
-    sass.render({
-      file: "./template/style.scss",
-      success: function (css) {
-        convertedSassToCss(null, css);
-      },
-      error: function (err) {
-        convertedSassToCss(err);
-      }
-    });
+    paginator.paginate(template.getBlankPage(), bodyMarkup, callback);
   }
 
   function convertedMarkdownToHtml(err, result) {
@@ -57,7 +27,7 @@ exports.generateFromMarkdown = function (markdown, callback) {
 
     bodyMarkup = result;
 
-    fs.readFile("./template/head.html", { encoding: "utf-8" }, gotHeadMarkup);
+    template.init("default", initialisedTemplate);
   }
   pandoc(markdown, "markdown", "html", convertedMarkdownToHtml);
 };
