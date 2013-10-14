@@ -70,12 +70,18 @@ exports.createPage = function (blankPage, content, callback) {
             // readd it...
             container.appendChild(lastElement);
 
+            // prep leftover to wrap paragraph
+            leftover = "</p>" + leftover;
+
             // and remove words one by one until it stops overflowing again
             while (container.clientHeight < container.scrollHeight) {
               lastWordIndex = lastElement.innerHTML.lastIndexOf(" ");
               leftover = lastElement.innerHTML.substring(lastWordIndex + 1) + " " + leftover;
               lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
             }
+
+            // contd class should have an indent 0
+            leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
           } else {
             leftover = lastElement.outerHTML + leftover;
             removeParagraph();
