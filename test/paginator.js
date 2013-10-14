@@ -57,7 +57,7 @@ describe("paginator", function () {
       });
     });
     it("should be able to split paragraphs at page break", function (done) {
-      var i, wordsInPage, wordsInLeftover, numberWords = 500;
+      var i, wordsInPage, wordsInLeftover, numberWords = 500, endFirstTagIndex;
       markup = "<p>start ";
       for (i = 0; i < numberWords; i += 1) {
         markup += "word ";
@@ -67,8 +67,10 @@ describe("paginator", function () {
         should.not.exist(err);
         should.exist(page);
         should.exist(leftoverMarkup);
-        // "word" should be the first word in leftover
-        leftoverMarkup.indexOf("word").should.equal(0);
+
+        // "word" should be the first word in leftover after the opening tag
+        endFirstTagIndex = leftoverMarkup.indexOf(">");
+        leftoverMarkup.indexOf("word").should.equal(endFirstTagIndex + 1);
 
         // check no words have been left out
         wordsInPage = (page.match(/word/g) || []).length;
