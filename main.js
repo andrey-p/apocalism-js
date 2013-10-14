@@ -30,11 +30,13 @@ function success(msg) {
 function compileBook(file) {
   if (!program.output) {
     fail("needs to specify output file (-o flag)");
+    return;
   }
 
   function generatedPdf(err, pathToPdf) {
     if (err) {
       fail(err);
+      return;
     }
 
     success("pdf generated at: " + pathToPdf);
@@ -43,6 +45,7 @@ function compileBook(file) {
   function generatedHtml(err, htmlMarkup) {
     if (err) {
       fail(err);
+      return;
     }
 
     pdf.generatePdfFromPages(htmlMarkup, program.output, generatedPdf);
@@ -51,6 +54,7 @@ function compileBook(file) {
   function readFile(err, markdown) {
     if (err) {
       fail(err);
+      return;
     }
 
     html.generateFromMarkdown(markdown, generatedHtml);
