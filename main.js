@@ -45,7 +45,7 @@ function compileBook(file) {
       fail(err);
     }
 
-    pdf.generatePdfFromPages(htmlMarkup, generatedPdf);
+    pdf.generatePdfFromPages(htmlMarkup, program.output, generatedPdf);
   }
 
   function readFile(err, markdown) {

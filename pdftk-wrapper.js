@@ -4,9 +4,8 @@
 var exec = require("child_process").exec,
   os = require("os");
 
-exports.concatenatePages = function (pagePaths, callback) {
-  var pathsArg = pagePaths.join(" "),
-    outputPath = os.tmpDir() + "/apoc_output_full" + Date.now() + ".pdf";
+exports.concatenatePages = function (pagePaths, outputPath, callback) {
+  var pathsArg = pagePaths.join(" ");
 
   exec("pdftk " + pathsArg + " cat output " + outputPath, function (err, stdout, stderr) {
     if (err) {

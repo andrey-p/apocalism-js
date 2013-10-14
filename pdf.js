@@ -48,7 +48,7 @@ exports.generatePdfPage = function (markup, path, callback) {
   phantomWrapper.getPage(gotPage);
 };
 
-exports.generatePdfFromPages = function (pages, callback) {
+exports.generatePdfFromPages = function (pages, pathToPdf, callback) {
   var page,
     pathsToPdfs = [],
     path;
@@ -64,16 +64,16 @@ exports.generatePdfFromPages = function (pages, callback) {
     callback(err, pathToPdf);
   }
 
-  function generatedPdfPage(err, pathToPdf) {
+  function generatedPdfPage(err, pathForPage) {
     if (err) {
       callback(err);
       return;
     }
 
-    pathsToPdfs.push(pathToPdf);
+    pathsToPdfs.push(pathForPage);
 
     if (pages.length === 0) {
-      pdftkWrapper.concatenatePages(pathsToPdfs, concatenatedPages);
+      pdftkWrapper.concatenatePages(pathsToPdfs, pathToPdf, concatenatedPages);
       return;
     }
 
