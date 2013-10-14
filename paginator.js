@@ -58,6 +58,13 @@ exports.createPage = function (blankPage, content, callback) {
 
           lastElement = container.lastChild;
           container.removeChild(lastElement);
+
+          // if it's a non-element node, ignore it
+          if (lastElement.nodeType !== 1) {
+            removeParagraph();
+            return;
+          }
+
           // if this last paragraph was the difference between container overflowing or not
           if (container.clientHeight >= container.scrollHeight && lastElement.tagName === "P") {
             // readd it...
