@@ -31,8 +31,16 @@ p {
   padding: 0px;
   margin: 0px;
 
-  &.contd, hr + & {
+  &.contd, &.opening, hr + & {
     text-indent: 0;
+  }
+
+  &.opening:first-letter {
+    float: left;
+    font-size: 72pt;
+    padding: 0 6pt 0 0;
+    line-height: 72pt;
+    margin-bottom: -10pt;
   }
 }
 
