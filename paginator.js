@@ -66,7 +66,9 @@ exports.createPage = function (blankPage, content, callback) {
           }
 
           // if this last paragraph was the difference between container overflowing or not
-          if (container.clientHeight >= container.scrollHeight && lastElement.tagName === "P") {
+          if (container.clientHeight >= container.scrollHeight
+              && lastElement.tagName === "P"
+              && lastElement.innerHTML.indexOf(" ") > -1) { // ignore single-word paragraphs
             // readd it...
             container.appendChild(lastElement);
 
@@ -80,8 +82,12 @@ exports.createPage = function (blankPage, content, callback) {
               lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
             }
 
-            // contd class should have an indent 0
-            leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
+            if (lastElement.innerHTML.length > 0) {
+              // contd class should have an indent 0
+              leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
+            } else {
+              leftover = "<p>" + leftover;
+            }
           } else {
             leftover = lastElement.outerHTML + leftover;
             removeParagraph();
