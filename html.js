@@ -24,6 +24,9 @@ exports.generateFromMarkdown = function (bodyMarkdown, callback) {
   // markup to html
   bodyMarkup = namp(bodyMarkdown).html;
 
+  // add 'opening' class to the first paragraph; this might be pretty brittle
+  bodyMarkup = bodyMarkup.replace(/<p>/, "<p class=\"opening\">");
+
   // decode html entities as typogr misses them otherwise
   bodyMarkup = ent.decode(bodyMarkup);
 

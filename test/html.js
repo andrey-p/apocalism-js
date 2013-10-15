@@ -26,7 +26,7 @@ describe("html", function () {
       html.generateFromMarkdown(validMarkdown, function (err, result) {
         should.not.exist(err);
         // the above should at the very least generate the following:
-        result[0].should.include("<p>Hello <em>world</em>.</p>");
+        result[0].should.include("Hello <em>world</em>.");
         result[0].should.include("<ul>");
         w3c.validate(result[0], done);
       });
@@ -41,6 +41,17 @@ describe("html", function () {
         result[0].should.include("–");
         result[0].should.include("—");
         result[0].should.include("…");
+        done();
+      });
+    });
+    it("should add the class 'opening' to the first paragraph", function (done) {
+      var input = "# heading\n\n";
+      input += "para1\n\n";
+      input += "para2\n\n";
+      html.generateFromMarkdown(input, function (err, result) {
+        should.not.exist(err);
+        result[0].should.include("<p class=\"opening\">para1</p>");
+        result[0].should.not.include("<p class=\"opening\">para2</p>");
         done();
       });
     });
