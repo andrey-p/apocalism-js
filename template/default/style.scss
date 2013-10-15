@@ -1,8 +1,18 @@
 p {
   font-family: "DejaVuSerif", sans-serif;
   font-size: 15pt;
-  line-height: 1.25em;
+  line-height: 1.5em;
+  text-indent: 1.5em;
   text-align: justify;
   padding: 0px;
   margin: 0px;
+
+  &.contd, hr + & {
+    text-indent: 0;
+  }
+}
+
+hr {
+  border: 0;
+  margin-bottom: 3em;
 }
