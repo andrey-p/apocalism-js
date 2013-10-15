@@ -9,51 +9,40 @@ var should = require("should"),
   phantomWrapper = require("../phantom-wrapper.js");
 
 describe("html", function () {
-  describe("#generateFromMarkdown()", function () {
-    var validMarkdown;
-    before(function () {
+  describe("#generateAndPrepMarkup()", function () {
+    it("should take markdown and produce a valid HTML string", function () {
+      var result,
+        validMarkdown;
+
       validMarkdown = "Hello *world*.\n\n";
       validMarkdown += "This is a list:\n\n";
       validMarkdown += "- item 1\n";
       validMarkdown += "- item 2\n";
+
+      result = html.generateAndPrepMarkup(validMarkdown);
+      // the above should at the very least generate the following:
+      result.should.include("Hello <em>world</em>.");
+      result.should.include("<ul>");
     });
-    after(function (done) {
-      phantomWrapper.cleanup(function () {
-        helper.killProcess("phantomjs", done);
-      });
+    it("should add all the proper typographic entities", function () {
+      var result = html.generateAndPrepMarkup("\"word\" ... 'word' can't -- ---");
+      result.should.include("&#8220;"); // opening double quote
+      result.should.include("&#8221;"); // closing double quote
+      result.should.include("&#8216;"); // opening single quote
+      result.should.include("&#8217;"); // closing single quote
+      result.should.include("&#8211;"); // en dash
+      result.should.include("&#8212;"); // em dash
+      result.should.include("&#8230;"); // ellipsis
     });
-    it("should take markdown and produce a valid HTML string", function (done) {
-      html.generateFromMarkdown(validMarkdown, function (err, result) {
-        should.not.exist(err);
-        // the above should at the very least generate the following:
-        result[0].should.include("Hello <em>world</em>.");
-        result[0].should.include("<ul>");
-        w3c.validate(result[0], done);
-      });
-    });
-    it("should add all the proper typographic entities", function (done) {
-      html.generateFromMarkdown("\"word\" ... 'word' can't -- ---", function (err, result) {
-        should.not.exist(err);
-        result[0].should.include("“");
-        result[0].should.include("”");
-        result[0].should.include("‘");
-        result[0].should.include("’");
-        result[0].should.include("–");
-        result[0].should.include("—");
-        result[0].should.include("…");
-        done();
-      });
-    });
-    it("should add the class 'opening' to the first paragraph", function (done) {
-      var input = "# heading\n\n";
+    it("should add the class 'opening' to the first paragraph", function () {
+      var result,
+        input = "# heading\n\n";
       input += "para1\n\n";
       input += "para2\n\n";
-      html.generateFromMarkdown(input, function (err, result) {
-        should.not.exist(err);
-        result[0].should.include("<p class=\"opening\">para1</p>");
-        result[0].should.not.include("<p class=\"opening\">para2</p>");
-        done();
-      });
+
+      result = html.generateAndPrepMarkup(input);
+      result.should.include("<p class=\"opening\">para1</p>");
+      result.should.not.include("<p class=\"opening\">para2</p>");
     });
   });
 });

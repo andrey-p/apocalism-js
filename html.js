@@ -9,6 +9,24 @@ var namp = require("namp"),
   typogr = require("typogr"),
   template = require("./template.js");
 
+exports.generateAndPrepMarkup = function (markdown) {
+  var markup;
+
+  // markup to html
+  markup = namp(markdown).html;
+
+  // add 'opening' class to the first paragraph; this might be pretty brittle
+  markup = markup.replace(/<p>/, "<p class=\"opening\">");
+
+  // decode html entities as typogr misses them otherwise
+  markup = ent.decode(markup);
+
+  // typographic fanciness
+  markup = typogr.typogrify(markup);
+
+  return markup;
+};
+
 exports.generateFromMarkdown = function (bodyMarkdown, callback) {
   var bodyMarkup;
 
@@ -21,17 +39,7 @@ exports.generateFromMarkdown = function (bodyMarkdown, callback) {
     paginator.paginate(template.getBlankPage(), bodyMarkup, callback);
   }
 
-  // markup to html
-  bodyMarkup = namp(bodyMarkdown).html;
-
-  // add 'opening' class to the first paragraph; this might be pretty brittle
-  bodyMarkup = bodyMarkup.replace(/<p>/, "<p class=\"opening\">");
-
-  // decode html entities as typogr misses them otherwise
-  bodyMarkup = ent.decode(bodyMarkup);
-
-  // typographic fanciness
-  bodyMarkup = typogr.typogrify(bodyMarkup);
+  bodyMarkup = exports.generateAndPrepMarkup(bodyMarkdown);
 
   template.init("default", initialisedTemplate);
 };
