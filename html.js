@@ -5,6 +5,8 @@ var namp = require("namp"),
   fs = require("fs"),
   sass = require("node-sass"),
   paginator = require("./paginator.js"),
+  ent = require("ent"),
+  typogr = require("typogr"),
   template = require("./template.js");
 
 exports.generateFromMarkdown = function (bodyMarkdown, callback) {
@@ -19,7 +21,14 @@ exports.generateFromMarkdown = function (bodyMarkdown, callback) {
     paginator.paginate(template.getBlankPage(), bodyMarkup, callback);
   }
 
+  // markup to html
   bodyMarkup = namp(bodyMarkdown).html;
+
+  // decode html entities as typogr misses them otherwise
+  bodyMarkup = ent.decode(bodyMarkup);
+
+  // typographic fanciness
+  bodyMarkup = typogr.typogrify(bodyMarkup);
 
   template.init("default", initialisedTemplate);
 };

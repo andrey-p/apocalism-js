@@ -5,6 +5,7 @@
     "typogr": "*",
     "hypher": "*",
     "namp": "*",
+    "ent": "*",
     "commander": "*",
     "node-sass": "*"
   },

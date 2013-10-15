@@ -31,5 +31,18 @@ describe("html", function () {
         w3c.validate(result[0], done);
       });
     });
+    it("should add all the proper typographic entities", function (done) {
+      html.generateFromMarkdown("\"word\" ... 'word' can't -- ---", function (err, result) {
+        should.not.exist(err);
+        result[0].should.include("“");
+        result[0].should.include("”");
+        result[0].should.include("‘");
+        result[0].should.include("’");
+        result[0].should.include("–");
+        result[0].should.include("—");
+        result[0].should.include("…");
+        done();
+      });
+    });
   });
 });
