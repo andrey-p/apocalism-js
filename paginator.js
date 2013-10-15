@@ -41,74 +41,72 @@ exports.createPage = function (blankPage, content, callback) {
       return;
     }
 
-    setTimeout(function () {
-      page.evaluate(function (markup) {
-        var leftover = "",
-          lastElement,
-          container,
-          body;
+    page.evaluate(function (markup) {
+      var leftover = "",
+        lastElement,
+        container,
+        body;
 
-        function removeParagraph() {
-          var lastWordIndex;
+      function removeParagraph() {
+        var lastWordIndex;
 
-          // return if container doesn't overflow anymore
-          if (container.clientHeight >= container.scrollHeight) {
-            return;
-          }
-
-          lastElement = container.lastChild;
-          container.removeChild(lastElement);
-
-          // if it's a non-element node, ignore it
-          if (lastElement.nodeType !== 1) {
-            removeParagraph();
-            return;
-          }
-
-          // if this last paragraph was the difference between container overflowing or not
-          if (container.clientHeight >= container.scrollHeight
-              && lastElement.tagName === "P"
-              && lastElement.innerHTML.indexOf(" ") > -1) { // ignore single-word paragraphs
-            // readd it...
-            container.appendChild(lastElement);
-
-            // prep leftover to wrap paragraph
-            leftover = "</p>" + leftover;
-
-            // and remove words one by one until it stops overflowing again
-            while (container.clientHeight < container.scrollHeight) {
-              lastWordIndex = lastElement.innerHTML.lastIndexOf(" ");
-              leftover = lastElement.innerHTML.substring(lastWordIndex + 1) + " " + leftover;
-              lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
-            }
-
-            if (lastElement.innerHTML.length > 0) {
-              // contd class should have an indent 0
-              leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
-            } else {
-              leftover = "<p>" + leftover;
-            }
-          } else {
-            leftover = lastElement.outerHTML + leftover;
-            removeParagraph();
-          }
+        // return if container doesn't overflow anymore
+        if (container.clientHeight >= container.scrollHeight) {
+          return;
         }
 
-        try {
-          // add all of the content to the container element
-          body = document.body;
-          container = document.getElementById("container");
-          container.innerHTML = markup;
+        lastElement = container.lastChild;
+        container.removeChild(lastElement);
 
-          // remove paragraphs until it doesn't overflow anymore
+        // if it's a non-element node, ignore it
+        if (lastElement.nodeType !== 1) {
           removeParagraph();
-        } catch (e) {
-          return "Error: " + e.toString();
+          return;
         }
 
-        return leftover; // to be populated with leftover text
-      }, filledPage, content);
-    }, 500);
+        // if this last paragraph was the difference between container overflowing or not
+        if (container.clientHeight >= container.scrollHeight
+            && lastElement.tagName === "P"
+            && lastElement.innerHTML.indexOf(" ") > -1) { // ignore single-word paragraphs
+          // readd it...
+          container.appendChild(lastElement);
+
+          // prep leftover to wrap paragraph
+          leftover = "</p>" + leftover;
+
+          // and remove words one by one until it stops overflowing again
+          while (container.clientHeight < container.scrollHeight) {
+            lastWordIndex = lastElement.innerHTML.lastIndexOf(" ");
+            leftover = lastElement.innerHTML.substring(lastWordIndex + 1) + " " + leftover;
+            lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
+          }
+
+          if (lastElement.innerHTML.length > 0) {
+            // contd class should have an indent 0
+            leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
+          } else {
+            leftover = "<p>" + leftover;
+          }
+        } else {
+          leftover = lastElement.outerHTML + leftover;
+          removeParagraph();
+        }
+      }
+
+      try {
+        // add all of the content to the container element
+        body = document.body;
+        container = document.getElementById("container");
+        container.innerHTML = markup;
+
+        // remove paragraphs until it doesn't overflow anymore
+        removeParagraph();
+      } catch (e) {
+        return "Error: " + e.toString();
+      }
+
+      return leftover; // to be populated with leftover text
+    }, filledPage, content);
   }
 
   function setViewSize(err) {
