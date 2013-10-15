@@ -57,8 +57,10 @@ exports.getBlankPage = function (classString) {
     + "height:" + height + "mm;"
     + "margin:" + margin.top + "mm " + margin.spine + "mm " + margin.bottom + "mm " + margin.outer + "mm;";
 
-  htmlMarkup = "<html>";
+  htmlMarkup = "<!DOCTYPE html>";
+  htmlMarkup += "<html>";
   htmlMarkup += "<head>";
+  htmlMarkup += "<title>apocalism.js page</title>";
   htmlMarkup += "<style type='text/css'>" + cssString + "</style>";
   htmlMarkup += "</head>";
   htmlMarkup += "<body style='" + dimensionsInlineCss + "' class='" + classString + "'>";
