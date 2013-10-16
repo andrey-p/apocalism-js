@@ -42,7 +42,7 @@ describe("pdf", function () {
       pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
         should.not.exist(err);
         should.exist(pathToPdf);
-        pathToPdf.should.be.a("string");
+        pathToPdf.should.have.type("string");
         helper.getFileMimeType(pathToPdf, function (err, mimetype) {
           should.not.exist(err);
           mimetype.should.include("application/pdf");
