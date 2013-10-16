@@ -24,7 +24,7 @@ exports.init = function (template, callback) {
   var dimensions;
 
   templateName = template;
-  dimensions = require("./template/" + templateName + "/dimensions.js");
+  dimensions = require("./template/" + templateName + "/dimensions.json");
   exports.stock = stock = dimensions.stock;
   exports.margin = margin = dimensions.margin;
 
