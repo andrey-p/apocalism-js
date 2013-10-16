@@ -26,8 +26,11 @@ find isn't quite as lacerated as one might expect. His story is much
 stranger than yours.
 
 "A cup of tea would be nice," Richard Plick thought of saying, but he
-had a feeling he wasn't going to get any, and he was right. What
-followed was not exactly a breeze, yet it went thankfully fast.
+had a feeling he wasn't going to get any, and he was right. 
+
+---
+
+What followed was not exactly a breeze, yet it went thankfully fast.
 
 He sat politely as the owners of the flat called the police and, once
 arrested, tried to answer the questions as well as he could. The
@@ -50,7 +53,11 @@ The young man who saw him out seemed a bit more receptive. "If you're
 telling the truth, probably a good idea to keep your eyes on the skies."
 
 That Plick did. He also bought a cheap cricket bat from the first shop
-he saw, just in case watching out wasn't enough. That night, Plick
+he saw, just in case watching out wasn't enough.
+
+---
+
+That night, Plick
 stayed up late, his cricket bat in hand. On the building opposite was
 the moth, almost imperceptible, but still very much there. It circled
 the windows, flicking its wings nervously.

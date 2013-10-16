@@ -57,7 +57,7 @@ describe("paginator", function () {
       });
     });
     it("should be able to split paragraphs at page break", function (done) {
-      var i, wordsInPage, wordsInLeftover, numberWords = 500;
+      var i, wordsInPage, wordsInLeftover, numberWords = 500, endFirstTagIndex;
       markup = "<p>start ";
       for (i = 0; i < numberWords; i += 1) {
         markup += "word ";
@@ -67,13 +67,35 @@ describe("paginator", function () {
         should.not.exist(err);
         should.exist(page);
         should.exist(leftoverMarkup);
-        // "word" should be the first word in leftover
-        leftoverMarkup.indexOf("word").should.equal(0);
+
+        // first para should be given a class of contd
+        leftoverMarkup.should.startWith("<p class='contd");
+
+        // "word" should be the first word in leftover after the opening tag
+        endFirstTagIndex = leftoverMarkup.indexOf(">");
+        leftoverMarkup.indexOf("word").should.equal(endFirstTagIndex + 1);
 
         // check no words have been left out
         wordsInPage = (page.match(/word/g) || []).length;
         wordsInLeftover = (leftoverMarkup.match(/word/g) || []).length;
         (wordsInPage + wordsInLeftover).should.equal(numberWords);
+        done();
+      });
+    });
+    it("shouldn't give paragraphs a contd class if they haven't been split", function (done) {
+      var i, numberParas = 50;
+      markup = "<p>start</p>";
+      for (i = 0; i < numberParas; i += 1) {
+        markup += "<p>para</p>";
+      }
+      markup += "<p>end</p>";
+
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        leftoverMarkup.should.startWith("<p>para</p>");
         done();
       });
     });
