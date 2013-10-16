@@ -8,7 +8,8 @@
     "namp": "*",
     "ent": "*",
     "commander": "*",
-    "node-sass": "*"
+    "node-sass": "*",
+    "json2sass": "git://github.com/renancouto/json2sass.git"
   },
   "devDependencies": {
     "mocha": "*",

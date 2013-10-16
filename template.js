@@ -3,14 +3,15 @@
 
 var fs = require("fs"),
   sass = require("node-sass"),
+  json2sass = require("json2sass"),
   templateName,
   stock,
   margin,
   cssString;
 
-function getStyle(path, callback) {
+function parseStyle(data, callback) {
   sass.render({
-    file: path,
+    data: data,
     success: function (css) {
       callback(null, css);
     },
@@ -21,14 +22,19 @@ function getStyle(path, callback) {
 }
 
 exports.init = function (template, callback) {
-  var dimensions;
+  var dimensions,
+    dimensionsScss;
 
   templateName = template;
   dimensions = require("./template/" + templateName + "/dimensions.json");
   exports.stock = stock = dimensions.stock;
   exports.margin = margin = dimensions.margin;
 
-  getStyle("./template/" + templateName + "/style.scss", function (err, css) {
+  // convert dimensions vars to scss
+  // they will be injected into style.scss
+  dimensionsScss = json2sass.writeScss(dimensions);
+
+  function parsedStyle(err, css) {
     if (err) {
       callback(err);
       return;
@@ -37,25 +43,28 @@ exports.init = function (template, callback) {
     cssString = css;
 
     callback();
-  });
+  }
+
+  function gotStyle(err, scss) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    scss = dimensionsScss + "\n\n" + scss;
+
+    parseStyle(scss, parsedStyle);
+  }
+
+  fs.readFile("./template/" + templateName + "/style.scss", gotStyle);
 };
 
 exports.getBlankPage = function (classString) {
-  var htmlMarkup,
-    dimensionsInlineCss,
-    width,
-    height;
+  var htmlMarkup;
 
   if (!templateName) {
     throw new Error("template hasn't been initialised");
   }
-
-  width = stock.width + stock.bleed * 2 - (margin.outer + margin.spine);
-  height = stock.height + stock.bleed * 2 - (margin.top + margin.bottom);
-
-  dimensionsInlineCss = "width:" + width + "mm;"
-    + "height:" + height + "mm;"
-    + "margin:" + margin.top + "mm " + margin.spine + "mm " + margin.bottom + "mm " + margin.outer + "mm;";
 
   htmlMarkup = "<!DOCTYPE html>";
   htmlMarkup += "<html>";
@@ -63,8 +72,8 @@ exports.getBlankPage = function (classString) {
   htmlMarkup += "<title>apocalism.js page</title>";
   htmlMarkup += "<style type='text/css'>" + cssString + "</style>";
   htmlMarkup += "</head>";
-  htmlMarkup += "<body style='" + dimensionsInlineCss + "' class='" + classString + "'>";
-  htmlMarkup += "<div id='container' style='width: 100%; height: 100%; overflow: hidden;'>";
+  htmlMarkup += "<body class='" + classString + "'>";
+  htmlMarkup += "<div id='container'>";
   htmlMarkup += "</div>";
   htmlMarkup += "</body>";
   htmlMarkup += "</html>";
