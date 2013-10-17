@@ -137,8 +137,9 @@ exports.createPage = function (blankPage, content, callback) {
   phantomWrapper.getPage(gotPage);
 };
 
-exports.paginate = function (blankPage, content, callback) {
+exports.paginate = function (content, callback) {
   var htmlMarkup,
+    blankPage,
     pages = [];
 
   function createdPage(err, page, leftover) {
@@ -155,6 +156,8 @@ exports.paginate = function (blankPage, content, callback) {
       callback(null, pages);
     }
   }
+
+  blankPage = template.getBlankPage();
 
   exports.createPage(blankPage, content, createdPage);
 };
