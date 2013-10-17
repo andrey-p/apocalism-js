@@ -38,3 +38,13 @@ exports.getFileMimeType = function (path, callback) {
     }
   });
 };
+
+exports.getPdfPaperSize = function (path, callback) {
+  exec("pdfinfo " + path + " | grep \"Page size:.*\" | grep -Eo \"[0-9]+ x [0-9]+\"", function (error, stdout, stderr) {
+    if (error) {
+      callback(error);
+    } else {
+      callback(null, stdout);
+    }
+  });
+};

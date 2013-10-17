@@ -35,6 +35,17 @@ describe("pdf", function () {
         });
       });
     });
+    it("should output pages in A5 format + bleed if the default template is being used", function (done) {
+      pdf.generatePdfPage(htmlMarkup, pathToPdf, function (err) {
+        should.not.exist(err);
+        helper.getPdfPaperSize(pathToPdf, function (err, paperSize) {
+          should.not.exist(err);
+          // 431 x 607 pts is 152 x 214.1mm, which is more or less A5 with 2mm bleed
+          paperSize.should.include("431 x 607");
+          done();
+        });
+      });
+    });
   });
   describe("#generatePdfFromPages()", function () {
     it("should generate a pdf from an array of html strings", function (done) {
