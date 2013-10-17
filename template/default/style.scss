@@ -42,7 +42,7 @@ the following are injected before compiling:
 body {
   width: $stock-width + $stock-bleed * 2 - ($margin-outer + $margin-spine) * 1mm;
   height: $stock-height + $stock-bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
-  margin: $margin-top * 1mm;
+  padding: $margin-top * 1mm;
 }
 
 #container {
@@ -55,7 +55,7 @@ body {
 
 p {
   font-family: "dejavuserif", sans-serif;
-  font-size: 15pt;
+  font-size: 11pt;
   line-height: 1.5em;
   text-indent: 1.5em;
   text-align: justify;
@@ -68,9 +68,9 @@ p {
 
   &.opening:first-letter {
     float: left;
-    font-size: 72pt;
-    padding: 0 6pt 0 0;
-    line-height: 72pt;
+    font-size: 53pt;
+    padding: 0 4pt 0 0;
+    line-height: 53pt;
     margin-bottom: -10pt;
   }
 }
