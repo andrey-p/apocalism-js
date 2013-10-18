@@ -5,9 +5,9 @@
     "bleed": 2
   },
   "margin": {
-    "top": 10,
-    "bottom": 10,
-    "outer": 10,
-    "spine": 10
+    "top": 15,
+    "bottom": 20,
+    "outer": 15,
+    "spine": 15
   }
 }

@@ -42,13 +42,23 @@ the following are injected before compiling:
 body {
   width: $stock-width + $stock-bleed * 2 - ($margin-outer + $margin-spine) * 1mm;
   height: $stock-height + $stock-bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
-  padding: $margin-top * 1mm;
+  padding-top: $margin-top * 1mm;
+  padding-bottom: $margin-bottom * 1mm;
+  &.recto {
+	padding-left: $margin-spine * 1mm;
+	padding-right: $margin-outer * 1mm;
+  }
+  &.verso {
+	padding-left: $margin-outer * 1mm;
+	padding-right: $margin-spine * 1mm;
+  }
 }
 
 #container {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 #page-number {
@@ -68,7 +78,6 @@ p {
   font-size: 12pt;
   line-height: 1.5em;
   text-indent: 1.5em;
-  text-align: justify;
   padding: 0px;
   margin: 0px;
 
@@ -88,4 +97,19 @@ p {
 hr {
   border: 0;
   margin-bottom: 3em;
+
+  // hr at the beginning or end of page
+  // needs to be graphical
+  &:first-child, &:last-child {
+    margin: 1em auto;
+	width: 30mm;
+	position: relative;
+	text-align: center;
+	&:after {
+	  font-family: "dejavuserif", sans-serif;
+      font-size: 12pt;
+	  position: relative;
+      content: "* * *";
+    }
+  }
 }
