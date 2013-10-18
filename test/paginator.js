@@ -132,7 +132,7 @@ describe("paginator", function () {
       lipsumOptions.units = "sentence";
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
+      paginator.paginate(markup, function (err, pages) {
         should.not.exist(err);
         pages.should.have.length(1);
         done();
@@ -142,7 +142,7 @@ describe("paginator", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
+      paginator.paginate(markup, function (err, pages) {
         should.not.exist(err);
         pages.length.should.be.above(1);
         done();
@@ -152,7 +152,7 @@ describe("paginator", function () {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
 
-      paginator.paginate(emptyPageMarkup, markup, function (err, pages) {
+      paginator.paginate(markup, function (err, pages) {
         should.not.exist(err);
         pages.forEach(function (page) {
           page.should.include("<html>");

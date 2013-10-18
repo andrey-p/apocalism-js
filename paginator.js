@@ -137,9 +137,12 @@ exports.createPage = function (blankPage, content, callback) {
   phantomWrapper.getPage(gotPage);
 };
 
-exports.paginate = function (blankPage, content, callback) {
+exports.paginate = function (content, callback) {
   var htmlMarkup,
-    pages = [];
+    blankPage,
+    pages = [],
+    currentPage = 1,
+    className = "recto";
 
   function createdPage(err, page, leftover) {
     if (err) {
@@ -150,11 +153,19 @@ exports.paginate = function (blankPage, content, callback) {
     pages.push(page);
 
     if (leftover && leftover.length) {
+      currentPage += 1;
+      className = currentPage % 2 ? "verso" : "recto";
+      blankPage = template.getBlankPage({ pageNumber: currentPage, className: className });
       exports.createPage(blankPage, leftover, createdPage);
     } else {
       callback(null, pages);
     }
   }
+
+  blankPage = template.getBlankPage({
+    pageNumber: currentPage,
+    className: "recto"
+  });
 
   exports.createPage(blankPage, content, createdPage);
 };

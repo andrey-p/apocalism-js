@@ -4,10 +4,12 @@
 
 var program = require("commander"),
   pdf = require("./pdf.js"),
+  paginator = require("./paginator.js"),
   html = require("./html.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
-  fs = require("fs");
+  fs = require("fs"),
+  template = require("./template.js");
 
 function cleanup(callback) {
   phantomWrapper.cleanup(callback);
@@ -42,25 +44,37 @@ function compileBook(file) {
     success("pdf generated at: " + pathToPdf);
   }
 
-  function generatedHtml(err, htmlMarkup) {
+  function generatedPages(err, pages) {
     if (err) {
       fail(err);
       return;
     }
 
-    pdf.generatePdfFromPages(htmlMarkup, program.output, generatedPdf);
+    pdf.generatePdfFromPages(pages, program.output, generatedPdf);
   }
 
   function readFile(err, markdown) {
+    var markup;
     if (err) {
       fail(err);
       return;
     }
 
-    html.generateFromMarkdown(markdown, generatedHtml);
+    markup = html.generateAndPrepMarkup(markdown);
+
+    paginator.paginate(markup, generatedPages);
   }
 
-  fs.readFile(file, { encoding: "utf-8" }, readFile);
+  function initialisedTemplate(err) {
+    if (err) {
+      fail(err);
+      return;
+    }
+
+    fs.readFile(file, { encoding: "utf-8" }, readFile);
+  }
+
+  template.init("default", initialisedTemplate);
 }
 
 program
