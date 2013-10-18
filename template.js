@@ -72,7 +72,7 @@ exports.getBlankPage = function (opts) {
   htmlMarkup += "<title>apocalism.js page</title>";
   htmlMarkup += "<style type='text/css'>" + cssString + "</style>";
   htmlMarkup += "</head>";
-  htmlMarkup += "<body class='" + opts.classString + "'>";
+  htmlMarkup += "<body class='" + opts.className + "'>";
   htmlMarkup += "<div id='container'>";
   htmlMarkup += "</div>";
   if (opts.pageNumber) {

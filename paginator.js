@@ -141,7 +141,8 @@ exports.paginate = function (content, callback) {
   var htmlMarkup,
     blankPage,
     pages = [],
-    currentPage = 1;
+    currentPage = 1,
+    className = "recto";
 
   function createdPage(err, page, leftover) {
     if (err) {
@@ -153,7 +154,8 @@ exports.paginate = function (content, callback) {
 
     if (leftover && leftover.length) {
       currentPage += 1;
-      blankPage = template.getBlankPage({ pageNumber: currentPage });
+      className = currentPage % 2 ? "verso" : "recto";
+      blankPage = template.getBlankPage({ pageNumber: currentPage, className: className });
       exports.createPage(blankPage, leftover, createdPage);
     } else {
       callback(null, pages);
@@ -161,7 +163,8 @@ exports.paginate = function (content, callback) {
   }
 
   blankPage = template.getBlankPage({
-    pageNumber: currentPage
+    pageNumber: currentPage,
+    className: "recto"
   });
 
   exports.createPage(blankPage, content, createdPage);
