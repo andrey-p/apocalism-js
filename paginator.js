@@ -140,7 +140,8 @@ exports.createPage = function (blankPage, content, callback) {
 exports.paginate = function (content, callback) {
   var htmlMarkup,
     blankPage,
-    pages = [];
+    pages = [],
+    currentPage = 1;
 
   function createdPage(err, page, leftover) {
     if (err) {
@@ -151,13 +152,17 @@ exports.paginate = function (content, callback) {
     pages.push(page);
 
     if (leftover && leftover.length) {
+      currentPage += 1;
+      blankPage = template.getBlankPage({ pageNumber: currentPage });
       exports.createPage(blankPage, leftover, createdPage);
     } else {
       callback(null, pages);
     }
   }
 
-  blankPage = template.getBlankPage();
+  blankPage = template.getBlankPage({
+    pageNumber: currentPage
+  });
 
   exports.createPage(blankPage, content, createdPage);
 };

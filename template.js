@@ -59,7 +59,7 @@ exports.init = function (template, callback) {
   fs.readFile("./template/" + templateName + "/style.scss", gotStyle);
 };
 
-exports.getBlankPage = function (classString) {
+exports.getBlankPage = function (opts) {
   var htmlMarkup;
 
   if (!templateName) {
@@ -72,9 +72,12 @@ exports.getBlankPage = function (classString) {
   htmlMarkup += "<title>apocalism.js page</title>";
   htmlMarkup += "<style type='text/css'>" + cssString + "</style>";
   htmlMarkup += "</head>";
-  htmlMarkup += "<body class='" + classString + "'>";
+  htmlMarkup += "<body class='" + opts.classString + "'>";
   htmlMarkup += "<div id='container'>";
   htmlMarkup += "</div>";
+  if (opts.pageNumber) {
+    htmlMarkup += "<div id='page-number'>" + opts.pageNumber + "</div>";
+  }
   htmlMarkup += "</body>";
   htmlMarkup += "</html>";
 

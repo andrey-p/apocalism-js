@@ -51,6 +51,16 @@ body {
   overflow: hidden;
 }
 
+#page-number {
+  font-family: "dejavuserif", sans-serif;
+  position: absolute;
+  bottom: 10mm;
+  width: 10mm;
+  text-align: center;
+  left: 50%;
+  margin-left: -5mm;
+}
+
 /* styles */
 
 p {
