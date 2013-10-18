@@ -65,7 +65,7 @@ body {
 
 p {
   font-family: "dejavuserif", sans-serif;
-  font-size: 11pt;
+  font-size: 12pt;
   line-height: 1.5em;
   text-indent: 1.5em;
   text-align: justify;
@@ -78,9 +78,9 @@ p {
 
   &.opening:first-letter {
     float: left;
-    font-size: 53pt;
+    font-size: 58pt;
     padding: 0 4pt 0 0;
-    line-height: 53pt;
+    line-height: 58pt;
     margin-bottom: -10pt;
   }
 }

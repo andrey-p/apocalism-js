@@ -21,24 +21,13 @@ exports.generatePdfPage = function (markup, path, callback) {
     page.render(path, pageRendered);
   }
 
-  function setZoomFactor(err) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    page.set("content", markup, setContent);
-  }
-
   function setPaperSize(err) {
     if (err) {
       callback(err);
       return;
     }
 
-    // this covers up issue with pages being half of what they should be
-    // this will come back to haunt me when I print images
-    page.set("zoomFactor", 2, setZoomFactor);
+    page.set("content", markup, setContent);
   }
 
   function gotPage(err, phantomPage) {
