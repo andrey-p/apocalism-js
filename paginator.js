@@ -43,54 +43,73 @@ exports.createPage = function (blankPage, content, callback) {
 
     page.evaluate(function (markup) {
       var leftover = "",
-        lastElement,
         container,
-        body;
+        body,
+        splittableTags = ["P", "A", "SPAN", "EM", "STRONG"];
 
-      function removeParagraph() {
-        var lastWordIndex;
+      function removeOverflowingElements(parentElement) {
+        var lastWordIndex,
+          lastNode,
+          lastWord,
+          parentTagName;
 
-        // return if container doesn't overflow anymore
+        // nothing to do if top level container's stopped overflowing
         if (container.clientHeight >= container.scrollHeight) {
           return;
         }
 
-        lastElement = container.lastChild;
-        container.removeChild(lastElement);
+        lastNode = parentElement.lastChild;
+        parentElement.removeChild(lastNode);
 
-        // if it's a non-element node, ignore it
-        if (lastElement.nodeType !== 1) {
-          removeParagraph();
-          return;
-        }
+        parentTagName = parentElement.tagName.toLowerCase();
 
-        // if this last paragraph was the difference between container overflowing or not
-        if (container.clientHeight >= container.scrollHeight
-            && lastElement.tagName === "P"
-            && lastElement.innerHTML.indexOf(" ") > -1) { // ignore single-word paragraphs
-          // readd it...
-          container.appendChild(lastElement);
+        // if this last element was the difference between container overflowing
+        // it may need to be split
+        if (container.clientHeight >= container.scrollHeight) {
 
-          // prep leftover to wrap paragraph
-          leftover = "</p>" + leftover;
+          if (lastNode.nodeType === 1 // if node is type element (ie a tag)
+              && splittableTags.indexOf(lastNode.tagName) > -1 // only split P and inline tags
+              && lastNode.innerHTML.indexOf(" ") > -1) { // can't split one word elements so don't bother
 
-          // and remove words one by one until it stops overflowing again
-          while (container.clientHeight < container.scrollHeight) {
-            lastWordIndex = lastElement.innerHTML.lastIndexOf(" ");
-            leftover = lastElement.innerHTML.substring(lastWordIndex + 1) + " " + leftover;
-            lastElement.innerHTML = lastElement.innerHTML.substring(0, lastWordIndex);
-          }
+            // readd it...
+            parentElement.appendChild(lastNode);
 
-          if (lastElement.innerHTML.length > 0) {
-            // contd class should have an indent 0
-            leftover = "<p class='contd " + lastElement.className + "'>" + leftover;
+            // and recurse
+            removeOverflowingElements(lastNode);
+
+          } else if (lastNode.nodeType === 3 // if node is text element
+              && lastNode.data) { // and is non-empty
+
+            // readd it...
+            parentElement.appendChild(lastNode);
+
+            // prep leftover to wrap
+            leftover = "</" + parentTagName + ">" + leftover;
+
+            // and remove words one by one until it stops overflowing again
+            while (container.clientHeight < container.scrollHeight) {
+              lastWordIndex = lastNode.data.lastIndexOf(" ");
+              lastWord = lastNode.data.substring(lastWordIndex + 1);
+
+              leftover = lastWord + " " + leftover;
+              lastNode.data = lastNode.data.substring(0, lastWordIndex);
+            }
+
+            if (lastNode.data.length > 0) {
+              // contd class should have an indent 0
+              leftover = "<" + parentTagName + " class='contd " + parentElement.className + "'>" + leftover;
+            } else {
+              leftover = "<" + parentTagName + ">" + leftover;
+            }
           } else {
-            leftover = "<p>" + leftover;
+            leftover = lastNode.outerHTML + leftover;
           }
-        } else {
-          leftover = lastElement.outerHTML + leftover;
-          removeParagraph();
+
+        } else if (lastNode.outerHTML) {
+          leftover = lastNode.outerHTML + leftover;
         }
+
+        removeOverflowingElements(parentElement);
       }
 
       try {
@@ -100,7 +119,7 @@ exports.createPage = function (blankPage, content, callback) {
         container.innerHTML = markup;
 
         // remove paragraphs until it doesn't overflow anymore
-        removeParagraph();
+        removeOverflowingElements(container);
       } catch (e) {
         return "Error: " + e.toString();
       }
