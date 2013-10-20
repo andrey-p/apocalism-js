@@ -51,8 +51,7 @@ exports.createPage = function (blankPage, content, callback) {
         var lastWordIndex,
           lastNode,
           lastWord,
-          tagName,
-          originalLengthOfNode;
+          tagName;
 
         // nothing to do if top level container's stopped overflowing
         if (container.clientHeight >= container.scrollHeight
@@ -82,9 +81,9 @@ exports.createPage = function (blankPage, content, callback) {
             // and recurse
             removeOverflowingElements(lastNode);
 
-            // if the node is still the same length, it means it overflowed completely
+            // if the node has length 0, it means it overflowed completely
             // so it wasn't split, so don't give it contd class
-            if (originalLengthOfNode === lastNode.innerHTML.length) {
+            if (lastNode.innerHTML.length === 0) {
               leftover = "<" + tagName + " class='" + lastNode.className + "'>" + leftover;
             } else {
               leftover = "<" + tagName + " class='contd " + lastNode.className + "'>" + leftover;
