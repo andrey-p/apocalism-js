@@ -130,7 +130,7 @@ describe("paginator", function () {
     it("should output a single page if the content is small enough to fit", function (done) {
       lipsumOptions.count = 1;
       lipsumOptions.units = "sentence";
-      markup = lipsum(lipsumOptions);
+      markup = "<p>" + lipsum(lipsumOptions) + "<p>";
 
       paginator.paginate(markup, function (err, pages) {
         should.not.exist(err);
