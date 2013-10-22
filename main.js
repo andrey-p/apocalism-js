@@ -17,8 +17,7 @@ function cleanup(callback) {
 
 function fail(msg) {
   cleanup(function () {
-    util.error(msg);
-    process.exit(1);
+    throw new Error(msg);
   });
 }
 
@@ -30,6 +29,11 @@ function success(msg) {
 }
 
 function compileBook(file) {
+  if (!program.output) {
+    fail("needs to specify path to images (-i flag)");
+    return;
+  }
+
   if (!program.output) {
     fail("needs to specify output file (-o flag)");
     return;
@@ -80,6 +84,7 @@ function compileBook(file) {
 program
   .version("0.0.1")
   .usage("[command] [options] <file>")
+  .option("-i, --path-to-images <pathToImages>")
   .option("-o, --output <outputFile>");
 
 program

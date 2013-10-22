@@ -10,4 +10,4 @@ tests:
 	@mocha -R spec -t 10000 test/pdf.js
 
 test-pdf:
-	@./main.js test/test_project/story.md -o test/test_project/output/output.pdf
+	@./main.js test/test_project/story.md -o test/test_project/output/output.pdf -i ./test/test_project/images/
