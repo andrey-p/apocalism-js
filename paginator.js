@@ -44,11 +44,13 @@ exports.createPage = function (blankPage, content, callback) {
     page.evaluate(function (markup) {
       var leftover = "",
         container,
+        overflowContainer,
         body,
         splittableTags = ["P", "A", "SPAN", "EM", "STRONG"];
 
       function removeOverflowingElements(parentElement) {
         var lastWordIndex,
+          nodeToMove,
           lastNode,
           lastWord,
           tagName;
@@ -118,13 +120,27 @@ exports.createPage = function (blankPage, content, callback) {
       }
 
       try {
-        // add all of the content to the container element
+        // add all of the content to the overflow container element
         body = document.body;
         container = document.getElementById("container");
-        container.innerHTML = markup;
+        overflowContainer = document.createElement("div");
+        overflowContainer.innerHTML = markup;
 
-        // remove paragraphs until it doesn't overflow anymore
-        removeOverflowingElements(container);
+        while (container.scrollHeight <= container.clientHeight
+            && overflowContainer.childElementCount) {
+          nodeToMove = overflowContainer.firstElementChild;
+          container.appendChild(nodeToMove);
+        }
+
+        // get all overflow
+        leftover = overflowContainer.innerHTML.trim();
+
+        // if the loop ended because of overflow
+        if (container.scrollHeight > container.clientHeight) {
+          // remove paragraphs until it doesn't overflow anymore
+          removeOverflowingElements(container);
+        }
+
       } catch (e) {
         return "Error: " + e.toString();
       }
