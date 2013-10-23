@@ -9,6 +9,7 @@ var program = require("commander"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs"),
+  images = require("./images.js"),
   template = require("./template.js");
 
 function cleanup(callback) {
@@ -29,7 +30,7 @@ function success(msg) {
 }
 
 function compileBook(file) {
-  if (!program.output) {
+  if (!program.pathToImages) {
     fail("needs to specify path to images (-i flag)");
     return;
   }
@@ -57,6 +58,15 @@ function compileBook(file) {
     pdf.generatePdfFromPages(pages, program.output, generatedPdf);
   }
 
+  function resolvedImages(err, markup) {
+    if (err) {
+      fail(err);
+      return;
+    }
+
+    paginator.paginate(markup, generatedPages);
+  }
+
   function readFile(err, markdown) {
     var markup;
     if (err) {
@@ -66,7 +76,7 @@ function compileBook(file) {
 
     markup = html.generateAndPrepMarkup(markdown);
 
-    paginator.paginate(markup, generatedPages);
+    images.resolveToBase64ImageData(markup, program.pathToImages, resolvedImages);
   }
 
   function initialisedTemplate(err) {
