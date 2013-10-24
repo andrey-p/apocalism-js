@@ -76,7 +76,7 @@ function compileBook(file) {
 
     markup = html.generateAndPrepMarkup(markdown);
 
-    images.resolveToBase64ImageData(markup, program.pathToImages, resolvedImages);
+    images.resolveImagesInMarkup(markup, program.pathToImages, resolvedImages);
   }
 
   function initialisedTemplate(err) {

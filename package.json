@@ -9,6 +9,7 @@
     "ent": "*",
     "commander": "*",
     "node-sass": "*",
+    "gm": "*",
     "json2sass": "git://github.com/renancouto/json2sass.git"
   },
   "devDependencies": {
