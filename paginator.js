@@ -44,6 +44,8 @@ exports.createPage = function (blankPage, content, callback) {
     page.evaluate(function (markup) {
       var leftover = "",
         container,
+        overflowContainer,
+        imgPrepend = "",
         body,
         splittableTags = ["P", "A", "SPAN", "EM", "STRONG"];
 
@@ -117,14 +119,36 @@ exports.createPage = function (blankPage, content, callback) {
         removeOverflowingElements(parentElement);
       }
 
+      function moveElementsUntilOveflowing() {
+        var nodeToMove;
+        while (container.scrollHeight <= container.clientHeight
+            && overflowContainer.childElementCount) {
+          nodeToMove = overflowContainer.firstElementChild;
+          container.appendChild(nodeToMove);
+        }
+      }
       try {
-        // add all of the content to the container element
+        // add all of the content to the overflow container element
         body = document.body;
         container = document.getElementById("container");
-        container.innerHTML = markup;
+        overflowContainer = document.createElement("div");
+        overflowContainer.innerHTML = markup;
+
+        moveElementsUntilOveflowing();
+
+        if (container.lastElementChild.innerHTML.indexOf("<img") > -1) {
+          imgPrepend = container.lastElementChild.outerHTML;
+          container.lastElementChild.outerHTML = "";
+          moveElementsUntilOveflowing();
+        }
+
+        // get all overflow
+        leftover += overflowContainer.innerHTML.trim();
 
         // remove paragraphs until it doesn't overflow anymore
         removeOverflowingElements(container);
+
+        leftover = imgPrepend + leftover;
       } catch (e) {
         return "Error: " + e.toString();
       }

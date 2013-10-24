@@ -25,6 +25,8 @@ brushes off grains of glass from his face with a hand he's surprised to
 find isn't quite as lacerated as one might expect. His story is much
 stranger than yours.
 
+![plick falls into a flat](1.png)
+
 "A cup of tea would be nice," Richard Plick thought of saying, but he
 had a feeling he wasn't going to get any, and he was right. 
 

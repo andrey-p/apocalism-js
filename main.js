@@ -9,6 +9,7 @@ var program = require("commander"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs"),
+  images = require("./images.js"),
   template = require("./template.js");
 
 function cleanup(callback) {
@@ -17,8 +18,7 @@ function cleanup(callback) {
 
 function fail(msg) {
   cleanup(function () {
-    util.error(msg);
-    process.exit(1);
+    throw new Error(msg);
   });
 }
 
@@ -30,6 +30,11 @@ function success(msg) {
 }
 
 function compileBook(file) {
+  if (!program.pathToImages) {
+    fail("needs to specify path to images (-i flag)");
+    return;
+  }
+
   if (!program.output) {
     fail("needs to specify output file (-o flag)");
     return;
@@ -53,6 +58,15 @@ function compileBook(file) {
     pdf.generatePdfFromPages(pages, program.output, generatedPdf);
   }
 
+  function resolvedImages(err, markup) {
+    if (err) {
+      fail(err);
+      return;
+    }
+
+    paginator.paginate(markup, generatedPages);
+  }
+
   function readFile(err, markdown) {
     var markup;
     if (err) {
@@ -62,7 +76,7 @@ function compileBook(file) {
 
     markup = html.generateAndPrepMarkup(markdown);
 
-    paginator.paginate(markup, generatedPages);
+    images.resolveImagesInMarkup(markup, program.pathToImages, resolvedImages);
   }
 
   function initialisedTemplate(err) {
@@ -80,6 +94,7 @@ function compileBook(file) {
 program
   .version("0.0.1")
   .usage("[command] [options] <file>")
+  .option("-i, --path-to-images <pathToImages>")
   .option("-o, --output <outputFile>");
 
 program
