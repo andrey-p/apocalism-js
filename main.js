@@ -92,7 +92,7 @@ function compileBook(file) {
 }
 
 program
-  .version("0.0.1")
+  .version("0.0.5")
   .usage("[command] [options] <file>")
   .option("-i, --path-to-images <pathToImages>")
   .option("-o, --output <outputFile>");
