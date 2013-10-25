@@ -54,7 +54,7 @@ exports.init = function (template, dimensions, callback) {
     parseStyle(scss, parsedStyle);
   }
 
-  fs.readFile("./template/" + templateName + "/style.scss", gotStyle);
+  fs.readFile(__dirname + "/template/" + templateName + "/style.scss", gotStyle);
 };
 
 exports.getBlankPage = function (opts) {
