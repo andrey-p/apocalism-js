@@ -3,6 +3,7 @@
 "use strict";
 
 var should = require("should"),
+  options = require("../options.js"),
   template = require("../template.js"),
   paginator = require("../paginator.js"),
   phantomWrapper = require("../phantom-wrapper.js"),
@@ -12,7 +13,10 @@ var should = require("should"),
 
 describe("paginator", function () {
   before(function (done) {
-    template.init("default", function (err) {
+    options.set({
+      title: "test",
+      author: "test"
+    }, function (err) {
       should.not.exist(err);
       emptyPageMarkup = template.getBlankPage();
       done();

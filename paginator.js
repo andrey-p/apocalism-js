@@ -3,6 +3,7 @@
 "use strict";
 
 var phantomWrapper = require("./phantom-wrapper.js"),
+  options = require("./options.js"),
   template = require("./template.js");
 
 exports.createPage = function (blankPage, content, callback) {
@@ -176,8 +177,8 @@ exports.createPage = function (blankPage, content, callback) {
 
     page = pageInstance;
 
-    width = (template.stock.width + template.stock.bleed * 2 - (template.margin.outer + template.margin.spine)) * 300 / 25.4;
-    height = (template.stock.height + template.stock.bleed * 2 - (template.margin.top + template.margin.bottom)) * 300 / 25.4;
+    width = (options.stock.width + options.bleed * 2 - (options.margin.outer + options.margin.spine)) * 300 / 25.4;
+    height = (options.stock.height + options.bleed * 2 - (options.margin.top + options.margin.bottom)) * 300 / 25.4;
 
     page.set("viewportSize", { width: width, height: height }, setViewSize);
   }

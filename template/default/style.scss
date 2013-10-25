@@ -30,7 +30,7 @@
 the following are injected before compiling:
   $stock-width
   $stock-height
-  $stock-bleed
+  $bleed
   $margin-top
   $margin-bottom
   $margin-outer
@@ -40,8 +40,8 @@ the following are injected before compiling:
 /* page layout */
 
 body {
-  width: $stock-width + $stock-bleed * 2 - ($margin-outer + $margin-spine) * 1mm;
-  height: $stock-height + $stock-bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
+  width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine) * 1mm;
+  height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
   padding-top: $margin-top * 1mm;
   padding-bottom: $margin-bottom * 1mm;
   &.recto {
