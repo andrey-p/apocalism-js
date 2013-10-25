@@ -9,8 +9,9 @@ var program = require("commander"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs"),
+  namp = require("namp"),
   images = require("./images.js"),
-  template = require("./template.js");
+  options = require("./options.js");
 
 function cleanup(callback) {
   phantomWrapper.cleanup(callback);
@@ -30,6 +31,7 @@ function success(msg) {
 }
 
 function compileBook(file) {
+  var markup;
   if (!program.pathToImages) {
     fail("needs to specify path to images (-i flag)");
     return;
@@ -67,28 +69,28 @@ function compileBook(file) {
     paginator.paginate(markup, generatedPages);
   }
 
-  function readFile(err, markdown) {
-    var markup;
+  function setOptions(err) {
     if (err) {
       fail(err);
       return;
     }
-
-    markup = html.generateAndPrepMarkup(markdown);
 
     images.resolveImagesInMarkup(markup, program.pathToImages, resolvedImages);
   }
 
-  function initialisedTemplate(err) {
+  function readFile(err, markdown) {
+    var nampResult;
     if (err) {
       fail(err);
       return;
     }
 
-    fs.readFile(file, { encoding: "utf-8" }, readFile);
+    nampResult = namp(markdown);
+    markup = html.prepMarkup(nampResult.html);
+    options.set(nampResult.metadata, setOptions);
   }
 
-  template.init("default", initialisedTemplate);
+  fs.readFile(file, { encoding: "utf-8" }, readFile);
 }
 
 program
