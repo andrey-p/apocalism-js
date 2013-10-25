@@ -71,5 +71,9 @@ exports.set = function (optionsToSet, callback) {
   exports.bleed = parseBleed(exports.bleed);
   exports.margin = parseMargins(exports.margin);
 
-  template.init(exports.template, callback);
+  template.init(exports.template, {
+    stock: exports.stock,
+    bleed: exports.bleed,
+    margin: exports.margin
+  }, callback);
 };

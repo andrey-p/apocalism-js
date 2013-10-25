@@ -86,8 +86,11 @@ describe("options", function () {
     });
     it("should initialise the template", function (done) {
       var tempInit = template.init;
-      template.init = function (templateName) {
+      template.init = function (templateName, dimensions) {
         templateName.should.equal(validInput.template);
+        dimensions.should.have.property("stock");
+        dimensions.should.have.property("margin");
+        dimensions.should.have.property("bleed");
         template.init = tempInit;
         done();
       };

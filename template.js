@@ -5,8 +5,6 @@ var fs = require("fs"),
   sass = require("node-sass"),
   json2sass = require("json2sass"),
   templateName,
-  stock,
-  margin,
   cssString;
 
 function parseStyle(data, callback) {
@@ -21,14 +19,14 @@ function parseStyle(data, callback) {
   });
 }
 
-exports.init = function (template, callback) {
-  var dimensions,
-    dimensionsScss;
+exports.init = function (template, dimensions, callback) {
+  var dimensionsScss,
+    stock,
+    margin;
 
   templateName = template;
-  dimensions = require("./template/" + templateName + "/dimensions.json");
-  exports.stock = stock = dimensions.stock;
-  exports.margin = margin = dimensions.margin;
+  stock = dimensions.stock;
+  margin = dimensions.margin;
 
   // convert dimensions vars to scss
   // they will be injected into style.scss
