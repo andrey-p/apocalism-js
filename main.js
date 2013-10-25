@@ -32,15 +32,6 @@ function success(msg) {
 
 function compileBook(file) {
   var markup;
-  if (!program.pathToImages) {
-    fail("needs to specify path to images (-i flag)");
-    return;
-  }
-
-  if (!program.output) {
-    fail("needs to specify output file (-o flag)");
-    return;
-  }
 
   function generatedPdf(err, pathToPdf) {
     if (err) {
@@ -95,9 +86,7 @@ function compileBook(file) {
 
 program
   .version("0.0.5")
-  .usage("[command] [options] <file>")
-  .option("-i, --path-to-images <pathToImages>")
-  .option("-o, --output <outputFile>");
+  .usage("[command] <file>");
 
 program
   .command("book <file>")
