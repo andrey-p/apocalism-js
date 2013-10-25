@@ -12,4 +12,4 @@ tests:
 	@mocha -R spec -t 10000 test/options.js
 
 test-pdf:
-	@./main.js test/test_project/story.md -o test/test_project/output/output.pdf -i ./test/test_project/images/
+	@cd test/test_project && ../../main.js ./story.md
