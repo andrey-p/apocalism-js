@@ -10,7 +10,8 @@
     "commander": "*",
     "node-sass": "*",
     "gm": "*",
-    "json2sass": "git://github.com/renancouto/json2sass.git"
+    "json2sass": "git://github.com/renancouto/json2sass.git",
+    "case": "*"
   },
   "devDependencies": {
     "mocha": "*",
