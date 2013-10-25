@@ -48,7 +48,7 @@ function compileBook(file) {
       return;
     }
 
-    pdf.generatePdfFromPages(pages, program.output, generatedPdf);
+    pdf.generatePdfFromPages(pages, options.output, generatedPdf);
   }
 
   function resolvedImages(err, markup) {
@@ -66,7 +66,7 @@ function compileBook(file) {
       return;
     }
 
-    images.resolveImagesInMarkup(markup, program.pathToImages, resolvedImages);
+    images.resolveImagesInMarkup(markup, options.pathToImages, resolvedImages);
   }
 
   function readFile(err, markdown) {
