@@ -9,8 +9,9 @@ var program = require("commander"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
   fs = require("fs"),
+  namp = require("namp"),
   images = require("./images.js"),
-  template = require("./template.js");
+  options = require("./options.js");
 
 function cleanup(callback) {
   phantomWrapper.cleanup(callback);
@@ -30,15 +31,7 @@ function success(msg) {
 }
 
 function compileBook(file) {
-  if (!program.pathToImages) {
-    fail("needs to specify path to images (-i flag)");
-    return;
-  }
-
-  if (!program.output) {
-    fail("needs to specify output file (-o flag)");
-    return;
-  }
+  var markup;
 
   function generatedPdf(err, pathToPdf) {
     if (err) {
@@ -55,7 +48,7 @@ function compileBook(file) {
       return;
     }
 
-    pdf.generatePdfFromPages(pages, program.output, generatedPdf);
+    pdf.generatePdfFromPages(pages, options.output, generatedPdf);
   }
 
   function resolvedImages(err, markup) {
@@ -67,35 +60,33 @@ function compileBook(file) {
     paginator.paginate(markup, generatedPages);
   }
 
+  function setOptions(err) {
+    if (err) {
+      fail(err);
+      return;
+    }
+
+    images.resolveImagesInMarkup(markup, options.pathToImages, resolvedImages);
+  }
+
   function readFile(err, markdown) {
-    var markup;
+    var nampResult;
     if (err) {
       fail(err);
       return;
     }
 
-    markup = html.generateAndPrepMarkup(markdown);
-
-    images.resolveImagesInMarkup(markup, program.pathToImages, resolvedImages);
+    nampResult = namp(markdown);
+    markup = html.prepMarkup(nampResult.html);
+    options.set(nampResult.metadata, setOptions);
   }
 
-  function initialisedTemplate(err) {
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    fs.readFile(file, { encoding: "utf-8" }, readFile);
-  }
-
-  template.init("default", initialisedTemplate);
+  fs.readFile(file, { encoding: "utf-8" }, readFile);
 }
 
 program
   .version("0.0.5")
-  .usage("[command] [options] <file>")
-  .option("-i, --path-to-images <pathToImages>")
-  .option("-o, --output <outputFile>");
+  .usage("[command] <file>");
 
 program
   .command("book <file>")

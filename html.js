@@ -1,17 +1,11 @@
 /*jslint indent: 2, node: true*/
 "use strict";
 
-var namp = require("namp"),
-  sass = require("node-sass"),
+var sass = require("node-sass"),
   ent = require("ent"),
   typogr = require("typogr");
 
-exports.generateAndPrepMarkup = function (markdown) {
-  var markup;
-
-  // markup to html
-  markup = namp(markdown).html;
-
+exports.prepMarkup = function (markup) {
   // add 'opening' class to the first paragraph; this might be pretty brittle
   markup = markup.replace(/<p>/, "<p class=\"opening\">");
 

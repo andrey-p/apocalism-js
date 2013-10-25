@@ -4,7 +4,7 @@
 var phantomWrapper = require("./phantom-wrapper.js"),
   pdftkWrapper = require("./pdftk-wrapper.js"),
   os = require("os"),
-  template = require("./template.js");
+  options = require("./options.js");
 
 exports.generatePdfPage = function (markup, path, callback) {
   var page;
@@ -39,8 +39,8 @@ exports.generatePdfPage = function (markup, path, callback) {
     page = phantomPage;
     page.set("paperSize", {
       // do I still need bleed * 2 if one of the sides is not being cut off?
-      width: (template.stock.width + template.stock.bleed * 2) + "mm",
-      height: (template.stock.height + template.stock.bleed * 2) + "mm",
+      width: (options.stock.width + options.bleed * 2) + "mm",
+      height: (options.stock.height + options.bleed * 2) + "mm",
       border: "0mm" // border is handled by html.js
     }, setPaperSize);
   }

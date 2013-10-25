@@ -1,3 +1,6 @@
+Title: Naphthalene
+Author: Andrey Pissantchev
+
 If you're wondering at what point to start a story, the point when someone
 falls from a window is always a safe bet. There's a few subconscious
 cues it sets: it could signal an irreversible chain of events, say, and
