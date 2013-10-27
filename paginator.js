@@ -137,7 +137,7 @@ exports.createPage = function (blankPage, content, callback) {
 
         moveElementsUntilOveflowing();
 
-        if (container.lastElementChild.innerHTML.indexOf("<img") > -1) {
+        if (container.lastElementChild && container.lastElementChild.innerHTML.indexOf("<img") > -1) {
           imgPrepend = container.lastElementChild.outerHTML;
           container.lastElementChild.outerHTML = "";
           moveElementsUntilOveflowing();
