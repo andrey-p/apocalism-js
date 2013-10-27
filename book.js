@@ -3,10 +3,12 @@
 
 var paginator = require("./paginator.js"),
   pdf = require("./pdf.js"),
-  template = require("./template.js"),
+  images = require("./images.js"),
   options = require("./options.js");
 
 exports.compile = function (markup, callback) {
+  var pages;
+
   function generatedPdf(err, pathToPdf) {
     if (err) {
       callback(err);
@@ -16,14 +18,39 @@ exports.compile = function (markup, callback) {
     callback(null, pathToPdf);
   }
 
-  function generatedPages(err, pages) {
+  function createdFrontCover(err, frontCover) {
     if (err) {
       callback(err);
       return;
     }
 
+    pages.unshift(frontCover);
+
     pdf.generatePdfFromPages(pages, options.output, generatedPdf);
   }
 
-  paginator.paginate(markup, generatedPages);
+  function resolvedFrontCoverImage(err, resolvedImageTag) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    paginator.createCover(resolvedImageTag, createdFrontCover);
+  }
+
+  function generatedBodyPages(err, bodyPages) {
+    var imageTag;
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    pages = bodyPages.slice();
+
+    imageTag = "<img src=\"front-cover.png\" />";
+
+    images.resolveImageTag(imageTag, options.pathToImages, resolvedFrontCoverImage);
+  }
+
+  paginator.paginate(markup, generatedBodyPages);
 };

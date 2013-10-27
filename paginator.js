@@ -218,3 +218,20 @@ exports.paginate = function (content, callback) {
 
   exports.createPage(blankPage, content, createdPage);
 };
+
+exports.createCover = function (markup, callback) {
+  var blankPage = template.getBlankPage({
+    className: "cover"
+  });
+
+  function createdPage(err, page, leftover) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    callback(null, page);
+  }
+
+  exports.createPage(blankPage, markup, createdPage);
+};
