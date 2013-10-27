@@ -3,8 +3,7 @@
 "use strict";
 
 var program = require("commander"),
-  pdf = require("./pdf.js"),
-  paginator = require("./paginator.js"),
+  book = require("./book.js"),
   html = require("./html.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
   util = require("util"),
@@ -33,22 +32,13 @@ function success(msg) {
 function compileBook(file) {
   var markup;
 
-  function generatedPdf(err, pathToPdf) {
+  function compiledBook(err, pathToPdf) {
     if (err) {
       fail(err);
       return;
     }
 
-    success("pdf generated at: " + pathToPdf);
-  }
-
-  function generatedPages(err, pages) {
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    pdf.generatePdfFromPages(pages, options.output, generatedPdf);
+    success("pdf output at: " + pathToPdf);
   }
 
   function resolvedImages(err, markup) {
@@ -57,7 +47,7 @@ function compileBook(file) {
       return;
     }
 
-    paginator.paginate(markup, generatedPages);
+    book.compile(markup, compiledBook);
   }
 
   function setOptions(err) {
