@@ -25,8 +25,15 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
       return;
     }
 
-    targetWidth = Math.floor(size.width * 96 / 300);
-    targetHeight = Math.floor(size.height * 96 / 300);
+    // these numbers were obtained through crazy trial and error
+    // there's currently a bug with the phantomjs pdf rendering
+    // where pdfs don't come out the right size
+    // more info here: https://github.com/ariya/phantomjs/issues/11590
+    //
+    // more sane solution to come when the phantomjs bug is fixed too
+    
+    targetWidth = Math.floor((size.width + 3) * 72 / 300 * 1.5);
+    targetHeight = Math.floor((size.height + 3) * 72 / 300 * 1.5);
 
     if (imgTag.indexOf("width=") > -1) {
       imgTag = imgTag.replace(/width="\d*"/, "width=\"" + targetWidth + "\"");

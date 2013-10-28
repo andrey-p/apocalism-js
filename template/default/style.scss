@@ -53,14 +53,14 @@ body {
 	padding-right: $margin-spine * 1mm;
   }
   &.cover {
-    padding: 0;
-    margin: 0;
+    #container {
+      position: static;
 
-    img {
-      position: absolute;
-      background: #f0f;
-      width: 100%;
-      height: 100%;
+      img {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
     }
   }
 }
@@ -68,7 +68,7 @@ body {
 #container {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
