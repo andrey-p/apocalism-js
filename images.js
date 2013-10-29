@@ -31,7 +31,7 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
     // more info here: https://github.com/ariya/phantomjs/issues/11590
     //
     // more sane solution to come when the phantomjs bug is fixed too
-    
+
     targetWidth = Math.floor((size.width + 3) * 72 / 300 * 1.5);
     targetHeight = Math.floor((size.height + 3) * 72 / 300 * 1.5);
 
