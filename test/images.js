@@ -78,5 +78,13 @@ describe("images", function () {
         done();
       });
     });
+    it("should give the image tag a unique id based on its name: 1.png -> image-1", function (done) {
+      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+        should.not.exist(err);
+        should.exist(updatedMarkup);
+        updatedMarkup.should.contain("id=\"image-1\"");
+        done();
+      });
+    });
   });
 });
