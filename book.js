@@ -6,8 +6,11 @@ var paginator = require("./paginator.js"),
   images = require("./images.js"),
   options = require("./options.js");
 
-exports.compile = function (markup, callback) {
-  var pages;
+exports.compile = function (sections, callback) {
+  var sectionsBeforeContent = ["front-cover", "inside-front-cover"],
+    sectionsAfterContent = ["inside-back-cover", "back-cover"],
+    pages = [],
+    sectionName;
 
   function generatedPdf(err, pathToPdf) {
     if (err) {
@@ -18,24 +21,37 @@ exports.compile = function (markup, callback) {
     callback(null, pathToPdf);
   }
 
-  function createdFrontCover(err, frontCover) {
+  function createdBackSection(err, sectionPage) {
     if (err) {
       callback(err);
       return;
     }
 
-    pages.unshift(frontCover);
+    pages.push(sectionPage);
 
-    pdf.generatePdfFromPages(pages, options.output, generatedPdf);
+    if (sectionsAfterContent.length === 0) {
+      pdf.generatePdfFromPages(pages, options.output, generatedPdf);
+    } else {
+      sectionName = sectionsAfterContent.shift();
+      paginator.createStandalonePage(sectionName, sections[sectionName], createdBackSection);
+    }
   }
 
-  function resolvedFrontCoverImage(err, resolvedImageTag) {
+  function createdFrontSection(err, sectionPage) {
     if (err) {
       callback(err);
       return;
     }
 
-    paginator.createCover(resolvedImageTag, createdFrontCover);
+    pages.unshift(sectionPage);
+
+    if (sectionsBeforeContent.length === 0) {
+      sectionName = sectionsAfterContent.shift();
+      paginator.createStandalonePage(sectionName, sections[sectionName], createdBackSection);
+    } else {
+      sectionName = sectionsBeforeContent.pop();
+      paginator.createStandalonePage(sectionName, sections[sectionName], createdFrontSection);
+    }
   }
 
   function generatedBodyPages(err, bodyPages) {
@@ -47,10 +63,9 @@ exports.compile = function (markup, callback) {
 
     pages = bodyPages.slice();
 
-    imageTag = "<img src=\"front-cover.png\" />";
-
-    images.resolveImageTag(imageTag, options.pathToImages, resolvedFrontCoverImage);
+    sectionName = sectionsBeforeContent.pop();
+    paginator.createStandalonePage(sectionName, sections[sectionName], createdFrontSection);
   }
 
-  paginator.paginate(markup, generatedBodyPages);
+  paginator.paginate(sections.content, generatedBodyPages);
 };
