@@ -4,13 +4,9 @@
 
 var program = require("commander"),
   book = require("./book.js"),
-  html = require("./html.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
-  util = require("util"),
-  fs = require("fs"),
-  namp = require("namp"),
-  images = require("./images.js"),
-  options = require("./options.js");
+  reader = require("./reader.js"),
+  util = require("util");
 
 function cleanup(callback) {
   phantomWrapper.cleanup(callback);
@@ -41,37 +37,16 @@ function compileBook(file) {
     success("pdf output at: " + pathToPdf);
   }
 
-  function resolvedImages(err, markup) {
+  function resolvedBookSections(err, bookSections) {
     if (err) {
       fail(err);
       return;
     }
 
-    book.compile(markup, compiledBook);
+    book.compile(bookSections, compiledBook);
   }
 
-  function setOptions(err) {
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    images.resolveImagesInMarkup(markup, options.pathToImages, resolvedImages);
-  }
-
-  function readFile(err, markdown) {
-    var nampResult;
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    nampResult = namp(markdown);
-    markup = html.prepMarkup(nampResult.html);
-    options.set(nampResult.metadata, setOptions);
-  }
-
-  fs.readFile(file, { encoding: "utf-8" }, readFile);
+  reader.read(file);
 }
 
 program
