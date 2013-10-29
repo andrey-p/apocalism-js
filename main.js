@@ -50,7 +50,7 @@ function compileBook(file) {
 }
 
 program
-  .version("0.0.6")
+  .version("0.0.7")
   .usage("[command] <file>");
 
 program
