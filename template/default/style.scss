@@ -44,20 +44,33 @@ body {
   height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
   padding-top: $margin-top * 1mm;
   padding-bottom: $margin-bottom * 1mm;
-  &.recto {
-	padding-left: $margin-spine * 1mm;
+	padding-left: $margin-outer * 1mm;
 	padding-right: $margin-outer * 1mm;
+  &.recto {
+    padding-left: $margin-spine * 1mm;
+    padding-right: $margin-outer * 1mm;
   }
   &.verso {
-	padding-left: $margin-outer * 1mm;
-	padding-right: $margin-spine * 1mm;
+    padding-left: $margin-outer * 1mm;
+    padding-right: $margin-spine * 1mm;
+  }
+  &.front-cover, &.back-cover {
+    #container {
+      position: static;
+
+      img {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+    }
   }
 }
 
 #container {
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 

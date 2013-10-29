@@ -137,7 +137,7 @@ exports.createPage = function (blankPage, content, callback) {
 
         moveElementsUntilOveflowing();
 
-        if (container.lastElementChild.innerHTML.indexOf("<img") > -1) {
+        if (container.lastElementChild && container.lastElementChild.innerHTML.indexOf("<img") > -1) {
           imgPrepend = container.lastElementChild.outerHTML;
           container.lastElementChild.outerHTML = "";
           moveElementsUntilOveflowing();
@@ -217,4 +217,21 @@ exports.paginate = function (content, callback) {
   });
 
   exports.createPage(blankPage, content, createdPage);
+};
+
+exports.createStandalonePage = function (className, markup, callback) {
+  var blankPage = template.getBlankPage({
+    className: className
+  });
+
+  function createdPage(err, page, leftover) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    callback(null, page);
+  }
+
+  exports.createPage(blankPage, markup, createdPage);
 };

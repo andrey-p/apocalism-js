@@ -3,15 +3,10 @@
 "use strict";
 
 var program = require("commander"),
-  pdf = require("./pdf.js"),
-  paginator = require("./paginator.js"),
-  html = require("./html.js"),
+  book = require("./book.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
-  util = require("util"),
-  fs = require("fs"),
-  namp = require("namp"),
-  images = require("./images.js"),
-  options = require("./options.js");
+  reader = require("./reader.js"),
+  util = require("util");
 
 function cleanup(callback) {
   phantomWrapper.cleanup(callback);
@@ -33,55 +28,25 @@ function success(msg) {
 function compileBook(file) {
   var markup;
 
-  function generatedPdf(err, pathToPdf) {
+  function compiledBook(err, pathToPdf) {
     if (err) {
       fail(err);
       return;
     }
 
-    success("pdf generated at: " + pathToPdf);
+    success("pdf output at: " + pathToPdf);
   }
 
-  function generatedPages(err, pages) {
+  function resolvedBookSections(err, bookSections) {
     if (err) {
       fail(err);
       return;
     }
 
-    pdf.generatePdfFromPages(pages, options.output, generatedPdf);
+    book.compile(bookSections, compiledBook);
   }
 
-  function resolvedImages(err, markup) {
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    paginator.paginate(markup, generatedPages);
-  }
-
-  function setOptions(err) {
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    images.resolveImagesInMarkup(markup, options.pathToImages, resolvedImages);
-  }
-
-  function readFile(err, markdown) {
-    var nampResult;
-    if (err) {
-      fail(err);
-      return;
-    }
-
-    nampResult = namp(markdown);
-    markup = html.prepMarkup(nampResult.html);
-    options.set(nampResult.metadata, setOptions);
-  }
-
-  fs.readFile(file, { encoding: "utf-8" }, readFile);
+  reader.read(file, resolvedBookSections);
 }
 
 program
