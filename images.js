@@ -19,7 +19,7 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
   extension = path.extname(originalImagePath).substr(1);
 
   function gotImageDimensions(err, size) {
-    var targetWidth, targetHeight;
+    var targetWidth, targetHeight, idName;
     if (err) {
       callback(err);
       return;
@@ -38,13 +38,18 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
     if (imgTag.indexOf("width=") > -1) {
       imgTag = imgTag.replace(/width="\d*"/, "width=\"" + targetWidth + "\"");
     } else {
-      imgTag = imgTag.replace("/>", "width=\"" + targetWidth + "\"/>");
+      imgTag = imgTag.replace("/>", "width=\"" + targetWidth + "\" />");
     }
 
     if (imgTag.indexOf("height=") > -1) {
       imgTag = imgTag.replace(/height="\d*"/, "height=\"" + targetHeight + "\"");
     } else {
-      imgTag = imgTag.replace("/>", "height=\"" + targetHeight + "\"/>");
+      imgTag = imgTag.replace("/>", "height=\"" + targetHeight + "\" />");
+    }
+
+    if (imgTag.indexOf("id=") === -1) {
+      idName = "image-" + originalImagePath.replace(".png", "");
+      imgTag = imgTag.replace("/>", "id=\"" + idName + "\" />");
     }
 
     callback(null, imgTag);
