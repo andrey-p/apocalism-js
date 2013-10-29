@@ -22,7 +22,8 @@ function parseStyle(data, callback) {
 exports.init = function (template, dimensions, callback) {
   var dimensionsScss,
     stock,
-    margin;
+    margin,
+    fullScss;
 
   templateName = template;
   stock = dimensions.stock;
@@ -43,18 +44,26 @@ exports.init = function (template, dimensions, callback) {
     callback();
   }
 
-  function gotStyle(err, scss) {
+  function gotCustomStyle(err, customStyleScss) {
+    if (customStyleScss) {
+      fullScss += "\n\n" + customStyleScss;
+    }
+
+    parseStyle(fullScss, parsedStyle);
+  }
+
+  function gotDefaultStyle(err, scss) {
     if (err) {
       callback(err);
       return;
     }
 
-    scss = dimensionsScss + "\n\n" + scss;
+    fullScss = dimensionsScss + "\n\n" + scss;
 
-    parseStyle(scss, parsedStyle);
+    fs.readFile(process.cwd() + "/style.scss", gotCustomStyle);
   }
 
-  fs.readFile(__dirname + "/template/" + templateName + "/style.scss", gotStyle);
+  fs.readFile(__dirname + "/template/" + templateName + "/style.scss", gotDefaultStyle);
 };
 
 exports.getBlankPage = function (opts) {
