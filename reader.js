@@ -30,7 +30,7 @@ exports.readStandalonePage = function (pageName, callback) {
       // if it can't find {pageName}.md,
       // try to find {pageName}.png in the images folder
       // TODO handle other formats
-      fs.statFile(options.pathToImages + "/" + pageName + ".png", checkedForImageFile);
+      fs.stat(options.pathToImages + "/" + pageName + ".png", checkedForImageFile);
       return;
     }
 
@@ -43,7 +43,7 @@ exports.readStandalonePage = function (pageName, callback) {
 };
 
 exports.read = function (pathToFile, callback) {
-  var standalonePages = ["front", "back", "inside-front-cover", "inside-back-cover"],
+  var standalonePages = ["front-cover", "back-cover", "inside-front-cover", "inside-back-cover"],
     markup,
     sections = {},
     pageToRead;

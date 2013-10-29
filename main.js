@@ -46,7 +46,7 @@ function compileBook(file) {
     book.compile(bookSections, compiledBook);
   }
 
-  reader.read(file);
+  reader.read(file, resolvedBookSections);
 }
 
 program
