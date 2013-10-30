@@ -8,6 +8,7 @@ var defaults = {
   bleed: "2mm",
   margin: "15mm 15mm 20mm 15mm",
   template: "default",
+  quiet: false,
   title: null,
   author: null
 },
