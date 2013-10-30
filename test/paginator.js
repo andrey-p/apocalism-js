@@ -15,7 +15,8 @@ describe("paginator", function () {
   before(function (done) {
     options.set({
       title: "test",
-      author: "test"
+      author: "test",
+      quiet: true
     }, function (err) {
       should.not.exist(err);
       emptyPageMarkup = template.getBlankPage();
