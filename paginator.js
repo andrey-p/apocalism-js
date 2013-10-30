@@ -4,6 +4,7 @@
 
 var phantomWrapper = require("./phantom-wrapper.js"),
   options = require("./options.js"),
+  progress = require("./progress.js"),
   template = require("./template.js");
 
 exports.createPage = function (blankPage, content, callback) {
@@ -201,12 +202,15 @@ exports.paginate = function (content, callback) {
 
     pages.push(page);
 
+    progress.update(pages.length + " (" + (leftover.length || "0") + " characters left)");
+
     if (leftover && leftover.length) {
       currentPage += 1;
       className = currentPage % 2 ? "verso" : "recto";
       blankPage = template.getBlankPage({ pageNumber: currentPage, className: className });
       exports.createPage(blankPage, leftover, createdPage);
     } else {
+      progress.end();
       callback(null, pages);
     }
   }
@@ -216,6 +220,7 @@ exports.paginate = function (content, callback) {
     className: "recto"
   });
 
+  progress.start("Generating pages");
   exports.createPage(blankPage, content, createdPage);
 };
 

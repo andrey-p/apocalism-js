@@ -6,6 +6,7 @@ var program = require("commander"),
   book = require("./book.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
   reader = require("./reader.js"),
+  progress = require("./progress.js"),
   util = require("util");
 
 function cleanup(callback) {
@@ -20,7 +21,7 @@ function fail(msg) {
 
 function success(msg) {
   cleanup(function () {
-    util.puts(msg);
+    progress.msg(msg);
     process.exit();
   });
 }

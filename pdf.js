@@ -4,6 +4,7 @@
 var phantomWrapper = require("./phantom-wrapper.js"),
   pdftkWrapper = require("./pdftk-wrapper.js"),
   os = require("os"),
+  progress = require("./progress.js"),
   options = require("./options.js");
 
 exports.generatePdfPage = function (markup, path, callback) {
@@ -73,9 +74,12 @@ exports.generatePdfFromPages = function (pages, pathToPdf, callback) {
     pathsToPdfs.push(pathForPage);
 
     if (pages.length === 0) {
+      progress.end();
       pdftkWrapper.concatenatePages(pathsToPdfs, pathToPdf, concatenatedPages);
       return;
     }
+
+    progress.update(pathsToPdfs.length + " of " + (pathsToPdfs.length + pages.length));
 
     page = pages.shift();
     path = os.tmpDir() + "/apoc_js_" + Date.now() + ".pdf";
@@ -83,6 +87,8 @@ exports.generatePdfFromPages = function (pages, pathToPdf, callback) {
   }
 
   path = os.tmpDir() + "/apoc_js_" + Date.now() + ".pdf";
+
+  progress.start("Rendering PDF pages");
 
   exports.generatePdfPage(page, path, generatedPdfPage);
 };
