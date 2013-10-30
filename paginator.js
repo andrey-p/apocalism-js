@@ -126,6 +126,12 @@ exports.createPage = function (blankPage, content, callback) {
         while (container.scrollHeight <= container.clientHeight
             && overflowContainer.childElementCount) {
           nodeToMove = overflowContainer.firstElementChild;
+          // if paragraph is 3 or more = signs
+          // break page
+          if (nodeToMove.innerHTML && nodeToMove.innerHTML.match(/^={3,}$/)) {
+            overflowContainer.removeChild(nodeToMove);
+            return;
+          }
           container.appendChild(nodeToMove);
         }
       }

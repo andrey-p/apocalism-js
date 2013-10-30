@@ -122,6 +122,25 @@ describe("paginator", function () {
         done();
       });
     });
+    it("should interpret a paragraph containing 3 or more eq signs and nothing else as a page break", function (done) {
+      markup = "<p>on page 1</p><p>==</p><p>on page 1</p><p>===</p><p>in leftover</p>";
+
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        page.should.contain("<p>on page 1</p>");
+        page.should.contain("<p>==</p>");
+        page.should.not.contain("<p>===</p>");
+
+        leftoverMarkup.should.contain("<p>in leftover</p>");
+        leftoverMarkup.should.not.contain("<p>on page 1</p>");
+        leftoverMarkup.should.not.contain("<p>===</p>");
+
+        done();
+      });
+    });
   });
   describe("#paginate()", function () {
     var lipsumOptions,
