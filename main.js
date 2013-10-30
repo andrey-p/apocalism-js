@@ -6,6 +6,8 @@ var program = require("commander"),
   book = require("./book.js"),
   phantomWrapper = require("./phantom-wrapper.js"),
   reader = require("./reader.js"),
+  progress = require("./progress.js"),
+  options = require("./options.js"),
   util = require("util");
 
 function cleanup(callback) {
@@ -20,7 +22,7 @@ function fail(msg) {
 
 function success(msg) {
   cleanup(function () {
-    util.puts(msg);
+    progress.msg(msg);
     process.exit();
   });
 }
@@ -43,6 +45,8 @@ function compileBook(file) {
       return;
     }
 
+    options.quiet = program.quiet;
+
     book.compile(bookSections, compiledBook);
   }
 
@@ -51,6 +55,7 @@ function compileBook(file) {
 
 program
   .version("0.0.8")
+  .option("-q, --quiet", "Don't output progress info")
   .usage("[command] <file>");
 
 program

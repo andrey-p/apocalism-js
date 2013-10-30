@@ -18,7 +18,8 @@ describe("pdf", function () {
     htmlMarkup = "<p>Hello!</p>";
     options.set({
       title: "test",
-      author: "test"
+      author: "test",
+      quiet: true
     }, done);
   });
   after(function (done) {
