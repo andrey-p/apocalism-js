@@ -144,17 +144,25 @@ exports.createPage = function (blankPage, content, callback) {
 
         moveElementsUntilOveflowing();
 
-        if (container.lastElementChild && container.lastElementChild.innerHTML.indexOf("<img") > -1) {
+        // in some cases an image at the end of some text is causing an overflow
+        // so it leaves a massive gap at the bottom of the page
+        // if this gap can be filled by text that follows the image, do that
+        if (container.lastElementChild && container.lastElementChild.tagName === "IMG"
+            && overflowContainer.firstElementChild && splittableTags.indexOf(overflowContainer.firstElementChild.tagName) > -1) {
           imgPrepend = container.lastElementChild.outerHTML;
           container.lastElementChild.outerHTML = "";
           moveElementsUntilOveflowing();
         }
 
+        // split elements unless
+        // there's only one overflowing element in the container and it can't be split
+        if ((container.childElementCount === 1 && splittableTags.indexOf(container.firstElementChild.tagName) > -1)
+            || container.childElementCount > 1) {
+          removeOverflowingElements(container);
+        }
+
         // get all overflow
         leftover += overflowContainer.innerHTML.trim();
-
-        // remove paragraphs until it doesn't overflow anymore
-        removeOverflowingElements(container);
 
         leftover = imgPrepend + leftover;
       } catch (e) {
