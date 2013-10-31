@@ -8,45 +8,12 @@ var phantomWrapper = require("./phantom-wrapper.js"),
   options = require("./options.js");
 
 exports.generatePdfPage = function (markup, path, callback) {
-  var page;
+  var dimensions = {
+    width: (options.stock.width + options.bleed * 2),
+    height: (options.stock.height + options.bleed * 2)
+  };
 
-  function pageRendered(err) {
-    callback(err, path);
-  }
-
-  function setContent(err) {
-    if (err) {
-      callback(err);
-      return;
-    }
-    page.render(path, pageRendered);
-  }
-
-  function setPaperSize(err) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    page.set("content", markup, setContent);
-  }
-
-  function gotPage(err, phantomPage) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    page = phantomPage;
-    page.set("paperSize", {
-      // do I still need bleed * 2 if one of the sides is not being cut off?
-      width: (options.stock.width + options.bleed * 2) + "mm",
-      height: (options.stock.height + options.bleed * 2) + "mm",
-      border: "0mm" // border is handled by html.js
-    }, setPaperSize);
-  }
-
-  phantomWrapper.getPage(gotPage);
+  phantomWrapper.generatePdfPage(markup, path, dimensions, callback);
 };
 
 exports.generatePdfFromPages = function (pages, pathToPdf, callback) {

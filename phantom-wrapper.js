@@ -69,6 +69,34 @@ exports.createPage = function (blankPage, markup, dimensions, callback) {
   fs.writeFile(pathToOverflow, markup, wroteOveflow);
 };
 
+exports.generatePdfPage = function (markup, pathToPdf, dimensions, callback) {
+  var pathToHtml = os.tmpdir() + "/tmp_book_page.html";
+
+  function doneWithScript(err, stdout, stderr) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    callback(null, pathToPdf);
+  }
+
+  function wrotePage(err) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    exec("phantomjs " + __dirname + "/phantom-scripts/create-pdf-page.js "
+        + pathToHtml + " "
+        + pathToPdf + " "
+        + dimensions.width + " "
+        + dimensions.height, doneWithScript);
+  }
+
+  fs.writeFile(pathToHtml, markup, wrotePage);
+};
+
 exports.getInstance = function (callback) {
   if (phantomInstance) {
     callback(null, phantomInstance);
