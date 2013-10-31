@@ -6,7 +6,6 @@ var should = require("should"),
   options = require("../options.js"),
   pdf = require("../pdf.js"),
   helper = require("./helper.js"),
-  phantomWrapper = require("../phantom-wrapper.js"),
   fs = require("fs"),
   os = require("os"),
   pathToPdf,
@@ -23,9 +22,7 @@ describe("pdf", function () {
     }, done);
   });
   after(function (done) {
-    fs.unlink(pathToPdf, function () {
-      phantomWrapper.cleanup(done);
-    });
+    fs.unlink(pathToPdf, done);
   });
   describe("#generatePdfPage()", function () {
     it("should generate a pdf from an html string", function (done) {

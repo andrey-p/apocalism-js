@@ -6,7 +6,6 @@ var should = require("should"),
   options = require("../options.js"),
   template = require("../template.js"),
   paginator = require("../paginator.js"),
-  phantomWrapper = require("../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("./helper.js"),
   emptyPageMarkup;
@@ -21,11 +20,6 @@ describe("paginator", function () {
       should.not.exist(err);
       emptyPageMarkup = template.getBlankPage();
       done();
-    });
-  });
-  after(function (done) {
-    phantomWrapper.cleanup(function () {
-      helper.killProcess("phantomjs", done);
     });
   });
   describe("#createPage()", function () {

@@ -1,11 +1,9 @@
 /*jslint indent: 2, nomen: true, node: true*/
 "use strict";
 
-var phantom = require("node-phantom"),
-  fs = require("fs"),
+var fs = require("fs"),
   exec = require("child_process").exec,
-  os = require("os"),
-  phantomInstance;
+  os = require("os");
 
 exports.createPage = function (blankPage, markup, dimensions, callback) {
   var pathToBlankPage = os.tmpdir() + "/tmp_blank_page.html",
@@ -95,46 +93,4 @@ exports.generatePdfPage = function (markup, pathToPdf, dimensions, callback) {
   }
 
   fs.writeFile(pathToHtml, markup, wrotePage);
-};
-
-exports.getInstance = function (callback) {
-  if (phantomInstance) {
-    callback(null, phantomInstance);
-  } else {
-    phantom.create(function (err, phantom) {
-      phantomInstance = phantom;
-      callback(err, phantomInstance);
-    });
-  }
-};
-
-exports.cleanup = function (callback) {
-  if (phantomInstance) {
-    phantomInstance.exit(function () {
-      phantomInstance._phantom.kill("SIGTERM");
-      callback();
-    });
-  } else {
-    callback();
-  }
-};
-
-exports.getPage = function (callback) {
-
-  function gotPhantomInstance(err, instance) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    instance.createPage(function (err, page) {
-      page.onConsoleMessage = function (msg) {
-        console.log("phantom says: " + msg);
-      };
-
-      callback(err, page);
-    });
-  }
-
-  exports.getInstance(gotPhantomInstance);
 };
