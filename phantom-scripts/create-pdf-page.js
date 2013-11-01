@@ -18,6 +18,9 @@
     height: height + "mm",
     border: "0mm"
   };
-  page.render(pdfPagePath);
-  phantom.exit();
+  // give the page a chance to load before rendering
+  setTimeout(function () {
+    page.render(pdfPagePath);
+    phantom.exit();
+  }, 10);
 }());
