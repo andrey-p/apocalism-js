@@ -61,9 +61,7 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
       return;
     }
 
-    imgTag = imgTag.replace(srcRegex, "$1data:image/" + extension
-        + ";base64," + data.toString("base64")
-        + "$3");
+    imgTag = imgTag.replace(srcRegex, "$1file://" + path.resolve(pathToImages) + "/$2$3");
 
     gm(data, "image." + extension).size(gotImageDimensions);
   }
