@@ -2,7 +2,6 @@
   "name": "apocalism-js",
   "version": "0.0.8",
   "dependencies": {
-    "node-phantom": "*",
     "typogr": "*",
     "hypher": "*",
     "namp": "*",

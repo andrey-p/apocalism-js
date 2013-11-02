@@ -28,12 +28,13 @@ describe("images", function () {
         throw new Error("shouldn't get this far");
       });
     });
-    it("should return base64 data of the image", function (done) {
+    it("should return an absolute path to the image with file:// protocol", function (done) {
       images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
-        // verifying the actual base64 data will probably be a mistake
-        updatedMarkup.should.contain("<img src=\"data:image/png;base64,");
+        updatedMarkup.should.contain("<img src=\"file://");
+        // cwd should at this point be part of the absolute path
+        updatedMarkup.should.contain(process.cwd());
         done();
       });
     });

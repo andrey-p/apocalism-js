@@ -4,27 +4,18 @@
 
 var program = require("commander"),
   book = require("./book.js"),
-  phantomWrapper = require("./phantom-wrapper.js"),
   reader = require("./reader.js"),
   progress = require("./progress.js"),
   options = require("./options.js"),
   util = require("util");
 
-function cleanup(callback) {
-  phantomWrapper.cleanup(callback);
-}
-
 function fail(msg) {
-  cleanup(function () {
-    throw new Error(msg);
-  });
+  throw new Error(msg);
 }
 
 function success(msg) {
-  cleanup(function () {
-    progress.msg(msg);
-    process.exit();
-  });
+  progress.message(msg);
+  process.exit();
 }
 
 function compileBook(file) {

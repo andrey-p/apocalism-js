@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 lint:
 	jslint ./*.js
+	jslint ./phantom-scripts/*.js
 	jslint ./test/*.js
 
 tests:

@@ -6,7 +6,6 @@ var should = require("should"),
   options = require("../options.js"),
   template = require("../template.js"),
   paginator = require("../paginator.js"),
-  phantomWrapper = require("../phantom-wrapper.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("./helper.js"),
   emptyPageMarkup;
@@ -21,11 +20,6 @@ describe("paginator", function () {
       should.not.exist(err);
       emptyPageMarkup = template.getBlankPage();
       done();
-    });
-  });
-  after(function (done) {
-    phantomWrapper.cleanup(function () {
-      helper.killProcess("phantomjs", done);
     });
   });
   describe("#createPage()", function () {
@@ -119,6 +113,25 @@ describe("paginator", function () {
         should.exist(leftoverMarkup);
 
         leftoverMarkup.indexOf("para450").should.not.be.above(leftoverMarkup.indexOf("para451"));
+        done();
+      });
+    });
+    it("should interpret a paragraph containing 3 or more eq signs and nothing else as a page break", function (done) {
+      markup = "<p>on page 1</p><p>==</p><p>on page 1</p><p>===</p><p>in leftover</p>";
+
+      paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        page.should.contain("<p>on page 1</p>");
+        page.should.contain("<p>==</p>");
+        page.should.not.contain("<p>===</p>");
+
+        leftoverMarkup.should.contain("<p>in leftover</p>");
+        leftoverMarkup.should.not.contain("<p>on page 1</p>");
+        leftoverMarkup.should.not.contain("<p>===</p>");
+
         done();
       });
     });

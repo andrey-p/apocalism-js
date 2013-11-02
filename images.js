@@ -35,6 +35,12 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
     targetWidth = Math.floor((size.width + 3) * 72 / 300 * 1.5);
     targetHeight = Math.floor((size.height + 3) * 72 / 300 * 1.5);
 
+    // namp seems to output non-self closing img tags
+    // not cool, namp
+    if (imgTag.indexOf("/>") === -1) {
+      imgTag = imgTag.replace(">", "/>");
+    }
+
     if (imgTag.indexOf("width=") > -1) {
       imgTag = imgTag.replace(/width="\d*"/, "width=\"" + targetWidth + "\"");
     } else {
@@ -61,9 +67,7 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
       return;
     }
 
-    imgTag = imgTag.replace(srcRegex, "$1data:image/" + extension
-        + ";base64," + data.toString("base64")
-        + "$3");
+    imgTag = imgTag.replace(srcRegex, "$1file://" + path.resolve(pathToImages) + "/$2$3");
 
     gm(data, "image." + extension).size(gotImageDimensions);
   }
