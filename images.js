@@ -35,6 +35,12 @@ exports.resolveImageTag = function (imgTag, pathToImages, callback) {
     targetWidth = Math.floor((size.width + 3) * 72 / 300 * 1.5);
     targetHeight = Math.floor((size.height + 3) * 72 / 300 * 1.5);
 
+    // namp seems to output non-self closing img tags
+    // not cool, namp
+    if (imgTag.indexOf("/>") === -1) {
+      imgTag = imgTag.replace(">", "/>");
+    }
+
     if (imgTag.indexOf("width=") > -1) {
       imgTag = imgTag.replace(/width="\d*"/, "width=\"" + targetWidth + "\"");
     } else {
