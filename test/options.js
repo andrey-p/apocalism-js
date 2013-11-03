@@ -17,6 +17,7 @@ describe("options", function () {
         title: "test expectations",
         author: "testy mctest"
       };
+      options.reset();
     });
     it("should set all the options passed to it", function (done) {
       options.set(validInput, function (err) {
