@@ -14,4 +14,4 @@ tests:
 	@mocha -R spec -t 10000 test/options.js
 
 test-pdf:
-	@cd test/test_project && ../../lib/main.js ./story.md
+	@cd test/test_project && ../../bin/apocalism-cli.js ./story.md
