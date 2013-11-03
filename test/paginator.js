@@ -3,9 +3,9 @@
 "use strict";
 
 var should = require("should"),
-  options = require("../options.js"),
-  template = require("../template.js"),
-  paginator = require("../paginator.js"),
+  options = require("../lib/options.js"),
+  template = require("../lib/template.js"),
+  paginator = require("../lib/paginator.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("./helper.js"),
   emptyPageMarkup;

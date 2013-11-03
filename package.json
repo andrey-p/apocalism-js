@@ -1,6 +1,7 @@
 {
   "name": "apocalism-js",
   "version": "0.0.9",
+  "main": "./index.js",
   "dependencies": {
     "typogr": "0.6.x",
     "hypher": "0.2.x",

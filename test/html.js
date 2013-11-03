@@ -3,10 +3,10 @@
 "use strict";
 
 var should = require("should"),
-  html = require("../html.js"),
+  html = require("../lib/html.js"),
   w3c = require("w3c-validate").createValidator(),
   helper = require("./helper.js"),
-  phantomWrapper = require("../phantom-wrapper.js");
+  phantomWrapper = require("../lib/phantom-wrapper.js");
 
 describe("html", function () {
   describe("#prepMarkup()", function () {

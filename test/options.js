@@ -3,8 +3,8 @@
 "use strict";
 
 var should = require("should"),
-  template = require("../template.js"),
-  options = require("../options.js");
+  template = require("../lib/template.js"),
+  options = require("../lib/options.js");
 
 describe("options", function () {
   describe("#set()", function () {

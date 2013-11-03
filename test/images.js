@@ -4,7 +4,7 @@
 
 var should = require("should"),
   fs = require("fs"),
-  images = require("../images.js");
+  images = require("../lib/images.js");
 
 describe("images", function () {
   describe("#resolveImageTag()", function () {
