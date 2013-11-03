@@ -45,7 +45,7 @@ function compileBook(file) {
 }
 
 program
-  .version("0.0.8")
+  .version("0.0.9")
   .option("-q, --quiet", "Don't output progress info")
   .usage("[command] <file>");
 
