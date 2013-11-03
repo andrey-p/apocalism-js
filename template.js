@@ -31,7 +31,7 @@ exports.init = function (template, dimensions, callback) {
 
   // convert dimensions vars to scss
   // they will be injected into style.scss
-  dimensionsScss = json2sass.writeScss(dimensions);
+  dimensionsScss = json2sass.getContent(dimensions, "scss");
 
   function parsedStyle(err, css) {
     if (err) {
