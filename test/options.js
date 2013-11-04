@@ -3,8 +3,8 @@
 "use strict";
 
 var should = require("should"),
-  template = require("../template.js"),
-  options = require("../options.js");
+  template = require("../lib/template.js"),
+  options = require("../lib/options.js");
 
 describe("options", function () {
   describe("#set()", function () {
@@ -17,6 +17,7 @@ describe("options", function () {
         title: "test expectations",
         author: "testy mctest"
       };
+      options.reset();
     });
     it("should set all the options passed to it", function (done) {
       options.set(validInput, function (err) {

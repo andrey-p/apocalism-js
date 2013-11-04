@@ -3,8 +3,8 @@
 "use strict";
 
 var should = require("should"),
-  options = require("../options.js"),
-  pdf = require("../pdf.js"),
+  options = require("../lib/options.js"),
+  pdf = require("../lib/pdf.js"),
   helper = require("./helper.js"),
   fs = require("fs"),
   os = require("os"),
