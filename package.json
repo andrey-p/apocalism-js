@@ -12,7 +12,8 @@
     "node-sass": "0.6.x",
     "gm": "1.13.x",
     "json2sass": ">=0.1.5",
-    "case": "1.0.x"
+    "case": "1.0.x",
+    "async": "0.2.x"
   },
   "devDependencies": {
     "mocha": "1.13.x",
