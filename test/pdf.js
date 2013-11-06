@@ -50,7 +50,11 @@ describe("pdf", function () {
   });
   describe("#generatePdfFromPages()", function () {
     it("should generate a pdf from an array of html strings", function (done) {
-      var pages = [htmlMarkup, htmlMarkup, htmlMarkup];
+      var pages = [
+        { htmlContent: htmlMarkup, order: 1 },
+        { htmlContent: htmlMarkup, order: 2 },
+        { htmlContent: htmlMarkup, order: 3 }
+      ];
       pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
         should.not.exist(err);
         should.exist(pathToPdf);
