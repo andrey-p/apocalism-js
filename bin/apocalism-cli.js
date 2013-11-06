@@ -7,7 +7,7 @@ var program = require("commander"),
   options = require("../lib/options.js");
 
 program
-  .version("0.0.9")
+  .version("0.0.10")
   .option("-q, --quiet", "Don't output progress info")
   .usage("[command] <file>");
 
