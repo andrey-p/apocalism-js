@@ -54,6 +54,11 @@ body {
     padding-left: $margin-outer * 1mm;
     padding-right: $margin-spine * 1mm;
   }
+  &.body, &.front-matter, &.back-matter {
+    img {
+      position: relative;
+    }
+  }
   &.front-cover, &.back-cover {
     #container {
       position: static;
@@ -82,6 +87,11 @@ body {
   text-align: center;
   left: 50%;
   margin-left: -5mm;
+
+  // until I figure out some kind of pagination scheme for this
+  .front-matter &, .back-matter & {
+    display: none;
+  }
 }
 
 /* styles */
@@ -94,16 +104,18 @@ p {
   padding: 0px;
   margin: 0px;
 
-  &.contd, &.opening, hr + & {
-    text-indent: 0;
-  }
+  .body & {
+    &.contd, &.opening, hr + & {
+      text-indent: 0;
+    }
 
-  &.opening:first-letter {
-    float: left;
-    font-size: 58pt;
-    padding: 0 4pt 0 0;
-    line-height: 58pt;
-    margin-bottom: -10pt;
+    &.opening:first-letter {
+      float: left;
+      font-size: 58pt;
+      padding: 0 4pt 0 0;
+      line-height: 58pt;
+      margin-bottom: -10pt;
+    }
   }
 }
 
