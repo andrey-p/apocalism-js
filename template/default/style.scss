@@ -24,6 +24,30 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: "dejavusans";
+  src: url(fonts/DejaVuSans.ttf);
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(fonts/DejaVuSans-Italic.ttf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(fonts/DejaVuSans-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(fonts/DejaVuSans-BoldItalic.ttf);
+  font-style: italic;
+  font-weight: bold;
+}
+
 /* vars */
 
 /*
@@ -39,9 +63,12 @@ the following are injected before compiling:
 
 /* page layout */
 
+$text-block-width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine);
+$text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
+
 body {
-  width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine) * 1mm;
-  height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom) * 1mm;
+  width: $text-block-width * 1mm;
+  height: $text-block-height * 1mm;
   padding-top: $margin-top * 1mm;
   padding-bottom: $margin-bottom * 1mm;
 	padding-left: $margin-outer * 1mm;
@@ -95,6 +122,9 @@ body {
 }
 
 /* styles */
+h1, h2, h3, h4, h5 {
+  font-family: "dejavuserif", sans-serif;
+}
 
 p {
   font-family: "dejavuserif", sans-serif;
