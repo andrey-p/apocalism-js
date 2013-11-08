@@ -20,12 +20,12 @@ describe("options", function () {
       options.reset();
     });
     it("should set all the options passed to it", function (done) {
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         var prop;
         should.not.exist(err);
         for (prop in validInput) {
           if (validInput.hasOwnProperty(prop)) {
-            options[prop].should.equal(validInput[prop]);
+            opts[prop].should.equal(validInput[prop]);
           }
         }
         done();
@@ -33,15 +33,15 @@ describe("options", function () {
     });
     it("should should complain if options without a default aren't set", function (done) {
       delete validInput.title;
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         should.exist(err);
         done();
       });
     });
     it("should not set options that don't exist", function (done) {
       validInput.thisShouldNotBeSet = "this";
-      options.set(validInput, function (err) {
-        options.should.not.have.property("thisShouldNotBeSet");
+      options.set(validInput, function (err, opts) {
+        opts.should.not.have.property("thisShouldNotBeSet");
         done();
       });
     });
@@ -50,54 +50,39 @@ describe("options", function () {
       delete validInput.pathToImages;
       validInput.Title = "title";
       validInput["Path to images"] = "path/to/images";
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         should.not.exist(err);
-        options.title.should.equal(validInput.Title);
-        options.pathToImages.should.equal(validInput["Path to images"]);
+        opts.title.should.equal(validInput.Title);
+        opts.pathToImages.should.equal(validInput["Path to images"]);
         done();
       });
     });
     it("should parse the dimensions passed to stock correctly", function (done) {
       validInput.stock = "100x105mm";
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         should.not.exist(err);
-        options.stock.width.should.equal(100);
-        options.stock.height.should.equal(105);
+        opts.stock.width.should.equal(100);
+        opts.stock.height.should.equal(105);
         done();
       });
     });
     it("should parse the dimensions passed to bleed correctly", function (done) {
       validInput.bleed = "5mm";
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         should.not.exist(err);
-        options.bleed.should.equal(5);
+        opts.bleed.should.equal(5);
         done();
       });
     });
     it("should parse the dimensions passed to margin", function (done) {
       validInput.margin = "1 2mm 3mm 4mm";
-      options.set(validInput, function (err) {
+      options.set(validInput, function (err, opts) {
         should.not.exist(err);
-        options.margin.top.should.equal(1);
-        options.margin.outer.should.equal(2);
-        options.margin.bottom.should.equal(3);
-        options.margin.spine.should.equal(4);
+        opts.margin.top.should.equal(1);
+        opts.margin.outer.should.equal(2);
+        opts.margin.bottom.should.equal(3);
+        opts.margin.spine.should.equal(4);
         done();
-      });
-    });
-    it("should initialise the template", function (done) {
-      var tempInit = template.init;
-      template.init = function (templateName, dimensions) {
-        templateName.should.equal(validInput.template);
-        dimensions.should.have.property("stock");
-        dimensions.should.have.property("margin");
-        dimensions.should.have.property("bleed");
-        template.init = tempInit;
-        done();
-      };
-
-      options.set(validInput, function (err) {
-        throw new Error("should not get here");
       });
     });
   });
