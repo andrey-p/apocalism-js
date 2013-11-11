@@ -4,12 +4,12 @@
     <title>apocalism.js page</title>
     <style type="text/css">{{{cssString}}}</style>
   </head>
-  <body class="{{#each classes}}{{this}} {{/each}}">
-    <div id="container">
+  <body class="page-container {{#each classes}}{{this}} {{/each}}">
+    <div class="text-block">
       {{! this gets filled out by the paginator }}
     </div>
     {{#if pageNumber}}
-    <div id='page-number'>{{pageNumber}}</div>
+    <div class='page-number'>{{pageNumber}}</div>
     {{/if}}
   </body>
 </html>
