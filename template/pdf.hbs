@@ -4,7 +4,7 @@
     <title>apocalism.js page</title>
     <style type="text/css">{{{cssString}}}</style>
   </head>
-  <body class="{{classString}}">
+  <body class="{{#each classes}}{{this}} {{/each}}">
     <div id="container">
       {{! this gets filled out by the paginator }}
     </div>
