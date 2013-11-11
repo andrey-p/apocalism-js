@@ -11,7 +11,7 @@ describe("options", function () {
     var validInput;
     beforeEach(function () {
       validInput = {
-        output: "test/path.pdf",
+        pathToOutput: "test/",
         pathToImages: "test/path/",
         template: "default",
         title: "test expectations",
