@@ -6,20 +6,21 @@ var should = require("should"),
   options = require("../lib/options.js"),
   template = require("../lib/template.js"),
   paginator = require("../lib/paginator.js"),
+  progress = require("../lib/progress.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("./helper.js"),
+  opts = helper.getDefaultOpts(),
   emptyPageMarkup;
 
 describe("paginator", function () {
   before(function (done) {
-    options.set({
-      title: "test",
-      author: "test",
-      quiet: true
-    }, function (err) {
-      should.not.exist(err);
-      emptyPageMarkup = template.getBlankPage();
-      done();
+    progress.init(opts, function () {
+      template.init(opts, function () {
+        paginator.init(opts, function () {
+          emptyPageMarkup = template.getBlankPage();
+          done();
+        });
+      });
     });
   });
   describe("#createPage()", function () {

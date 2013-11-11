@@ -6,20 +6,24 @@ var should = require("should"),
   options = require("../lib/options.js"),
   pdf = require("../lib/pdf.js"),
   helper = require("./helper.js"),
+  progress = require("../lib/progress.js"),
+  cache = require("../lib/cache.js"),
   fs = require("fs"),
   os = require("os"),
-  pathToPdf,
+  opts = helper.getDefaultOpts(),
+  pathToPdf = opts.output,
   htmlMarkup;
 
 describe("pdf", function () {
   before(function (done) {
-    pathToPdf = os.tmpdir() + "/output.pdf";
     htmlMarkup = "<p>Hello!</p>";
-    options.set({
-      title: "test",
-      author: "test",
-      quiet: true
-    }, done);
+    progress.init(opts, function () {
+      cache.init(opts, function () {
+        pdf.init(opts, function () {
+          done();
+        });
+      });
+    });
   });
   after(function (done) {
     fs.unlink(pathToPdf, done);

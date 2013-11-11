@@ -11,8 +11,12 @@ program
   .option("-q, --quiet", "Don't output progress info")
   .usage("[command] <file>");
 
+program
+  .command("* <file>")
+  .action(function (filename, options) {
+    main.compileBook(filename, {
+      quiet: program.quiet
+    });
+  });
+
 program.parse(process.argv);
-
-options.quiet = program.quiet;
-
-main.compileBook(program.args[0]);

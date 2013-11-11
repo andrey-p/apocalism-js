@@ -3,6 +3,29 @@
 
 var exec = require("child_process").exec;
 
+exports.getDefaultOpts = function () {
+  return {
+    author: "test",
+    title: "test",
+    template: "default",
+    stock: {
+      width: 148,
+      height: 210
+    },
+    margin: {
+      top: 15,
+      spine: 15,
+      bottom: 20,
+      outer: 15
+    },
+    quiet: true,
+    bleed: 2,
+    output: "output/output.pdf",
+    pathToImages: "output/output.pdf",
+    pathToCache: "output/cache/"
+  };
+};
+
 // returns true if process exists
 exports.checkIfProcessExists = function (processName, callback) {
   exec("pgrep " + processName, function (error, stdout, stderr) {
