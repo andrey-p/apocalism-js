@@ -7,7 +7,7 @@ exports.getDefaultOpts = function () {
   return {
     author: "test",
     title: "test",
-    template: "default",
+    template: "pdf",
     stock: {
       width: 148,
       height: 210
