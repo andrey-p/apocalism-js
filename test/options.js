@@ -13,7 +13,7 @@ describe("options", function () {
       validInput = {
         pathToOutput: "test/",
         pathToImages: "test/path/",
-        template: "default",
+        template: "pdf",
         title: "test expectations",
         author: "testy mctest"
       };
