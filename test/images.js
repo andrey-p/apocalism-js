@@ -7,6 +7,29 @@ var should = require("should"),
   images = require("../lib/images.js");
 
 describe("images", function () {
+  describe("#resolveImagesInCss()", function () {
+    var css,
+      pathToImages;
+
+    beforeEach(function () {
+      css = ".element-1 {\n"
+        + "background-image: url(pattern.png)\n"
+        + "}\n"
+        + ".element-2 { background: url(pattern2.png); }";
+      pathToImages = "test/test_project/images/";
+    });
+
+    it("should resolve to an absolute path to the image with file:// protocol", function (done) {
+      images.resolveImagesInCss(css, pathToImages, function (err, updatedCss) {
+        should.not.exist(err);
+        should.exist(updatedCss);
+
+        updatedCss.should.contain("url(file://" + process.cwd() + "/" + pathToImages + "pattern.png)");
+        updatedCss.should.contain("url(file://" + process.cwd() + "/" + pathToImages + "pattern2.png)");
+        done();
+      });
+    });
+  });
   describe("#resolveImageTag()", function () {
     var markup,
       pathToImages;
