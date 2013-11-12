@@ -79,11 +79,20 @@ describe("images", function () {
         done();
       });
     });
-    it("should give the image tag a unique id based on its name: 1.png -> image-1", function (done) {
+    it("should give the image tag a unique class based on its name: 1.png -> image-1", function (done) {
       images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
-        updatedMarkup.should.contain("id=\"image-1\"");
+        updatedMarkup.should.contain("class=\"image-1\"");
+        done();
+      });
+    });
+    it("should not overwrite the image's existing class(es)", function (done) {
+      markup = "<img src=\"1.png\" class=\"foo bar\" alt=\"hello\" />";
+      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+        should.not.exist(err);
+        should.exist(updatedMarkup);
+        updatedMarkup.should.contain("class=\"image-1 foo bar\"");
         done();
       });
     });
