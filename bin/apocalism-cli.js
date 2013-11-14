@@ -4,10 +4,11 @@
 
 var program = require("commander"),
   main = require("../index.js"),
-  options = require("../lib/options.js");
+  options = require("../lib/options.js"),
+  version = require("../package.json").version;
 
 program
-  .version("0.0.10")
+  .version(version)
   .option("-q, --quiet", "Don't output progress info")
   .usage("[command] <file>");
 
