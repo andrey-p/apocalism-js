@@ -1,0 +1,8 @@
+<div class="page-container {{#each classes}}{{this}} {{/each}}">
+  <div class="text-block">
+    {{! this gets filled out by the paginator }}
+  </div>
+  {{#if pageNumber}}
+  <div class='page-number'>{{pageNumber}}</div>
+  {{/if}}
+</div>
