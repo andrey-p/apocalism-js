@@ -139,19 +139,23 @@ describe("paginator", function () {
   });
   describe("#paginate()", function () {
     var lipsumOptions,
-      markup;
+      markup,
+      args;
+
     beforeEach(function () {
       lipsumOptions = {
         format: "html",
         units: "paragraph"
       };
+      args = {};
     });
     it("should output a single page if the content is small enough to fit", function (done) {
       lipsumOptions.count = 1;
       lipsumOptions.units = "sentence";
       markup = "<p>" + lipsum(lipsumOptions) + "<p>";
+      args = { templateName: "pdf", sectionName: "body", content: markup };
 
-      paginator.paginate("body", markup, function (err, pages) {
+      paginator.paginate(args, function (err, pages) {
         should.not.exist(err);
         pages.should.have.length(1);
         done();
@@ -160,8 +164,9 @@ describe("paginator", function () {
     it("should output multiple pages if the content is larger", function (done) {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
+      args = { templateName: "pdf", sectionName: "body", content: markup };
 
-      paginator.paginate("body", markup, function (err, pages) {
+      paginator.paginate(args, function (err, pages) {
         should.not.exist(err);
         pages.length.should.be.above(1);
         done();
@@ -170,8 +175,9 @@ describe("paginator", function () {
     it("should output pages with full head and body tags", function (done) {
       lipsumOptions.count = 10;
       markup = lipsum(lipsumOptions);
+      args = { templateName: "pdf", sectionName: "body", content: markup };
 
-      paginator.paginate("body", markup, function (err, pages) {
+      paginator.paginate(args, function (err, pages) {
         should.not.exist(err);
         pages.forEach(function (page) {
           page.should.include("<html>");
