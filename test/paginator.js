@@ -17,7 +17,7 @@ describe("paginator", function () {
     progress.init(opts, function () {
       template.init(opts, function () {
         paginator.init(opts, function () {
-          emptyPageMarkup = template.getBlankPage();
+          emptyPageMarkup = template.getBlankPage("pdf");
           done();
         });
       });
