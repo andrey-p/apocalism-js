@@ -15,7 +15,7 @@ program
 program
   .command("* <file>")
   .action(function (filename, options) {
-    main.compileBook(filename, {
+    main.compilePdf(filename, {
       quiet: program.quiet
     });
   });
