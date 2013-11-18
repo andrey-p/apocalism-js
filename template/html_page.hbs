@@ -1,8 +1,16 @@
-<div class="page-container {{#each classes}}{{this}} {{/each}}">
-  <div class="text-block">
-    {{! this gets filled out by the paginator }}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>apocalism.js page</title>
+    <style type="text/css">{{{cssString}}}</style>
+  </head>
+<body>
+  <div class="page-container {{#each classes}}{{this}} {{/each}}">
+    <div class="text-block">
+      {{! this gets filled out by the paginator }}
+    </div>
+    {{#if pageNumber}}
+    <div class='page-number'>{{pageNumber}}</div>
+    {{/if}}
   </div>
-  {{#if pageNumber}}
-  <div class='page-number'>{{pageNumber}}</div>
-  {{/if}}
-</div>
+</body>

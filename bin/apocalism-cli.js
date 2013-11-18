@@ -20,4 +20,12 @@ program
     });
   });
 
+program
+  .command("webpage <file>")
+  .action(function (filename, option) {
+    main.compileWebpage(filename, {
+      quiet: program.quiet
+    });
+  });
+
 program.parse(process.argv);
