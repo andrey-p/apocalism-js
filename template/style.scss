@@ -66,11 +66,18 @@ the following are injected before compiling:
 $text-block-width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine);
 $text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .page-container {
   width: $text-block-width * 1mm;
   height: $text-block-height * 1mm;
   padding-top: $margin-top * 1mm;
-  padding-bottom: $margin-bottom * 1mm;
+
+  // the 0.2 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
+  padding-bottom: ($margin-bottom - 0.2) * 1mm;
 	padding-left: $margin-outer * 1mm;
 	padding-right: $margin-outer * 1mm;
   &.recto {
