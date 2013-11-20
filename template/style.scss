@@ -1,53 +1,3 @@
-/* fonts */
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif.ttf);
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-Italic.ttf);
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-Bold.ttf);
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-BoldItalic.ttf);
-  font-style: italic;
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans.ttf);
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-Italic.ttf);
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-Bold.ttf);
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-BoldItalic.ttf);
-  font-style: italic;
-  font-weight: bold;
-}
-
 /* vars */
 
 /*
@@ -59,7 +9,57 @@ the following are injected before compiling:
   $margin-bottom
   $margin-outer
   $margin-spine
+
+  $fontUrlBase
 */
+
+/* fonts */
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif.ttf);
+}
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-Italic.ttf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-BoldItalic.ttf);
+  font-style: italic;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans.ttf);
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-Italic.ttf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-BoldItalic.ttf);
+  font-style: italic;
+  font-weight: bold;
+}
 
 /* page layout */
 
