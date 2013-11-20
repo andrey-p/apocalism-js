@@ -9,7 +9,8 @@ var should = require("should"),
 describe("images", function () {
   describe("#resolveImagesInCss()", function () {
     var css,
-      pathToImages;
+      pathToImages,
+      args;
 
     beforeEach(function () {
       css = ".element-1 {\n"
@@ -17,10 +18,11 @@ describe("images", function () {
         + "}\n"
         + ".element-2 { background: url(pattern2.png); }";
       pathToImages = "test/test_project/images/";
+      args = { css: css, pathToImages: pathToImages };
     });
 
     it("should resolve to an absolute path to the image with file:// protocol", function (done) {
-      images.resolveImagesInCss(css, pathToImages, function (err, updatedCss) {
+      images.resolveImagesInCss(args, function (err, updatedCss) {
         should.not.exist(err);
         should.exist(updatedCss);
 
@@ -31,12 +33,14 @@ describe("images", function () {
     });
   });
   describe("#resolveImageTag()", function () {
-    var markup,
-      pathToImages;
+    var imgTag,
+      pathToImages,
+      args;
 
     beforeEach(function () {
-      markup = "<img src=\"1.png\" alt=\"hello\" />";
+      imgTag = "<img src=\"1.png\" alt=\"hello\" />";
       pathToImages = "test/test_project/images/";
+      args = { imgTag: imgTag, pathToImages: pathToImages };
     });
     it("should read the file at the correct path", function (done) {
       // stub, cheekily
@@ -47,12 +51,12 @@ describe("images", function () {
         fs.readFile = tempReadFile;
       };
 
-      images.resolveImageTag(markup, pathToImages, function () {
+      images.resolveImageTag(args, function () {
         throw new Error("shouldn't get this far");
       });
     });
     it("should return an absolute path to the image with file:// protocol", function (done) {
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
         updatedMarkup.should.contain("<img src=\"file://");
@@ -64,7 +68,7 @@ describe("images", function () {
     // skipped until the relevant phantomjs bug is fixed
     // see the note in the images module for more info
     it.skip("should contain correct width and height of the image", function (done) {
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         var targetWidth, targetHeight;
         should.not.exist(err);
         should.exist(updatedMarkup);
@@ -80,8 +84,8 @@ describe("images", function () {
     it("should add width and height even if they're already present in the tag", function (done) {
       // the most likely situation will be with width and height blank
       // as that's how namp gives 'em
-      markup = "<img src=\"1.png\" alt=\"hello\" width=\"\" height=\"\" />";
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      args.imgTag = "<img src=\"1.png\" alt=\"hello\" width=\"\" height=\"\" />";
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
 
@@ -93,8 +97,8 @@ describe("images", function () {
       });
     });
     it("should strip <p> tags around an image", function (done) {
-      markup = "<p>" + markup + "</p>";
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      args.imgTag = "<p>" + args.imgTag + "</p>";
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
         updatedMarkup.should.not.contain("<p>");
@@ -103,7 +107,7 @@ describe("images", function () {
       });
     });
     it("should give the image tag a unique class based on its name: 1.png -> image-1", function (done) {
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
         updatedMarkup.should.contain("class=\"image-1\"");
@@ -111,8 +115,8 @@ describe("images", function () {
       });
     });
     it("should not overwrite the image's existing class(es)", function (done) {
-      markup = "<img src=\"1.png\" class=\"foo bar\" alt=\"hello\" />";
-      images.resolveImageTag(markup, pathToImages, function (err, updatedMarkup) {
+      args.imgTag = "<img src=\"1.png\" class=\"foo bar\" alt=\"hello\" />";
+      images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
         updatedMarkup.should.contain("class=\"image-1 foo bar\"");
