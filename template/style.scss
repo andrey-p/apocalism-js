@@ -72,6 +72,7 @@ body {
 }
 
 .page-container {
+  position: relative;
   width: $text-block-width * 1mm;
   height: $text-block-height * 1mm;
   padding-top: $margin-top * 1mm;
