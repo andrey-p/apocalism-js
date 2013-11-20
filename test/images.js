@@ -20,17 +20,6 @@ describe("images", function () {
       pathToImages = "test/test_project/images/";
       args = { css: css, pathToImages: pathToImages };
     });
-
-    it("should resolve to an absolute path to the image with file:// protocol", function (done) {
-      images.resolveImagesInCss(args, function (err, updatedCss) {
-        should.not.exist(err);
-        should.exist(updatedCss);
-
-        updatedCss.should.contain("url(file://" + process.cwd() + "/" + pathToImages + "pattern.png)");
-        updatedCss.should.contain("url(file://" + process.cwd() + "/" + pathToImages + "pattern2.png)");
-        done();
-      });
-    });
   });
   describe("#resolveImageTag()", function () {
     var imgTag,
@@ -53,16 +42,6 @@ describe("images", function () {
 
       images.resolveImageTag(args, function () {
         throw new Error("shouldn't get this far");
-      });
-    });
-    it("should return an absolute path to the image with file:// protocol", function (done) {
-      images.resolveImageTag(args, function (err, updatedMarkup) {
-        should.not.exist(err);
-        should.exist(updatedMarkup);
-        updatedMarkup.should.contain("<img src=\"file://");
-        // cwd should at this point be part of the absolute path
-        updatedMarkup.should.contain(process.cwd());
-        done();
       });
     });
     // skipped until the relevant phantomjs bug is fixed
