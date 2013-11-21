@@ -63,7 +63,7 @@ the following are injected before compiling:
 
 /* page layout */
 
-$text-block-width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine);
+$text-block-width: $stock-width - ($margin-outer + $margin-spine);
 $text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
 
 body {
@@ -75,6 +75,7 @@ body {
   position: relative;
   width: $text-block-width * 1mm;
   height: $text-block-height * 1mm;
+  overflow: hidden;
   padding-top: $margin-top * 1mm;
 
   // the 0.2 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
@@ -99,11 +100,33 @@ body {
       position: static;
 
       img {
-        top: 0;
-        left: 0;
+        top: -$bleed * 1mm;
+        left: -$bleed * 1mm;
         position: absolute;
       }
     }
+  }
+  &.has-bleed {
+	width: ($text-block-width + $bleed * 2) * 1mm;
+	height: ($text-block-height + $bleed * 2) * 1mm;
+	padding-bottom: ($margin-bottom + $bleed - 0.2) * 1mm;
+	padding-left: ($margin-outer + $bleed) * 1mm;
+	padding-right: ($margin-outer + $bleed) * 1mm;
+	&.recto {
+		padding-left: ($margin-spine + $bleed) * 1mm;
+		padding-right: ($margin-outer + $bleed) * 1mm;
+	}
+	&.verso {
+		padding-left: ($margin-outer + $bleed) * 1mm;
+		padding-right: ($margin-spine + $bleed) * 1mm;
+	}
+	&.front-cover, &.back-cover {
+		img {
+			top: 0;
+			left: 0;
+		}
+	}
+
   }
 }
 
