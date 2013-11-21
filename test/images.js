@@ -44,9 +44,7 @@ describe("images", function () {
         throw new Error("shouldn't get this far");
       });
     });
-    // skipped until the relevant phantomjs bug is fixed
-    // see the note in the images module for more info
-    it.skip("should contain correct width and height of the image", function (done) {
+    it("should contain correct width and height of the image", function (done) {
       images.resolveImageTag(args, function (err, updatedMarkup) {
         var targetWidth, targetHeight;
         should.not.exist(err);
