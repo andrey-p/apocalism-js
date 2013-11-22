@@ -20,6 +20,7 @@ exports.getDefaultOpts = function () {
     },
     quiet: true,
     bleed: 2,
+    hasBleed: true,
     output: "output/output.pdf",
     pathToImages: "output/output.pdf",
     pathToCache: "output/cache/"

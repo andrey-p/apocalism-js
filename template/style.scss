@@ -1,53 +1,3 @@
-/* fonts */
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif.ttf);
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-Italic.ttf);
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-Bold.ttf);
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavuserif";
-  src: url(fonts/DejaVuSerif-BoldItalic.ttf);
-  font-style: italic;
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans.ttf);
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-Italic.ttf);
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-Bold.ttf);
-  font-weight: bold;
-}
-
-@font-face {
-  font-family: "dejavusans";
-  src: url(fonts/DejaVuSans-BoldItalic.ttf);
-  font-style: italic;
-  font-weight: bold;
-}
-
 /* vars */
 
 /*
@@ -59,18 +9,77 @@ the following are injected before compiling:
   $margin-bottom
   $margin-outer
   $margin-spine
+
+  $fontUrlBase
 */
+
+/* fonts */
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif.ttf);
+}
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-Italic.ttf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavuserif";
+  src: url(#{$fontUrlBase}/DejaVuSerif-BoldItalic.ttf);
+  font-style: italic;
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans.ttf);
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-Italic.ttf);
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-Bold.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "dejavusans";
+  src: url(#{$fontUrlBase}/DejaVuSans-BoldItalic.ttf);
+  font-style: italic;
+  font-weight: bold;
+}
 
 /* page layout */
 
-$text-block-width: $stock-width + $bleed * 2 - ($margin-outer + $margin-spine);
-$text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
+$text-block-width: $stock-width - ($margin-outer + $margin-spine);
+$text-block-height: $stock-height - ($margin-top + $margin-bottom);
+
+body {
+  margin: 0;
+  padding: 0;
+}
 
 .page-container {
+  position: relative;
   width: $text-block-width * 1mm;
   height: $text-block-height * 1mm;
+  overflow: hidden;
   padding-top: $margin-top * 1mm;
-  padding-bottom: $margin-bottom * 1mm;
+
+  // the 0.6 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
+  padding-bottom: ($margin-bottom - 0.6) * 1mm;
 	padding-left: $margin-outer * 1mm;
 	padding-right: $margin-outer * 1mm;
   &.recto {
@@ -91,11 +100,33 @@ $text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
       position: static;
 
       img {
-        top: 0;
-        left: 0;
+        top: -$bleed * 1mm;
+        left: -$bleed * 1mm;
         position: absolute;
       }
     }
+  }
+  &.has-bleed {
+	padding-bottom: ($margin-bottom + $bleed + 1.7) * 1mm;
+	padding-left: ($margin-outer + $bleed) * 1mm;
+	padding-right: ($margin-outer + $bleed) * 1mm;
+	&.recto {
+		padding-left: ($margin-spine + $bleed) * 1mm;
+		padding-right: ($margin-outer + $bleed) * 1mm;
+	}
+	&.verso {
+		padding-left: ($margin-outer + $bleed) * 1mm;
+		padding-right: ($margin-spine + $bleed) * 1mm;
+	}
+	&.front-cover, &.back-cover {
+    .text-block {
+      img {
+        top: 0;
+        left: 0;
+      }
+    }
+	}
+
   }
 }
 
@@ -109,11 +140,15 @@ $text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
 .page-number {
   font-family: "dejavuserif", sans-serif;
   position: absolute;
-  bottom: 10mm;
+  bottom: ($margin-bottom / 2) * 1mm;
   width: 10mm;
   text-align: center;
   left: 50%;
   margin-left: -5mm;
+
+  .has-bleed & {
+    bottom: ($margin-bottom / 2 + $bleed) * 1mm;
+  }
 
   // until I figure out some kind of pagination scheme for this
   .front-matter &, .back-matter & {

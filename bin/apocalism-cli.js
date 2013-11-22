@@ -13,9 +13,19 @@ program
   .usage("[command] <file>");
 
 program
+  .option("--no-bleed", "PDF only: Don't add bleed")
   .command("* <file>")
   .action(function (filename, options) {
-    main.compileBook(filename, {
+    main.compilePdf(filename, {
+      quiet: program.quiet,
+      hasBleed: program.bleed
+    });
+  });
+
+program
+  .command("webpage <file>")
+  .action(function (filename, option) {
+    main.compileWebpage(filename, {
       quiet: program.quiet
     });
   });
