@@ -64,7 +64,7 @@ the following are injected before compiling:
 /* page layout */
 
 $text-block-width: $stock-width - ($margin-outer + $margin-spine);
-$text-block-height: $stock-height + $bleed * 2 - ($margin-top + $margin-bottom);
+$text-block-height: $stock-height - ($margin-top + $margin-bottom);
 
 body {
   margin: 0;
@@ -78,8 +78,8 @@ body {
   overflow: hidden;
   padding-top: $margin-top * 1mm;
 
-  // the 0.2 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
-  padding-bottom: ($margin-bottom - 0.2) * 1mm;
+  // the 0.6 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
+  padding-bottom: ($margin-bottom - 0.6) * 1mm;
 	padding-left: $margin-outer * 1mm;
 	padding-right: $margin-outer * 1mm;
   &.recto {
@@ -107,9 +107,7 @@ body {
     }
   }
   &.has-bleed {
-	width: ($text-block-width + $bleed * 2) * 1mm;
-	height: ($text-block-height + $bleed * 2) * 1mm;
-	padding-bottom: ($margin-bottom + $bleed - 0.2) * 1mm;
+	padding-bottom: ($margin-bottom + $bleed + 1.7) * 1mm;
 	padding-left: ($margin-outer + $bleed) * 1mm;
 	padding-right: ($margin-outer + $bleed) * 1mm;
 	&.recto {
@@ -121,10 +119,12 @@ body {
 		padding-right: ($margin-spine + $bleed) * 1mm;
 	}
 	&.front-cover, &.back-cover {
-		img {
-			top: 0;
-			left: 0;
-		}
+    .text-block {
+      img {
+        top: 0;
+        left: 0;
+      }
+    }
 	}
 
   }
@@ -140,11 +140,15 @@ body {
 .page-number {
   font-family: "dejavuserif", sans-serif;
   position: absolute;
-  bottom: 10mm;
+  bottom: ($margin-bottom / 2) * 1mm;
   width: 10mm;
   text-align: center;
   left: 50%;
   margin-left: -5mm;
+
+  .has-bleed & {
+    bottom: ($margin-bottom / 2 + $bleed) * 1mm;
+  }
 
   // until I figure out some kind of pagination scheme for this
   .front-matter &, .back-matter & {
