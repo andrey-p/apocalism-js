@@ -13,10 +13,12 @@ program
   .usage("[command] <file>");
 
 program
+  .option("--no-bleed", "PDF only: Don't add bleed")
   .command("* <file>")
   .action(function (filename, options) {
     main.compilePdf(filename, {
-      quiet: program.quiet
+      quiet: program.quiet,
+      hasBleed: program.bleed
     });
   });
 
