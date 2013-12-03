@@ -14,11 +14,13 @@ program
 
 program
   .option("--no-bleed", "PDF only: Don't add bleed")
+  .option("--lo-res", "PDF only: Use low resolution images")
   .command("* <file>")
   .action(function (filename, options) {
     main.compilePdf(filename, {
       quiet: program.quiet,
-      hasBleed: program.bleed
+      hasBleed: program.bleed,
+      loRes: program.loRes
     });
   });
 

@@ -15,7 +15,8 @@
     "case": "1.0.x",
     "async": "0.2.x",
     "fs-extra": "0.8.x",
-    "handlebars": "1.1.x"
+    "handlebars": "1.1.x",
+    "long-stack-traces": "0.1.x"
   },
   "devDependencies": {
     "mocha": "1.13.x",

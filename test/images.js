@@ -23,13 +23,19 @@ describe("images", function () {
   });
   describe("#resolveImageTag()", function () {
     var imgTag,
-      pathToImages,
+      actualPathToImages,
+      replacementPathToImages,
       args;
 
     beforeEach(function () {
       imgTag = "<img src=\"1.png\" alt=\"hello\" />";
-      pathToImages = "test/test_project/images/";
-      args = { imgTag: imgTag, pathToImages: pathToImages };
+      actualPathToImages = "test/test_project/images/";
+      replacementPathToImages = "test/test_project/images/";
+      args = {
+        imgTag: imgTag,
+        actualPathToImages: actualPathToImages,
+        replacementPathToImages: replacementPathToImages
+      };
     });
     it("should read the file at the correct path", function (done) {
       // stub, cheekily
