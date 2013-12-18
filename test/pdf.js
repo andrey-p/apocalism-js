@@ -7,7 +7,6 @@ var should = require("should"),
   pdf = require("../lib/pdf.js"),
   helper = require("./helper.js"),
   progress = require("../lib/progress.js"),
-  cache = require("../lib/cache.js"),
   fs = require("fs"),
   os = require("os"),
   opts = helper.getDefaultOpts(),
@@ -18,10 +17,8 @@ describe("pdf", function () {
   before(function (done) {
     htmlMarkup = "<p>Hello!</p>";
     progress.init(opts, function () {
-      cache.init(opts, function () {
-        pdf.init(opts, function () {
-          done();
-        });
+      pdf.init(opts, function () {
+        done();
       });
     });
   });
