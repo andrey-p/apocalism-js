@@ -16,7 +16,8 @@
     "async": "0.2.x",
     "fs-extra": "0.8.x",
     "handlebars": "1.1.x",
-    "long-stack-traces": "0.1.x"
+    "long-stack-traces": "0.1.x",
+    "arg-err": "git://github.com/andrey-p/arg-err"
   },
   "devDependencies": {
     "mocha": "1.13.x",
