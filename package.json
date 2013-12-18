@@ -24,6 +24,7 @@
     "should": "2.0.x",
     "w3c-validate": "0.0.x",
     "lorem-ipsum": "0.1.x",
-    "istanbul": "0.1.x"
+    "istanbul": "0.1.x",
+    "monkey": "0.0.3"
   }
 }

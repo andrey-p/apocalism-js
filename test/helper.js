@@ -22,7 +22,8 @@ exports.getDefaultOpts = function () {
     bleed: 2,
     hasBleed: true,
     output: "output/output.pdf",
-    pathToImages: "output/output.pdf"
+    pathToImages: "output/output.pdf",
+    pathToTmp: "output/tmp/"
   };
 };
 
