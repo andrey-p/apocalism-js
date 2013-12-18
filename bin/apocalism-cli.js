@@ -10,6 +10,7 @@ var program = require("commander"),
 program
   .version(version)
   .option("-q, --quiet", "Don't output progress info")
+  .option("-d, --debug", "Output individual html pages in output/debug folder (useful for tweaking PDF layouts)")
   .usage("[command] <file>");
 
 program
@@ -20,7 +21,8 @@ program
     main.compilePdf(filename, {
       quiet: program.quiet,
       hasBleed: program.bleed,
-      loRes: program.loRes
+      loRes: program.loRes,
+      debug: program.debug
     });
   });
 
