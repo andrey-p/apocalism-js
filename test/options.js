@@ -33,7 +33,7 @@ describe("options", function () {
     });
     it("should should complain if options without a default aren't set", function (done) {
       delete validInput.title;
-      options.set(validInput, function (err, opts) {
+      options.set(validInput, function (err) {
         should.exist(err);
         done();
       });
@@ -41,6 +41,7 @@ describe("options", function () {
     it("should not set options that don't exist", function (done) {
       validInput.thisShouldNotBeSet = "this";
       options.set(validInput, function (err, opts) {
+        should.not.exist(err);
         opts.should.not.have.property("thisShouldNotBeSet");
         done();
       });

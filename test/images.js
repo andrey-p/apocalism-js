@@ -7,20 +7,6 @@ var should = require("should"),
   images = require("../lib/images.js");
 
 describe("images", function () {
-  describe("#resolveImagesInCss()", function () {
-    var css,
-      pathToImages,
-      args;
-
-    beforeEach(function () {
-      css = ".element-1 {\n"
-        + "background-image: url(pattern.png)\n"
-        + "}\n"
-        + ".element-2 { background: url(pattern2.png); }";
-      pathToImages = "test/test_project/images/";
-      args = { css: css, pathToImages: pathToImages };
-    });
-  });
   describe("#resolveImageTag()", function () {
     var imgTag,
       actualPathToImages,
@@ -40,7 +26,7 @@ describe("images", function () {
     it("should read the file at the correct path", function (done) {
       // stub, cheekily
       var tempReadFile = fs.readFile;
-      fs.readFile = function (filename, callback) {
+      fs.readFile = function (filename) {
         filename.should.equal("test/test_project/images/1.png");
         done();
         fs.readFile = tempReadFile;

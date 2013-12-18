@@ -51,6 +51,7 @@ describe("paginator", function () {
       markup = lipsum(lipsumOptions);
       paginator.createPage(emptyPageMarkup, markup, function (err, page, leftoverMarkup) {
         should.not.exist(err);
+        should.exist(page);
         should.exist(leftoverMarkup);
         leftoverMarkup.length.should.be.above(0);
         done();

@@ -1,5 +1,5 @@
 /*jslint indent: 2, node: true*/
-/*globals it, describe, beforeEach, after, before*/
+/*globals it, describe, beforeEach, afterEach, after, before*/
 "use strict";
 
 var should = require("should"),
@@ -39,6 +39,7 @@ describe("pdf", function () {
     beforeEach(function () {
       monkey.patch(fs, {
         readdir: function (dir, callback) {
+          should.exist(dir);
           callback(null, ["file1.pdf", "file2.pdf", "file3.pdf"]);
         }
       });
@@ -51,6 +52,8 @@ describe("pdf", function () {
 
       monkey.patch(pdftkWrapper, {
         concatenatePages: function (pathsToPdfs, pathToPdf, callback) {
+          should.exist(pathsToPdfs);
+          should.exist(pathToPdf);
           callback(null, pathToPdf);
         }
       });
@@ -67,18 +70,18 @@ describe("pdf", function () {
       phantomWrapper.generatePdfPage = function (args, callback) {
 
         // check args are right
-        should(arg.err(args, {
+        should.exist(!arg.err(args, {
           pathToPdf: "string",
           dimensions: { width: "number", height: "number" },
           markup: "string"
-        })).not.ok;
+        }));
 
         called += 1;
 
         callback(null, args.pathToPdf);
       };
 
-      pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
+      pdf.generatePdfFromPages(pages, pathToPdf, function (err) {
         called.should.equal(2);
         should.not.exist(err);
         done();
@@ -90,17 +93,18 @@ describe("pdf", function () {
         dir.should.equal(opts.pathToTmp);
         callback(null, ["file1.pdf", "file2.pdf", "file3.pdf"]);
       };
-      pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
+      pdf.generatePdfFromPages(pages, pathToPdf, function (err) {
         should.not.exist(err);
         done();
       });
     });
     it("should call pdftkWrapper#concatenatePages() with all pdfs in the correct order", function (done) {
       fs.readdir = function (dir, callback) {
+        should.exist(dir);
         callback(null, ["1.pdf", "11.pdf", "2.pdf"]);
       };
       pdftkWrapper.concatenatePages = function (paths, pathToPdf, callback) {
-        paths.should.be.an.Array;
+        (paths instanceof Array).should.equal(true);
         paths.length.should.equal(3);
         paths[0].should.equal(opts.pathToTmp + "1.pdf");
         paths[1].should.equal(opts.pathToTmp + "2.pdf");
@@ -108,7 +112,7 @@ describe("pdf", function () {
 
         callback(null, pathToPdf);
       };
-      pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
+      pdf.generatePdfFromPages(pages, pathToPdf, function (err) {
         should.not.exist(err);
         done();
       });
