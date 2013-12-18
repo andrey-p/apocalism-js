@@ -3,35 +3,33 @@
 "use strict";
 
 var should = require("should"),
-  options = require("../lib/options.js"),
-  pdf = require("../lib/pdf.js"),
+  phantomWrapper = require("../lib/phantom-wrapper.js"),
   helper = require("./helper.js"),
-  progress = require("../lib/progress.js"),
   fs = require("fs-extra"),
   os = require("os"),
   opts = helper.getDefaultOpts(),
   htmlMarkup;
 
-describe("pdf", function () {
-  var pathToPdf;
+describe("phantom-wrapper", function () {
+  var pathToPdf,
+    dimensions;
 
-  before(function (done) {
+  before(function () {
     // need this because the phantom script creates its own dir
     opts.pathToOutput = os.tmpdir() + "/apoc_out/";
+    dimensions = {
+      width: opts.stock.width + opts.bleed * 2,
+      height: opts.stock.height + opts.bleed * 2
+    };
     pathToPdf = opts.pathToOutput + "output.pdf";
     htmlMarkup = "<p>Hello!</p>";
-    progress.init(opts, function () {
-      pdf.init(opts, function () {
-        done();
-      });
-    });
   });
   after(function (done) {
     fs.remove(opts.pathToOutput, done);
   });
   describe("#generatePdfPage()", function () {
     it("should generate a pdf from an html string", function (done) {
-      pdf.generatePdfPage(htmlMarkup, pathToPdf, function (err) {
+      phantomWrapper.generatePdfPage(htmlMarkup, pathToPdf, dimensions, function (err) {
         should.not.exist(err);
         // check if file is a pdf - this has the side effect of checking if file exists, too
         helper.getFileMimeType(opts.pathToOutput + "output.pdf", function (err, mimetype) {
@@ -42,7 +40,7 @@ describe("pdf", function () {
       });
     });
     it("should output pages in A5 format + bleed if the default template is being used", function (done) {
-      pdf.generatePdfPage(htmlMarkup, pathToPdf, function (err) {
+      phantomWrapper.generatePdfPage(htmlMarkup, pathToPdf, dimensions, function (err) {
         should.not.exist(err);
         helper.getPdfPaperSize(pathToPdf, function (err, paperSize) {
           should.not.exist(err);
