@@ -7,14 +7,18 @@ var should = require("should"),
   pdf = require("../lib/pdf.js"),
   helper = require("./helper.js"),
   progress = require("../lib/progress.js"),
-  fs = require("fs"),
+  fs = require("fs-extra"),
   os = require("os"),
   opts = helper.getDefaultOpts(),
-  pathToPdf = opts.output,
   htmlMarkup;
 
 describe("pdf", function () {
+  var pathToPdf;
+
   before(function (done) {
+    // need this because the phantom script creates its own dir
+    opts.pathToOutput = os.tmpdir() + "/apoc_out/";
+    pathToPdf = opts.pathToOutput + "output.pdf";
     htmlMarkup = "<p>Hello!</p>";
     progress.init(opts, function () {
       pdf.init(opts, function () {
@@ -23,14 +27,14 @@ describe("pdf", function () {
     });
   });
   after(function (done) {
-    fs.unlink(pathToPdf, done);
+    fs.remove(opts.pathToOutput, done);
   });
   describe("#generatePdfPage()", function () {
     it("should generate a pdf from an html string", function (done) {
       pdf.generatePdfPage(htmlMarkup, pathToPdf, function (err) {
         should.not.exist(err);
         // check if file is a pdf - this has the side effect of checking if file exists, too
-        helper.getFileMimeType(pathToPdf, function (err, mimetype) {
+        helper.getFileMimeType(opts.pathToOutput + "output.pdf", function (err, mimetype) {
           should.not.exist(err);
           mimetype.should.include("application/pdf");
           done();
