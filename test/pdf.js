@@ -7,7 +7,6 @@ var should = require("should"),
   pdf = require("../lib/pdf.js"),
   helper = require("./helper.js"),
   progress = require("../lib/progress.js"),
-  cache = require("../lib/cache.js"),
   fs = require("fs"),
   os = require("os"),
   opts = helper.getDefaultOpts(),
@@ -18,10 +17,8 @@ describe("pdf", function () {
   before(function (done) {
     htmlMarkup = "<p>Hello!</p>";
     progress.init(opts, function () {
-      cache.init(opts, function () {
-        pdf.init(opts, function () {
-          done();
-        });
+      pdf.init(opts, function () {
+        done();
       });
     });
   });
@@ -47,25 +44,6 @@ describe("pdf", function () {
           should.not.exist(err);
           // 431 x 607 pts is 152 x 214.1mm, which is more or less A5 with 2mm bleed
           paperSize.should.include("431 x 607");
-          done();
-        });
-      });
-    });
-  });
-  describe("#generatePdfFromPages()", function () {
-    it("should generate a pdf from an array of html strings", function (done) {
-      var pages = [
-        { htmlContent: htmlMarkup, order: 1 },
-        { htmlContent: htmlMarkup, order: 2 },
-        { htmlContent: htmlMarkup, order: 3 }
-      ];
-      pdf.generatePdfFromPages(pages, pathToPdf, function (err, pathToPdf) {
-        should.not.exist(err);
-        should.exist(pathToPdf);
-        pathToPdf.should.have.type("string");
-        helper.getFileMimeType(pathToPdf, function (err, mimetype) {
-          should.not.exist(err);
-          mimetype.should.include("application/pdf");
           done();
         });
       });
