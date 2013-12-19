@@ -1,10 +1,10 @@
 SHELL := /bin/bash
 
 lint:
-	jslint ./*.js
-	jslint ./lib/*.js
-	jslint ./lib/phantom-scripts/*.js
-	jslint ./test/*.js
+	./node_modules/.bin/jslint ./*.js
+	./node_modules/.bin/jslint ./lib/*.js
+	./node_modules/.bin/jslint ./lib/phantom-scripts/*.js
+	./node_modules/.bin/jslint ./test/*.js
 
 test:
 	@./node_modules/.bin/mocha -R spec -t 10000 \

@@ -25,6 +25,7 @@
     "w3c-validate": "0.0.x",
     "lorem-ipsum": "0.1.x",
     "istanbul": "0.1.x",
-    "monkey": "0.0.3"
+    "monkey-patch": "0.0.3",
+    "jslint": "0.2.6"
   }
 }
