@@ -4,9 +4,41 @@
 
 var should = require("should"),
   fs = require("fs"),
+  monkey = require("monkey-patch"),
   images = require("../lib/images.js");
 
 describe("images", function () {
+  describe("#resolveImagesInMarkup()", function () {
+    var args;
+    before(function () {
+      args = {
+        markup: "<img src='1.png' /><img src='1.png' /><img src='1.png' />",
+        actualPathToImages: "",
+        replacementPathToImages: ""
+      };
+    });
+    after(function () {
+      monkey.unpatch(images);
+    });
+    it("should call the resolveImageTag method for every image in the markup", function (done) {
+      var count = 0;
+
+      monkey.patch(images, {
+        resolveImageTag: function (args, callback) {
+          should.exist(args);
+          count += 1;
+          callback(null, "<img class='resolved'/>");
+        }
+      });
+
+      images.resolveImagesInMarkup(args, function (err, markup) {
+        should.not.exist(err);
+        count.should.equal(3);
+        markup.should.equal("<img class='resolved'/><img class='resolved'/><img class='resolved'/>");
+        done();
+      });
+    });
+  });
   describe("#resolveImageTag()", function () {
     var imgTag,
       actualPathToImages,
