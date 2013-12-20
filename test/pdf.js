@@ -51,7 +51,7 @@ describe("pdf", function () {
       });
 
       monkey.patch(pdftkWrapper, {
-        concatenatePages: function (pathsToPdfs, pathToPdf, callback) {
+        concatenatePages: function (pathToPdf, pathsToPdfs, callback) {
           should.exist(pathsToPdfs);
           should.exist(pathToPdf);
           callback(null, pathToPdf);
@@ -103,7 +103,7 @@ describe("pdf", function () {
         should.exist(dir);
         callback(null, ["1.pdf", "11.pdf", "2.pdf"]);
       };
-      pdftkWrapper.concatenatePages = function (paths, pathToPdf, callback) {
+      pdftkWrapper.concatenatePages = function (pathToPdf, paths, callback) {
         (paths instanceof Array).should.equal(true);
         paths.length.should.equal(3);
         paths[0].should.equal(opts.pathToTmp + "1.pdf");
