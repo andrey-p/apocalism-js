@@ -16,13 +16,16 @@
     "async": "0.2.x",
     "fs-extra": "0.8.x",
     "handlebars": "1.1.x",
-    "long-stack-traces": "0.1.x"
+    "long-stack-traces": "0.1.x",
+    "arg-err": "git://github.com/andrey-p/arg-err"
   },
   "devDependencies": {
     "mocha": "1.13.x",
     "should": "2.0.x",
     "w3c-validate": "0.0.x",
     "lorem-ipsum": "0.1.x",
-    "istanbul": "0.1.x"
+    "istanbul": "0.1.x",
+    "monkey-patch": "0.0.3",
+    "jslint": "0.2.6"
   }
 }

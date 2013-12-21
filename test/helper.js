@@ -22,13 +22,14 @@ exports.getDefaultOpts = function () {
     bleed: 2,
     hasBleed: true,
     output: "output/output.pdf",
-    pathToImages: "output/output.pdf"
+    pathToImages: "output/output.pdf",
+    pathToTmp: "output/tmp/"
   };
 };
 
 // returns true if process exists
 exports.checkIfProcessExists = function (processName, callback) {
-  exec("pgrep " + processName, function (error, stdout, stderr) {
+  exec("pgrep " + processName, function (error, stdout) {
     // error code 1 means no matches
     if (error && error.code !== 1) {
       callback(error);
@@ -40,7 +41,7 @@ exports.checkIfProcessExists = function (processName, callback) {
 
 // kills all instances of process
 exports.killProcess = function (processName, callback) {
-  exec("pkill " + processName, function (error, stdout, stderr) {
+  exec("pkill " + processName, function (error, stdout) {
     // error code 1 means no process of that name found,
     // which is ok for cleaning up
     if (error && error.code !== 1) {
@@ -53,7 +54,7 @@ exports.killProcess = function (processName, callback) {
 
 // output mimetype of file
 exports.getFileMimeType = function (path, callback) {
-  exec("file -b --mime-type " + path, function (error, stdout, stderr) {
+  exec("file -b --mime-type " + path, function (error, stdout) {
     if (error) {
       callback(error);
     } else {
@@ -63,7 +64,7 @@ exports.getFileMimeType = function (path, callback) {
 };
 
 exports.getPdfPaperSize = function (path, callback) {
-  exec("pdfinfo " + path + " | grep \"Page size:.*\" | grep -Eo \"[0-9]+ x [0-9]+\"", function (error, stdout, stderr) {
+  exec("pdfinfo " + path + " | grep \"Page size:.*\" | grep -Eo \"[0-9]+ x [0-9]+\"", function (error, stdout) {
     if (error) {
       callback(error);
     } else {
