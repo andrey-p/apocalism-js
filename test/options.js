@@ -57,33 +57,5 @@ describe("options", function () {
         done();
       });
     });
-    it("should parse the dimensions passed to stock correctly", function (done) {
-      validInput.stock = "100x105mm";
-      options.set(validInput, function (err, opts) {
-        should.not.exist(err);
-        opts.stock.width.should.equal(100);
-        opts.stock.height.should.equal(105);
-        done();
-      });
-    });
-    it("should parse the dimensions passed to bleed correctly", function (done) {
-      validInput.bleed = "5mm";
-      options.set(validInput, function (err, opts) {
-        should.not.exist(err);
-        opts.bleed.should.equal(5);
-        done();
-      });
-    });
-    it("should parse the dimensions passed to margin", function (done) {
-      validInput.margin = "1 2mm 3mm 4mm";
-      options.set(validInput, function (err, opts) {
-        should.not.exist(err);
-        opts.margin.top.should.equal(1);
-        opts.margin.outer.should.equal(2);
-        opts.margin.bottom.should.equal(3);
-        opts.margin.spine.should.equal(4);
-        done();
-      });
-    });
   });
 });
