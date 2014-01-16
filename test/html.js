@@ -30,6 +30,29 @@ describe("html", function () {
       result.should.include("<p class=\"opening\">para1</p>");
       result.should.not.include("<p class=\"opening\">para2</p>");
     });
+    it("should add classes to block level elements properly", function () {
+      var result, input;
+
+      input = "# heading\n";
+      input += "{foo bar}\n\n";
+      input += "paragraph1\n";
+      input += "{bar}\n\n";
+      input += "paragraph2\n";
+      input += "{baz}\n\n";
+
+      result = html.fromMarkdown(input);
+      result.should.include("<h1 class=\"foo bar\">heading</h1>");
+      result.should.include("<p class=\"bar opening\">paragraph1</p>");
+      result.should.include("<p class=\"baz\">paragraph2</p>");
+    });
+    it("should add classes to inline level elements properly", function () {
+      var result, input;
+
+      input = "hello *hello*{foo} *hello*{bar baz}!";
+
+      result = html.fromMarkdown(input);
+      result.should.include("hello <em class=\"hello\">hello</em> <em class=\"bar baz\">hello</em>!");
+    });
   });
   describe("#getBodyContent()", function () {
     it("should return everything inside the body tag", function () {
