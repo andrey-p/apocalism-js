@@ -9,9 +9,9 @@ var should = require("should"),
   phantomWrapper = require("../lib/phantom-wrapper.js");
 
 describe("html", function () {
-  describe("#prepMarkup()", function () {
+  describe("#fromMarkdown()", function () {
     it("should add all the proper typographic entities", function () {
-      var result = html.prepMarkup("\"word\" ... 'word' can't -- ---");
+      var result = html.fromMarkdown("\"word\" ... 'word' can't -- ---");
       result.should.include("&#8220;"); // opening double quote
       result.should.include("&#8221;"); // closing double quote
       result.should.include("&#8216;"); // opening single quote
@@ -22,11 +22,11 @@ describe("html", function () {
     });
     it("should add the class 'opening' to the first paragraph", function () {
       var result,
-        input = "<h1>heading</h1>\n\n";
-      input += "<p>para1</p>\n\n";
-      input += "<p>para2</p>\n\n";
+        input = "# heading\n\n";
+      input += "para1\n\n";
+      input += "para2\n\n";
 
-      result = html.prepMarkup(input);
+      result = html.fromMarkdown(input);
       result.should.include("<p class=\"opening\">para1</p>");
       result.should.not.include("<p class=\"opening\">para2</p>");
     });
