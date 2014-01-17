@@ -48,10 +48,10 @@ describe("html", function () {
     it("should add classes to inline level elements properly", function () {
       var result, input;
 
-      input = "hello *hello*{foo} *hello*{bar baz}!";
+      input = "hello *hello{foo}* *hello{bar baz}*!";
 
       result = html.fromMarkdown(input);
-      result.should.include("hello <em class=\"hello\">hello</em> <em class=\"bar baz\">hello</em>!");
+      result.should.include("hello <em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
     });
   });
   describe("#getBodyContent()", function () {
