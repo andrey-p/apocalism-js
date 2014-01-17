@@ -5,8 +5,7 @@ var exec = require("child_process").exec;
 
 exports.getDefaultOpts = function () {
   return {
-    author: "test",
-    title: "test",
+    filename: "test",
     template: "pdf",
     stock: {
       width: 148,
