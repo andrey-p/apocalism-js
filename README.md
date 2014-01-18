@@ -9,7 +9,7 @@ What is this?
 This is an app I've been working on to compile my illustrated short stories.
 This is a _very early_ version with _a number of problems_ but I've already used it in production - the results can be seen at http://apocalism.co.uk.
 
-It is essentially a beefed-up opinionated Markdown to HTML to PDF generator with pagination and image management.
+It is essentially a beefed-up opinionated Markdown to HTML to PDF generator with pagination, image management and custom styling capabilities.
 It's built on NodeJS and uses PhantomJS internally to render PDFs.
 
 Requirements
@@ -22,36 +22,17 @@ Requirements
 Quick start
 ----
 
-This misses out on loads of details, pitfalls, styling hooks and extra options (coming soon: detailed wiki-style guide) but here's a quick runthrough.
+Loads of useful info in the [wiki](https://github.com/andrey-p/apocalism-js/wiki).
 
-Your short story file structure should be the following:
+But... why?
+----
 
-```
-project-folder/
-|-- images/   <---- 300dpi PNGs
-|-- output/   <---- this is where the pdf will be located
-|-- story.md  <---- your story file, which I'm assuming contains greatness
-```
+Some time ago I started working on an illustrated short story thing. As a Linux user, I started with an OSS alternative to InDesign called [Scribus](http://scribus.net/canvas/Scribus).
 
-Fill in Title and Author name and start writing:
+It was ok enough, but the workflow was painful. I worked on the layout and the content (both text and images) simultaneously so a lot of unnecessary copy and pasting was needed, duplication of formatting work, and so on.
 
-```
-Title: Foo
-Name: John Bar
+What I needed was something that would allow me to work on the content and layout side by side, and something that its magic on the command line so I could integrate it with an XCF to PNG conversion script. Being able to work in a plain text file would also be good, so I could Vim and git as much as I want.
 
-Lorem ipsum something
-```
+[LaTeX](http://latex-project.org/) almost fit the bill. That is, until I had to spend an afternoon trying (and failing) to move an image three milimetres to the right.
 
-Images can be added too, you only need to specify the filename and the path gets resolved automatically. So assuming your `images` folder contains `fancy-image.png`, you do:
-
-```
-![this is an image from the images folder](fancy-image.png)
-```
-
-Call the script with the story markdown filename as the first argument (coming soon: installation via `npm install -g`):
-
-```
-/path/to/apocalism/bin/apocalism-cli.js story.md
-```
-
-This should result in an A5 pdf booklet with 2mm bleed. Bliss!
+So I made this instead.
