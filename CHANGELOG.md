@@ -1,3 +1,8 @@
+0.3.1
+====
+
+- fixed [#9](https://github.com/andrey-p/apocalism-js/issues/9)
+
 0.3.0
 ====
 
