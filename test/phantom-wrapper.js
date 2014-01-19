@@ -141,7 +141,7 @@ describe("phantom-wrapper", function () {
       });
     });
     it("should not return comments in leftover", function (done) {
-      args.markup = "<p>foo</p><!-- bar baz -->";
+      args.markup = "<p>foo</p><!-- bar --><p>baz</p><!-- bla -->";
 
       phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
         should.not.exist(err);
@@ -149,8 +149,10 @@ describe("phantom-wrapper", function () {
         should.exist(leftoverMarkup);
 
         page.should.contain("<p>foo</p>");
+        page.should.contain("<p>baz</p>");
 
-        leftoverMarkup.should.not.contain("bar baz");
+        leftoverMarkup.should.not.contain("bar");
+        leftoverMarkup.should.not.contain("bla");
 
         done();
       });
