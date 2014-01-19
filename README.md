@@ -29,9 +29,9 @@ But... why?
 
 Some time ago I started working on an illustrated short story thing. As a Linux user, I started with an OSS alternative to InDesign called [Scribus](http://scribus.net/canvas/Scribus).
 
-It was ok enough, but the workflow was painful. I worked on the layout and the content (both text and images) simultaneously so a lot of unnecessary copy and pasting was needed, duplication of formatting work, and so on.
+It was ok enough, but the workflow was painful. I worked on the layout and the content (both text and images) simultaneously so a lot of unnecessary copy and pasting was needed as well as repeat formatting work and so on.
 
-What I needed was something that would allow me to work on the content and layout side by side, and something that its magic on the command line so I could integrate it with an XCF to PNG conversion script. Being able to work in a plain text file would also be good, so I could Vim and git as much as I want.
+What I needed was something that would allow me to work on the content and layout side by side, and something that did its magic via the command line so I could integrate it with an XCF to PNG conversion script. Being able to work in a plain text file would also be good, so I could Vim and git to my heart's content.
 
 [LaTeX](http://latex-project.org/) almost fit the bill. That is, until I had to spend an afternoon trying (and failing) to move an image three milimetres to the right.
 
