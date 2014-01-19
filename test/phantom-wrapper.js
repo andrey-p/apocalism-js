@@ -140,6 +140,21 @@ describe("phantom-wrapper", function () {
         done();
       });
     });
+    it("should not return comments in leftover", function (done) {
+      args.markup = "<p>foo</p><!-- bar baz -->";
+
+      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        page.should.contain("<p>foo</p>");
+
+        leftoverMarkup.should.not.contain("bar baz");
+
+        done();
+      });
+    });
   });
   describe("#generatePdfPage()", function () {
     var args;
