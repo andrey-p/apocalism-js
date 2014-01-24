@@ -6,9 +6,21 @@ var should = require("should"),
   fs = require("fs"),
   monkey = require("monkey-patch"),
   images = require("../lib/images.js"),
-  pathToTmp = __dirname + "/tmp/";
+  pathToTmp = __dirname + "/tmp/",
+  progress = require("../lib/progress.js"),
+  helper = require("./helper.js"),
+  opts = helper.getDefaultOpts();
 
 describe("images", function () {
+
+  before(function (done) {
+    progress.init(opts, function () {
+      images.init(opts, function () {
+        done();
+      });
+    });
+  });
+
   describe("#resolveImagesInMarkup()", function () {
     var args;
     before(function () {

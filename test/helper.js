@@ -18,6 +18,8 @@ exports.getDefaultOpts = function () {
       outer: 15
     },
     quiet: true,
+    hiResDPI: 300,
+    loResDPI: 96,
     bleed: 2,
     hasBleed: true,
     output: "output/output.pdf",
