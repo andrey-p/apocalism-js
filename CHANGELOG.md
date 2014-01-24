@@ -1,3 +1,11 @@
+0.3.3
+====
+
+- added support for jpg image formats (issue [#5](https://github.com/andrey-p/apocalism-js/issues/5))
+- added dpi settings in options
+- some refactoring for reader
+- improved test coverage
+
 0.3.2
 ====
 
