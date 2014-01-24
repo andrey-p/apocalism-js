@@ -1,11 +1,12 @@
-/*jslint indent: 2, node: true*/
-/*globals it, describe, beforeEach, after, before*/
+/*jslint indent: 2, node: true, nomen: true*/
+/*globals it, describe, beforeEach, afterEach, after, before*/
 "use strict";
 
 var should = require("should"),
   fs = require("fs"),
   monkey = require("monkey-patch"),
-  images = require("../lib/images.js");
+  images = require("../lib/images.js"),
+  pathToTmp = __dirname + "/tmp/";
 
 describe("images", function () {
   describe("#resolveImagesInMarkup()", function () {
@@ -42,27 +43,36 @@ describe("images", function () {
   describe("#resolveImageTag()", function () {
     var imgTag,
       actualPathToImages,
-      replacementPathToImages,
       args;
 
+    before(function (done) {
+      fs.mkdir(pathToTmp, done);
+    });
+
+    after(function (done) {
+      fs.rmdir(pathToTmp, done);
+    });
+
+    afterEach(function () {
+      monkey.unpatch(fs);
+    });
+
     beforeEach(function () {
-      imgTag = "<img src=\"1.png\" alt=\"hello\" />";
-      actualPathToImages = "test/test_project/images/";
-      replacementPathToImages = "test/test_project/images/";
+      imgTag = "<img src=\"mallard.png\" alt=\"hello\" />";
+      actualPathToImages = __dirname + "/assets/";
       args = {
         imgTag: imgTag,
         actualPathToImages: actualPathToImages,
-        replacementPathToImages: replacementPathToImages
+        replacementPathToImages: pathToTmp
       };
     });
     it("should read the file at the correct path", function (done) {
-      // stub, cheekily
-      var tempReadFile = fs.readFile;
-      fs.readFile = function (filename) {
-        filename.should.equal("test/test_project/images/1.png");
-        done();
-        fs.readFile = tempReadFile;
-      };
+      monkey.patch(fs, {
+        readFile: function (filename) {
+          filename.should.equal(__dirname + "/assets/mallard.png");
+          done();
+        }
+      });
 
       images.resolveImageTag(args, function () {
         throw new Error("shouldn't get this far");
@@ -73,10 +83,10 @@ describe("images", function () {
         var targetWidth, targetHeight;
         should.not.exist(err);
         should.exist(updatedMarkup);
-        // size of images in test proj folder is 1299 x 901
+        // size of images in test proj folder is 2560 x 1600
         // the width / height should be adjusted for resolution
-        targetWidth = Math.floor(1299 * 96 / 300);
-        targetHeight = Math.floor(901 * 96 / 300);
+        targetWidth = Math.floor(2560 * 96 / 300);
+        targetHeight = Math.floor(1600 * 96 / 300);
         updatedMarkup.should.contain("width=\"" + targetWidth + "\"");
         updatedMarkup.should.contain("height=\"" + targetHeight + "\"");
         done();
@@ -85,7 +95,7 @@ describe("images", function () {
     it("should add width and height even if they're already present in the tag", function (done) {
       // the most likely situation will be with width and height blank
       // as that's how namp gives 'em
-      args.imgTag = "<img src=\"1.png\" alt=\"hello\" width=\"\" height=\"\" />";
+      args.imgTag = "<img src=\"mallard.png\" alt=\"hello\" width=\"\" height=\"\" />";
       images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
@@ -107,20 +117,20 @@ describe("images", function () {
         done();
       });
     });
-    it("should give the image tag a unique class based on its name: 1.png -> image-1", function (done) {
+    it("should give the image tag a unique class based on its name: mallard.png -> image-mallard", function (done) {
       images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
-        updatedMarkup.should.contain("class=\"image-1\"");
+        updatedMarkup.should.contain("class=\"image-mallard\"");
         done();
       });
     });
     it("should not overwrite the image's existing class(es)", function (done) {
-      args.imgTag = "<img src=\"1.png\" class=\"foo bar\" alt=\"hello\" />";
+      args.imgTag = "<img src=\"mallard.png\" class=\"foo bar\" alt=\"hello\" />";
       images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
-        updatedMarkup.should.contain("class=\"image-1 foo bar\"");
+        updatedMarkup.should.contain("class=\"image-mallard foo bar\"");
         done();
       });
     });
