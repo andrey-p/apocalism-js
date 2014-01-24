@@ -3,9 +3,10 @@
 "use strict";
 
 var should = require("should"),
-  fs = require("fs"),
+  fs = require("fs-extra"),
   monkey = require("monkey-patch"),
   images = require("../lib/images.js"),
+  pathToAssets = __dirname + "/assets/",
   pathToTmp = __dirname + "/tmp/",
   progress = require("../lib/progress.js"),
   helper = require("./helper.js"),
@@ -21,6 +22,45 @@ describe("images", function () {
     });
   });
 
+  describe("#saveImagesForScreen()", function () {
+    after(function (done) {
+      fs.remove(pathToTmp, done);
+    });
+
+    it("should take all image files from the source dir and save them at a lower resolution in the dest dir", function (done) {
+      images.saveImagesForScreen(pathToAssets, pathToTmp, function (err) {
+        should.not.exist(err);
+
+        fs.readdir(pathToTmp, function (err, files) {
+          should.not.exist(err);
+          should.exist(files);
+          files.should.be.instanceOf(Array);
+          files.length.should.equal(1);
+          done();
+        });
+      });
+    });
+  });
+  describe("#resolveImagesInCss()", function () {
+    var args;
+    before(function () {
+      args = {
+        css: ".div1 { background-image: url(1.png); } .div2 { background-image: url(2.jpg); }",
+        pathToImages: pathToAssets
+      };
+    });
+
+    it("should update all image paths in the css", function (done) {
+      images.resolveImagesInCss(args, function (err, resolvedCss) {
+        should.not.exist(err);
+        should.exist(resolvedCss);
+
+        resolvedCss.should.contain("url(" + pathToAssets + "1.png)");
+        resolvedCss.should.contain("url(" + pathToAssets + "2.jpg)");
+        done();
+      });
+    });
+  });
   describe("#resolveImagesInMarkup()", function () {
     var args;
     before(function () {
@@ -54,15 +94,14 @@ describe("images", function () {
   });
   describe("#resolveImageTag()", function () {
     var imgTag,
-      actualPathToImages,
       args;
 
     before(function (done) {
-      fs.mkdir(pathToTmp, done);
+      fs.mkdirp(pathToTmp, done);
     });
 
     after(function (done) {
-      fs.rmdir(pathToTmp, done);
+      fs.remove(pathToTmp, done);
     });
 
     afterEach(function () {
@@ -71,17 +110,16 @@ describe("images", function () {
 
     beforeEach(function () {
       imgTag = "<img src=\"mallard.png\" alt=\"hello\" />";
-      actualPathToImages = __dirname + "/assets/";
       args = {
         imgTag: imgTag,
-        actualPathToImages: actualPathToImages,
+        actualPathToImages: pathToAssets,
         replacementPathToImages: pathToTmp
       };
     });
     it("should read the file at the correct path", function (done) {
       monkey.patch(fs, {
         readFile: function (filename) {
-          filename.should.equal(__dirname + "/assets/mallard.png");
+          filename.should.equal(pathToAssets + "mallard.png");
           done();
         }
       });
