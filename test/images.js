@@ -35,7 +35,7 @@ describe("images", function () {
           should.not.exist(err);
           should.exist(files);
           files.should.be.instanceOf(Array);
-          files.length.should.equal(1);
+          files.length.should.equal(2);
           done();
         });
       });
@@ -126,6 +126,18 @@ describe("images", function () {
 
       images.resolveImageTag(args, function () {
         throw new Error("shouldn't get this far");
+      });
+    });
+    it("should accept jpgs as well", function (done) {
+      args.imgTag = "<img src=\"mallards.jpg\"/>"
+      images.resolveImageTag(args, function (err, updatedMarkup) {
+        should.not.exist(err);
+        should.exist(updatedMarkup);
+
+        updatedMarkup.should.contain("mallards.jpg");
+        updatedMarkup.should.contain("class=\"image-mallards\"");
+
+        done();
       });
     });
     it("should contain correct width and height of the image", function (done) {

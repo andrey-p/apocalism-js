@@ -1,5 +1,5 @@
-This image is by Tom Held and is used under the Creative Commons license.
+mallard.png by [Tom Held](http://www.flickr.com/photos/tomheld/2829720542/)
 
-The original is here:
+mallards.jpg by [Mardos07](https://en.wikipedia.org/wiki/File:Mallard_getting_eclipse_plumage.jpg)
 
-http://www.flickr.com/photos/tomheld/2829720542/
+Mallards are great.
