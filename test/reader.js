@@ -25,6 +25,29 @@ describe("reader", function () {
     afterEach(function () {
       monkey.unpatch(fs);
     });
+    it("should return a sections object containing strings", function (done) {
+      reader.read(function (err, sections) {
+        should.not.exist(err);
+        should.exist(sections);
+
+        sections.should.be.type("object");
+
+        [
+          "front-cover",
+          "back-cover",
+          "inside-front-cover",
+          "inside-back-cover",
+          "front-matter",
+          "back-matter",
+          "body"
+        ].forEach(function (sectionName) {
+          sections.should.have.property(sectionName);
+        });
+
+        sections.body.should.contain("Lorem");
+        done();
+      });
+    });
     it("should read the main story file", function (done) {
       var fileHasBeenRead = false;
 
@@ -79,18 +102,16 @@ describe("reader", function () {
       });
     });
     it("should fall back to images whenever a corresponding markdown file doesn't exist", function (done) {
-      // front-matter.md exists in the folder structure,
+      // front-cover.md exists in the folder structure,
       // so it shouldn't check for existing pngs
       var filesLeftToRead = [
-        "front-cover",
         "back-cover",
         "inside-front-cover",
-        "inside-back-cover",
-        "back-matter"
+        "inside-back-cover"
       ];
 
       monkey.patch(fs, {
-        stat: function (filename, callback) {
+        exists: function (filename, callback) {
           var i;
 
           // remove files that have been looked for
@@ -107,13 +128,36 @@ describe("reader", function () {
           }
 
           // pass to patched method
-          fs.___monkey.stat(filename, callback);
+          fs.___monkey.exists(filename, callback);
         }
       });
 
       reader.read(function (err) {
         should.not.exist(err);
         filesLeftToRead.length.should.equal(0);
+        done();
+      });
+    });
+    it("should be checking for a jpg file for the covers if a png doesn't exist", function (done) {
+      var hasLookedForFrontCoverJpg = false,
+        hasLookedForBackCoverJpg = false;
+
+      monkey.patch(fs, {
+        exists: function (filename, callback) {
+          if (filename.indexOf("front-cover.jpg") > -1) {
+            hasLookedForFrontCoverJpg = true;
+          } else if (filename.indexOf("back-cover.jpg") > -1) {
+            hasLookedForBackCoverJpg = true;
+          }
+
+          fs.___monkey.exists(filename, callback);
+        }
+      });
+
+      reader.read(function (err) {
+        should.not.exist(err);
+        hasLookedForFrontCoverJpg.should.equal(true);
+        hasLookedForBackCoverJpg.should.equal(true);
         done();
       });
     });
