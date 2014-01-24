@@ -145,10 +145,10 @@ describe("images", function () {
         var targetWidth, targetHeight;
         should.not.exist(err);
         should.exist(updatedMarkup);
-        // size of images in test proj folder is 2560 x 1600
+        // size of images in test proj folder is 1280 x 800
         // the width / height should be adjusted for resolution
-        targetWidth = Math.floor(2560 * 96 / 300);
-        targetHeight = Math.floor(1600 * 96 / 300);
+        targetWidth = Math.floor(1280 * 96 / 300);
+        targetHeight = Math.floor(800 * 96 / 300);
         updatedMarkup.should.contain("width=\"" + targetWidth + "\"");
         updatedMarkup.should.contain("height=\"" + targetHeight + "\"");
         done();
