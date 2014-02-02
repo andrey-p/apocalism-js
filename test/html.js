@@ -53,6 +53,14 @@ describe("html", function () {
       result = html.fromMarkdown(input);
       result.should.include("hello <em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
     });
+    it("should NOT add '.opening' to the first paragraph that's inside another element (ex. a blockquote)", function () {
+      var result, input;
+
+      input = "> para1\n>\n> para2\n\npara3";
+      result = html.fromMarkdown(input);
+      result.should.not.include("<p class=\"opening\">para1</p>");
+      result.should.include("<p class=\"opening\">para3</p>");
+    });
   });
   describe("#getBodyContent()", function () {
     it("should return everything inside the body tag", function () {
