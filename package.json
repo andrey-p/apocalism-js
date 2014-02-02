@@ -1,6 +1,18 @@
 {
   "name": "apocalism-js",
   "version": "0.3.4",
+  "author": "Andrey Pissantchev",
+  "description": "Automate your illustrated short story build process",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrey-p/apocalism-js"
+  },
+  "keywords": [
+    "markdown",
+    "pdf",
+    "book"
+  ],
   "main": "./index.js",
   "bin": "./bin/apocalism-cli.js",
   "dependencies": {
@@ -16,7 +28,7 @@
     "fs-extra": "0.8.x",
     "handlebars": "1.1.x",
     "long-stack-traces": "0.1.x",
-    "arg-err": "git://github.com/andrey-p/arg-err",
+    "arg-err": "0.0.x",
     "marked": "0.3.x"
   },
   "devDependencies": {
