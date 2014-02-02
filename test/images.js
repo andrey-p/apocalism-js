@@ -129,7 +129,7 @@ describe("images", function () {
       });
     });
     it("should accept jpgs as well", function (done) {
-      args.imgTag = "<img src=\"mallards.jpg\"/>"
+      args.imgTag = "<img src=\"mallards.jpg\"/>";
       images.resolveImageTag(args, function (err, updatedMarkup) {
         should.not.exist(err);
         should.exist(updatedMarkup);
