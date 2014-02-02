@@ -1,3 +1,9 @@
+0.3.4
+====
+
+- fixed crash with null section contents
+- fixed [#10](https://github.com/andrey-p/apocalism-js/issues/10)
+
 0.3.3
 ====
 
