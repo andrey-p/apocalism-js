@@ -26,7 +26,7 @@ describe("phantom-wrapper", function () {
       };
       template.init(opts, function () {
         args.blankPage = template.getBlankPage("page");
-        done();
+        phantomWrapper.initCreatePage(done);
       });
     });
 
@@ -35,6 +35,10 @@ describe("phantom-wrapper", function () {
         format: "html",
         units: "paragraph"
       };
+    });
+
+    after(function () {
+      phantomWrapper.cleanup();
     });
 
     it("should output a filled out page", function (done) {
