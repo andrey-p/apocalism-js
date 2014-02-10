@@ -165,7 +165,7 @@ describe("phantom-wrapper", function () {
   describe("#generatePdfPage()", function () {
     var args;
 
-    before(function () {
+    before(function (done) {
       // need this because the phantom script creates its own dir
       opts.pathToOutput = os.tmpdir() + "/apoc_out/";
 
@@ -177,9 +177,11 @@ describe("phantom-wrapper", function () {
           height: opts.stock.height + opts.bleed * 2
         }
       };
+      phantomWrapper.initCreatePdfPage(done);
     });
     after(function (done) {
       fs.remove(opts.pathToOutput, done);
+      phantomWrapper.cleanup();
     });
     it("should generate a pdf from an html string", function (done) {
       phantomWrapper.generatePdfPage(args, function (err) {
