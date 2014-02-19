@@ -19,7 +19,6 @@ Requirements
 ----
 
 - NodeJS (tested on v0.10.22)
-- PhantomJS (tested on 1.9.0)
 - pdftk
 
 Usage

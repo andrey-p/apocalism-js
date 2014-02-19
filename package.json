@@ -29,7 +29,9 @@
     "handlebars": "1.1.x",
     "long-stack-traces": "0.1.x",
     "arg-err": "0.0.x",
-    "marked": "0.3.x"
+    "marked": "0.3.x",
+    "phantomjs": "1.9.7-1",
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {
     "mocha": "1.13.x",
