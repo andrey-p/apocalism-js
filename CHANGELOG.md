@@ -1,3 +1,9 @@
+0.3.5
+====
+
+- refactored the way phantomjs is used as a dependency (making it easier to manage the version currently in use), fixes [#13](https://github.com/andrey-p/apocalism-js/issues/10)
+- switched to websockets for everything phantomjs-related, gaining a huge performance boost [#7](https://github.com/andrey-p/apocalism-js/issues/7)
+
 0.3.4
 ====
 
