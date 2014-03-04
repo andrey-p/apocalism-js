@@ -12,7 +12,7 @@ var should = require("should"),
   monkey = require("monkey-patch"),
   opts = helper.getDefaultOpts();
 
-describe.only("book", function () {
+describe("book", function () {
   describe("#compilePages()", function () {
     it("should resolve the images in all the sections");
     it("should save the images for screen if loRes is true");
