@@ -10,7 +10,6 @@ var should = require("should"),
   pdftkWrapper = require("../lib/pdftk-wrapper.js"),
   monkey = require("monkey-patch"),
   arg = require("arg-err"),
-  progress = require("../lib/progress.js"),
   opts = helper.getDefaultOpts();
 
 describe("pdf", function () {
@@ -31,9 +30,7 @@ describe("pdf", function () {
 
     pathToPdf = opts.pathToOutput + "output.pdf";
 
-    pdf.init(opts, function () {
-      progress.init(opts, done);
-    });
+    pdf.init(opts, done);
   });
   describe("#generatePdfFromPages()", function () {
     beforeEach(function () {

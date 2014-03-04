@@ -24,7 +24,8 @@ exports.getDefaultOpts = function () {
     hasBleed: true,
     output: "output/output.pdf",
     pathToImages: "output/output.pdf",
-    pathToTmp: "output/tmp/"
+    pathToTmp: "output/tmp/",
+    progress: require("../lib/dummy-progress.js")
   };
 };
 
