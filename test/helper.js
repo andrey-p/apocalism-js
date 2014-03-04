@@ -22,11 +22,24 @@ exports.getDefaultOpts = function () {
     loResDPI: 96,
     bleed: 2,
     hasBleed: true,
-    output: "output/output.pdf",
+    pathToOutput: "output/",
     pathToImages: "output/output.pdf",
     pathToTmp: "output/tmp/",
     progress: require("../lib/dummy-progress.js")
   };
+};
+
+exports.getSamplePages = function () {
+  return [
+    {
+      order: 1,
+      htmlContent: "<html><body><p>foo</p></body></html>"
+    },
+    {
+      order: 2,
+      htmlContent: "<html><body><p>bar</p></body></html>"
+    }
+  ];
 };
 
 // returns true if process exists
