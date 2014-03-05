@@ -3,12 +3,12 @@
 "use strict";
 
 var should = require("should"),
-  html = require("../lib/html.js");
+  parser = require("../lib/parser.js");
 
-describe("html", function () {
-  describe("#fromMarkdown()", function () {
+describe("parser", function () {
+  describe("#parseMarkdown()", function () {
     it("should add all the proper typographic entities", function () {
-      var result = html.fromMarkdown("\"word\" ... 'word' can't -- ---");
+      var result = parser.parseMarkdown("\"word\" ... 'word' can't -- ---");
       result.should.include("&#8220;"); // opening double quote
       result.should.include("&#8221;"); // closing double quote
       result.should.include("&#8216;"); // opening single quote
@@ -23,7 +23,7 @@ describe("html", function () {
       input += "para1\n\n";
       input += "para2\n\n";
 
-      result = html.fromMarkdown(input);
+      result = parser.parseMarkdown(input);
       result.should.include("<p class=\"opening\">para1</p>");
       result.should.not.include("<p class=\"opening\">para2</p>");
     });
@@ -37,7 +37,7 @@ describe("html", function () {
       input += "paragraph2\n";
       input += "{baz}\n\n";
 
-      result = html.fromMarkdown(input);
+      result = parser.parseMarkdown(input);
       result.should.include("<h1 class=\"foo bar\">heading</h1>");
       result.should.include("<p class=\"bar opening\">paragraph1</p>");
       result.should.include("<p class=\"baz\">paragraph2</p>");
@@ -47,14 +47,14 @@ describe("html", function () {
 
       input = "hello *hello{foo}* *hello{bar baz}*!";
 
-      result = html.fromMarkdown(input);
+      result = parser.parseMarkdown(input);
       result.should.include("hello <em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
     });
     it("should NOT add '.opening' to the first paragraph that's inside another element (ex. a blockquote)", function () {
       var result, input;
 
       input = "> para1\n>\n> para2\n\npara3";
-      result = html.fromMarkdown(input);
+      result = parser.parseMarkdown(input);
       result.should.not.include("<p class=\"opening\">para1</p>");
       result.should.include("<p class=\"opening\">para3</p>");
     });
