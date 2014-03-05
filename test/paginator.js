@@ -8,17 +8,14 @@ var should = require("should"),
   paginator = require("../lib/paginator.js"),
   monkey = require("monkey-patch"),
   phantomWrapper = require("../lib/phantom-wrapper.js"),
-  progress = require("../lib/progress.js"),
   lipsum = require("lorem-ipsum"),
   helper = require("./helper.js"),
   opts = helper.getDefaultOpts();
 
 describe("paginator", function () {
   before(function (done) {
-    progress.init(opts, function () {
-      paginator.init(opts, function () {
-        done();
-      });
+    paginator.init(opts, function () {
+      done();
     });
   });
   describe("#paginate()", function () {
