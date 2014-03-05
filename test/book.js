@@ -8,16 +8,208 @@ var should = require("should"),
   fs = require("fs"),
   pdf = require("../lib/pdf.js"),
   template = require("../lib/template.js"),
+  paginator = require("../lib/paginator.js"),
   images = require("../lib/images.js"),
   monkey = require("monkey-patch"),
   opts = helper.getDefaultOpts();
 
 describe("book", function () {
   describe("#compilePages()", function () {
-    it("should resolve the images in all the sections");
-    it("should save the images for screen if loRes is true");
-    it("should paginate all content sections");
-    it("should create standalone pages for all single page sections");
+    var sections;
+    beforeEach(function (done) {
+      sections = {
+        "front-cover": "<p>front-cover</p>",
+        "inside-front-cover": "<p>inside-front-cover</p>",
+        "front-matter": "<p>front-matter</p>",
+        "body": "<p>body</p>",
+        "back-matter": "<p>back-matter</p>",
+        "inside-back-cover": "<p>inside-back-cover</p>",
+        "back-cover": "<p>back-cover</p>"
+      };
+
+      opts = helper.getDefaultOpts();
+      book.init(opts, done);
+    });
+    afterEach(function () {
+      monkey.unpatch(images);
+      monkey.unpatch(paginator);
+    });
+    it("should resolve the images in all the sections", function (done) {
+      var sectionsLeftToResolve = Object.keys(sections);
+      monkey.patch(images, {
+        resolveImagesInMarkup: function (args) {
+          args.actualPathToImages.should.equal(opts.pathToImages);
+          args.replacementPathToImages.should.equal(opts.pathToImages);
+
+          // take off each section passed to this method
+          sectionsLeftToResolve.forEach(function (sectionName, i) {
+            if (args.markup === ("<p>" + sectionName + "</p>")) {
+              sectionsLeftToResolve.splice(i, 1);
+            }
+          });
+
+          // if none are left, test is successful
+          if (sectionsLeftToResolve.length === 0) {
+            done();
+          }
+        }
+      });
+
+      book.compilePages(sections, function () {
+        throw new Error("should not get here");
+      });
+    });
+    it("should save loRes images in the output folder if loRes is true", function (done) {
+      monkey.patch(images, {
+        saveImagesForScreen: function (sourcePath, targetPath) {
+          sourcePath.should.equal(opts.pathToImages);
+          targetPath.should.equal(opts.pathToOutput + "images/");
+
+          done();
+        }
+      });
+
+      opts.loRes = true;
+
+      book.init(opts, function () {
+        book.compilePages(sections, function () {
+          throw new Error("should not get here");
+        });
+      });
+    });
+    it("should replace the path to the one containing lo res images if loRes is true", function (done) {
+      var timesLeftToBeCalled = Object.keys(sections).length;
+      monkey.patch(images, {
+        saveImagesForScreen: function (sourcePath, targetPath, callback) {
+          should.exist(sourcePath);
+          should.exist(targetPath);
+
+          callback();
+        },
+        resolveImagesInMarkup: function (args) {
+          args.replacementPathToImages.should.equal(opts.pathToOutput + "images/");
+
+          timesLeftToBeCalled -= 1;
+
+          if (timesLeftToBeCalled === 0) {
+            done();
+          }
+        }
+      });
+
+      opts.loRes = true;
+
+      book.init(opts, function () {
+        book.compilePages(sections, function () {
+          throw new Error("should not get here");
+        });
+      });
+    });
+    it("should paginate all content sections", function (done) {
+      var sectionsLeftToPaginate = ["back-matter", "body", "front-matter"];
+      monkey.patch(images, {
+        resolveImagesInMarkup: function (args, callback) {
+          should.exist(args);
+          callback(null, args.markup);
+        }
+      });
+
+      monkey.patch(paginator, {
+        paginate: function (args, callback) {
+          // take off each section passed to this method
+          sectionsLeftToPaginate.forEach(function (sectionName, i) {
+            if (args.sectionName === sectionName) {
+              args.content.should.equal("<p>" + sectionName + "</p>");
+              sectionsLeftToPaginate.splice(i, 1);
+            }
+          });
+
+          // if none are left, test is successful
+          if (sectionsLeftToPaginate.length === 0) {
+            done();
+          } else {
+            callback(null, ["foo", "bar"]);
+          }
+        }
+      });
+
+      book.compilePages(sections, function () {
+        throw new Error("should not get here");
+      });
+    });
+    it("should create standalone pages for all single page sections", function (done) {
+      var sectionsLeftToPaginate = ["inside-front-cover", "inside-back-cover", "front-cover", "back-cover"];
+      monkey.patch(images, {
+        resolveImagesInMarkup: function (args, callback) {
+          should.exist(args);
+          callback(null, args.markup);
+        }
+      });
+
+      monkey.patch(paginator, {
+        paginate: function (args, callback) {
+          should.exist(args);
+          callback(null, ["foo", "bar"]);
+        },
+        createStandalonePage: function (args, callback) {
+          // take off each section passed to this method
+          sectionsLeftToPaginate.forEach(function (sectionName, i) {
+            if (args.sectionName === sectionName) {
+              args.content.should.equal("<p>" + sectionName + "</p>");
+              sectionsLeftToPaginate.splice(i, 1);
+            }
+          });
+
+          // if none are left, test is successful
+          if (sectionsLeftToPaginate.length === 0) {
+            done();
+          } else {
+            callback(null, "foo");
+          }
+        }
+      });
+
+      book.compilePages(sections, function () {
+        throw new Error("should not get here");
+      });
+    });
+    it("should return page objects (with page order and htmlContent) in the right order", function (done) {
+      monkey.patch(images, {
+        resolveImagesInMarkup: function (args, callback) {
+          should.exist(args);
+          callback(null, args.markup);
+        }
+      });
+
+      monkey.patch(paginator, {
+        paginate: function (args, callback) {
+          callback(null, [args.content]);
+        },
+        createStandalonePage: function (args, callback) {
+          callback(null, args.content);
+        }
+      });
+
+      book.compilePages(sections, function (err, pages) {
+        should.not.exist(err);
+        var allSectionsInOrder = [
+          "front-cover",
+          "inside-front-cover",
+          "front-matter",
+          "body",
+          "back-matter",
+          "inside-back-cover",
+          "back-cover"
+        ];
+
+        pages.forEach(function (page, i) {
+          page.order.should.equal(i + 1);
+          page.htmlContent.should.equal("<p>" + allSectionsInOrder[i] + "</p>");
+        });
+
+        done();
+      });
+    });
   });
   describe("#compilePdf()", function () {
     beforeEach(function (done) {
