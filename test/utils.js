@@ -14,4 +14,12 @@ describe("utils", function () {
       output.should.eql([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     });
   });
+  describe("#getBodyContent()", function () {
+    it("should return everything inside the body tag", function () {
+      var markup = "<html><head></head><body><h1>foo</h1><p>bar!</p></body></html>",
+        result = utils.getBodyContent(markup);
+
+      result.should.equal("<h1>foo</h1><p>bar!</p>");
+    });
+  });
 });

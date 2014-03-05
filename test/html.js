@@ -59,12 +59,4 @@ describe("html", function () {
       result.should.include("<p class=\"opening\">para3</p>");
     });
   });
-  describe("#getBodyContent()", function () {
-    it("should return everything inside the body tag", function () {
-      var markup = "<html><head></head><body><h1>foo</h1><p>bar!</p></body></html>",
-        result = html.getBodyContent(markup);
-
-      result.should.equal("<h1>foo</h1><p>bar!</p>");
-    });
-  });
 });
