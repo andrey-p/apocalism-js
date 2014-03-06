@@ -17,15 +17,15 @@ describe("parser", function () {
       result.should.include("&#8212;"); // em dash
       result.should.include("&#8230;"); // ellipsis
     });
-    it("should add the class 'opening' to the first paragraph", function () {
+    it("should add the class 'opening' to the first paragraph and mark the first letter as the cap", function () {
       var result,
         input = "# heading\n\n";
       input += "para1\n\n";
       input += "para2\n\n";
 
       result = parser.parseMarkdown(input);
-      result.should.include("<p class=\"opening\">para1</p>");
-      result.should.not.include("<p class=\"opening\">para2</p>");
+      result.should.include("<p class=\"opening\"><span class=\"cap\">p</span>ara1</p>");
+      result.should.not.include("<p class=\"opening\"><span class=\"cap\">p</span>ara2</p>");
     });
     it("should add classes to block level elements properly", function () {
       var result, input;
@@ -39,7 +39,7 @@ describe("parser", function () {
 
       result = parser.parseMarkdown(input);
       result.should.include("<h1 class=\"foo bar\">heading</h1>");
-      result.should.include("<p class=\"bar opening\">paragraph1</p>");
+      result.should.include("<p class=\"bar opening\"><span class=\"cap\">p</span>aragraph1</p>");
       result.should.include("<p class=\"baz\">paragraph2</p>");
     });
     it("should add classes to inline level elements properly", function () {
@@ -48,15 +48,34 @@ describe("parser", function () {
       input = "hello *hello{foo}* *hello{bar baz}*!";
 
       result = parser.parseMarkdown(input);
-      result.should.include("hello <em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
+      result.should.include("<em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
     });
-    it("should NOT add '.opening' to the first paragraph that's inside another element (ex. a blockquote)", function () {
+    it("should NOT add '.opening' and cap to the first paragraph that's inside another element (ex. a blockquote)", function () {
       var result, input;
 
       input = "> para1\n>\n> para2\n\npara3";
       result = parser.parseMarkdown(input);
-      result.should.not.include("<p class=\"opening\">para1</p>");
-      result.should.include("<p class=\"opening\">para3</p>");
+      result.should.not.include("<p class=\"opening\"><span class=\"cap\">p</span>ara1</p>");
+      result.should.include("<p class=\"opening\"><span class=\"cap\">p</span>ara3</p>");
+    });
+    it("should NOT add a cap to non-alphanumeric characters", function () {
+      var result, input;
+
+      input = "===";
+      result = parser.parseMarkdown(input);
+      result.should.not.include("<p class=\"opening\"><span class=\"cap\">=</span>==</p>");
+      result.should.include("<p class=\"opening\">===</p>");
+    });
+    it("should add a cap and give a quotation mark the quo class if it the opening para begins with a quote", function () {
+      var result, input;
+
+      input = "'Hello!'";
+      result = parser.parseMarkdown(input);
+      result.should.include("<p class=\"opening\"><span class=\"quo\">&#8216;</span><span class=\"cap\">H</span>ello!&#8217;</p>");
+
+      input = "\"Hello!\"";
+      result = parser.parseMarkdown(input);
+      result.should.include("<p class=\"opening\"><span class=\"dquo\">&#8220;</span><span class=\"cap\">H</span>ello!&#8221;</p>");
     });
   });
 });
