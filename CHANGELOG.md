@@ -1,3 +1,10 @@
+0.3.6
+===
+
+- refactored book.js and improved test coverage
+- improved the way empty sections are handled (see [#15](https://github.com/andrey-p/apocalism-js/issues/7))
+- added an --ignore-blank option to the command line
+
 0.3.5
 ====
 
