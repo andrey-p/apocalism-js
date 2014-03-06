@@ -66,5 +66,16 @@ describe("parser", function () {
       result.should.not.include("<p class=\"opening\"><span class=\"cap\">=</span>==</p>");
       result.should.include("<p class=\"opening\">===</p>");
     });
+    it("should add a cap and give a quotation mark the quo class if it the opening para begins with a quote", function () {
+      var result, input;
+
+      input = "'Hello!'";
+      result = parser.parseMarkdown(input);
+      result.should.include("<p class=\"opening\"><span class=\"quo\">&#8216;</span><span class=\"cap\">H</span>ello!&#8217;</p>");
+
+      input = "\"Hello!\"";
+      result = parser.parseMarkdown(input);
+      result.should.include("<p class=\"opening\"><span class=\"dquo\">&#8220;</span><span class=\"cap\">H</span>ello!&#8221;</p>");
+    });
   });
 });
