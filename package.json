@@ -19,14 +19,14 @@
     "typogr": "0.6.x",
     "hypher": "0.2.x",
     "ent": "0.1.x",
-    "commander": "2.0.x",
-    "node-sass": "0.6.x",
-    "gm": "1.13.x",
+    "commander": "2.1.x",
+    "node-sass": "0.8.x",
+    "gm": "1.14.x",
     "json2sass": ">=0.1.5",
     "case": "1.0.x",
     "async": "0.2.x",
     "fs-extra": "0.8.x",
-    "handlebars": "1.1.x",
+    "handlebars": "2.0.x",
     "long-stack-traces": "0.1.x",
     "arg-err": "0.0.x",
     "marked": "0.3.x",
@@ -34,12 +34,12 @@
     "socket.io": "~0.9.16"
   },
   "devDependencies": {
-    "mocha": "1.13.x",
-    "should": "2.0.x",
+    "mocha": "1.17.x",
+    "should": "2.1.x",
     "w3c-validate": "0.0.x",
     "lorem-ipsum": "0.1.x",
-    "istanbul": "0.1.x",
+    "istanbul": "0.2.x",
     "monkey-patch": "0.0.3",
-    "jslint": "0.2.6"
+    "jslint": "0.2.11"
   }
 }
