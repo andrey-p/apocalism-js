@@ -11,6 +11,7 @@ program
   .version(version)
   .option("-q, --quiet", "Don't output progress info")
   .option("-d, --debug", "Output individual html pages in output/debug folder (useful for tweaking PDF layouts)")
+  .option("--ignore-blank", "Don't output blank pages")
   .usage("[command] <file>");
 
 program
@@ -22,7 +23,8 @@ program
       quiet: program.quiet,
       hasBleed: program.bleed,
       loRes: program.loRes,
-      debug: program.debug
+      debug: program.debug,
+      ignoreBlank: program.ignoreBlank
     });
   });
 
@@ -30,7 +32,8 @@ program
   .command("webpage <file>")
   .action(function (filename, option) {
     main.compileWebpage(filename, {
-      quiet: program.quiet
+      quiet: program.quiet,
+      ignoreBlank: program.ignoreBlank
     });
   });
 

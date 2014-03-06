@@ -97,6 +97,25 @@ describe("paginator", function () {
         done();
       });
     });
+    it("should return no empty pages if the ignoreBlank option is true", function (done) {
+      phantomWrapper.createPage = function (args, callback) {
+        should.exist(args);
+
+        console.log("runs");
+        callback(null, "<html></html>", "");
+      };
+
+      opts.ignoreBlank = true;
+
+      paginator.init(opts, function () {
+        paginator.paginate(args, function (err, pages) {
+          should.not.exist(err);
+          pages.should.eql([]);
+
+          done();
+        });
+      });
+    });
   });
   describe("#createStandalonePage()", function () {
     var args;
@@ -152,6 +171,22 @@ describe("paginator", function () {
         called.should.equal(true);
         should.not.exist(err);
         done();
+      });
+    });
+    it("should return an undefined page if the ignoreBlank is true and the page is blank", function (done) {
+      phantomWrapper.createPage = function (args, callback) {
+        should.exist(args);
+        callback(null, "<html></html>", "");
+      };
+
+      opts.ignoreBlank = true;
+
+      paginator.init(opts, function () {
+        paginator.createStandalonePage(args, function (err, page) {
+          should.not.exist(err);
+          should.not.exist(page);
+          done();
+        });
       });
     });
   });
