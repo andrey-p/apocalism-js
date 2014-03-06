@@ -210,6 +210,37 @@ describe("book", function () {
         done();
       });
     });
+    it("should not return any pages with undefined htmlContent for sections that are undefined", function (done) {
+      monkey.patch(images, {
+        resolveImagesInMarkup: function (args, callback) {
+          should.exist(args);
+          callback(null, args.markup);
+        }
+      });
+
+      monkey.patch(paginator, {
+        paginate: function (args, callback) {
+          callback(null, [args.content]);
+        },
+        createStandalonePage: function (args, callback) {
+          callback(null, args.content);
+        }
+      });
+
+      delete sections["front-cover"];
+      delete sections["inside-front-cover"];
+      delete sections["inside-back-cover"];
+
+      book.compilePages(sections, function (err, pages) {
+        should.not.exist(err);
+
+        pages.forEach(function (page) {
+          page.htmlContent.should.not.equal(undefined);
+        });
+
+        done();
+      });
+    });
   });
   describe("#compilePdf()", function () {
     beforeEach(function (done) {

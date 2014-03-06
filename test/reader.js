@@ -161,5 +161,14 @@ describe("reader", function () {
         done();
       });
     });
+    it("should throw an error if the content markdown file doesn't exist", function (done) {
+      reader.init({ filename: "does-not-exist.md" }, function () {
+        reader.read(function (err) {
+          should.exist(err);
+          err.should.include("Could not find");
+          done();
+        });
+      });
+    });
   });
 });
