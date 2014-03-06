@@ -44,7 +44,7 @@ describe("reader", function () {
           sections.should.have.property(sectionName);
         });
 
-        sections.body.should.contain("Lorem");
+        sections.body.should.contain("ipsum");
         done();
       });
     });
