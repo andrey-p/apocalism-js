@@ -124,7 +124,16 @@ p {
       text-indent: 0;
     }
 
-    &.opening:first-letter {
+    &.opening {
+      position: relative;
+    }
+
+    &.opening .quo, &.opening .dquo {
+      position: absolute;
+      left: -7pt;
+    }
+
+    &.opening .cap {
       float: left;
       font-size: 58pt;
       padding: 0 4pt 0 0;
