@@ -1,3 +1,10 @@
+0.3.8
+===
+
+- --debug pages are now output with utf-8 encoding
+- css is output compressed
+- updated dependencies
+
 0.3.7
 ===
 
