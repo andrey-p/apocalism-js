@@ -58,5 +58,13 @@ describe("parser", function () {
       result.should.not.include("<p class=\"opening\"><span class=\"cap\">p</span>ara1</p>");
       result.should.include("<p class=\"opening\"><span class=\"cap\">p</span>ara3</p>");
     });
+    it("should NOT add a cap to non-alphanumeric characters", function () {
+      var result, input;
+
+      input = "===";
+      result = parser.parseMarkdown(input);
+      result.should.not.include("<p class=\"opening\"><span class=\"cap\">=</span>==</p>");
+      result.should.include("<p class=\"opening\">===</p>");
+    });
   });
 });
