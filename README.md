@@ -15,6 +15,19 @@ You can also build an HTML-only paginated version if you want, too.
 
 `apocalism.js` built on NodeJS and uses PhantomJS internally to render PDFs.
 
+Who is this for?
+---
+
+It is meant for self publishing writers who:
+
+- want to work on the content and style of their writing at the same time (but within separate files)
+- want an unobtrusive writing format (Markdown with a few extra bits and bobs)
+- want a styling method that is powerful, popular and easy to pick up (Sass/CSS)
+- want to work in a text editor of their choice
+- are comfortable working with a command line interface
+
+(At least one of those is known to exist at the time of writing.)
+
 Requirements
 ----
 
@@ -32,18 +45,12 @@ But... why?
 Some time ago I started working on an illustrated short story thing called *Apocalism!*.
 The lack of suitable tools was at least part of the reason why I never managed to finish it.
 
-As a Linux user, I started with an OSS alternative to InDesign called [Scribus](http://scribus.net/canvas/Scribus).
-It was ok enough, but the workflow was painful.
-I worked on the layout and the content (both text and images) simultaneously.
-The fact I couldn't write the text in Scribus meant a lot of unnecessary copy and pasting was needed.
-There was no discernible way of keeping the style consistent after copy and pasting, so I needed to repeat quite a bit of formatting work too.
+As a Linux user, I tried a couple of OSS desktop publishing tools.
 
-What I needed was something that would allow me to work on the content, styling and layout side by side as part of the same process, and something that did its magic via the command line so I could integrate it with an XCF to PNG conversion script.
-Being able to work in a plain text file would also be good, so I could Vim and git to my heart's content.
+Scribus was ok but didn't fit in with the efficient command-line-based workflow I'd become used to as a programmer, and forced me to work on content and layout separately.
 
-[LaTeX](http://latex-project.org/) almost fit the bill.
-That is, until I had to spend an afternoon trying (and failing) to move an image three milimetres to the right.
+LaTeX was a step in the right direction but was too restrictive. Creating anything that didn't look like a dissertation was a headache, and I gave up on it after spending an afternoon trying to move an image 3mm to the right.
 
-So I made this instead.
-I figured there's no easier way to write text than in Markdown and no easier way to style stuff (in a text-only, version controllable way) than CSS.
+At the end I decided it would be loads easier to roll my own solution, and put this together.
+
 I named it `apocalism.js` in memory of that long-dead project.
