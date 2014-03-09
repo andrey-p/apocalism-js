@@ -119,8 +119,12 @@ p {
   padding: 0px;
   margin: 0px;
 
+  hr + & {
+    text-indent: 0;
+  }
+
   .body & {
-    &.contd, &.opening, hr + & {
+    &.contd, &.opening {
       text-indent: 0;
     }
 
