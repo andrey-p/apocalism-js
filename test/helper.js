@@ -1,4 +1,3 @@
-/*jslint indent: 2, node: true*/
 "use strict";
 
 var exec = require("child_process").exec;

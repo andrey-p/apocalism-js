@@ -1,5 +1,3 @@
-/*jslint indent: 2, node: true*/
-/*globals it, describe, beforeEach, after, before*/
 "use strict";
 
 var should = require("should"),
