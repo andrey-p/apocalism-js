@@ -159,6 +159,33 @@ describe("phantom-wrapper", function () {
         done();
       });
     });
+    it("should not miss out dots after an em tag when a paragraph has been split (issue #19)", function (done) {
+      var i, numberParas = 10;
+      for (i = 0; i < numberParas; i += 1) {
+        // adding manually because lipsum outputs a different paragraph each time
+        // and we want sameness
+        args.markup += "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+        args.markup += "Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. ";
+        args.markup += "Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. ";
+        args.markup += "Donec <em>et mollis dolor</em>.</p>";
+      }
+
+      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
+        var emTagsInPage,
+          emTagsInLeftover,
+          emTagRegexp = /dolor<\/em>\.<\/p>/g;
+
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        emTagsInPage = page.match(emTagRegexp);
+        emTagsInLeftover = leftoverMarkup.match(emTagRegexp);
+
+        (emTagsInPage.length + emTagsInLeftover.length).should.equal(10);
+        done();
+      });
+    });
   });
   describe("#generatePdfPage()", function () {
     var args;
