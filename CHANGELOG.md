@@ -1,3 +1,11 @@
+0.3.9
+===
+
+- fixed issue with weird missing dot (see [#19](https://github.com/andrey-p/apocalism-js/issues/19))
+- some improvements to error and status reporting from within the phantom processes
+- fixed style issue with line that should have zero indentation immediately after an `<hr>` tag
+- some cleaning out (moved jslint cruft into a jslintrc file, removed long-stack-traces)
+
 0.3.8
 ===
 
