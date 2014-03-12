@@ -1,3 +1,10 @@
+0.3.10
+===
+
+- added example project and some extra bits in the readme
+- updated binary name to just `apocalism`
+- fixed problem with --ignore-blank not working properly
+
 0.3.9
 ===
 
