@@ -20,4 +20,7 @@ test-cov:
 	@./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- -R spec -t 10000 \
 	test/*.js
 
-.PHONY: test
+example:
+	./bin/apocalism-cli.js example/example.md
+
+.PHONY: test example
