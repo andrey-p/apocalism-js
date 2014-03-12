@@ -34,8 +34,18 @@ Requirements
 - NodeJS (tested on v0.10.22)
 - pdftk
 
+Installation
+----
+
+```
+npm install -g apocalism-js
+```
+
 Usage
 ----
+
+Check out the example in `example/`.
+Run the example by doing either `make example` or, if you've installed using `npm -g` use `apocalism example/example.md`.
 
 Loads of useful info in the [wiki](https://github.com/andrey-p/apocalism-js/wiki).
 
