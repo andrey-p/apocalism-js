@@ -14,7 +14,9 @@
     "book"
   ],
   "main": "./index.js",
-  "bin": "./bin/apocalism-cli.js",
+  "bin": {
+    "apocalism": "./bin/apocalism-cli.js"
+  },
   "dependencies": {
     "typogr": "0.6.x",
     "hypher": "0.2.x",
