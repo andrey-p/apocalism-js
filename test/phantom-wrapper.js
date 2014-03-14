@@ -142,6 +142,21 @@ describe("phantom-wrapper", function () {
         done();
       });
     });
+    it("should not continue adding stuff after an image and a page break followed by text", function (done) {
+      args.markup = "<img width=\"100\" height=\"100\" src=\"foo.png\" /><p>===</p><p>should be leftover</p>";
+
+      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        page.should.contain("<img width=\"100\" height=\"100\" src=\"foo.png\">");
+        page.should.not.contain("<p>should be leftover</p>");
+        leftoverMarkup.should.contain("<p>should be leftover</p>");
+
+        done();
+      });
+    });
     it("should not return comments in leftover", function (done) {
       args.markup = "<p>foo</p><!-- bar --><p>baz</p><!-- bla -->";
 
