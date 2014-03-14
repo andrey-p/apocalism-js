@@ -1,3 +1,8 @@
+0.3.11
+===
+
+- fixed issue with page breaking after an image, when it's followed by text
+
 0.3.10
 ===
 
