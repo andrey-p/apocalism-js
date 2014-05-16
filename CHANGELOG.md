@@ -1,3 +1,8 @@
+0.3.12
+===
+
+- temporarily set json2sass dependency to point to the specific Github commit
+
 0.3.11
 ===
 
