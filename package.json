@@ -18,21 +18,21 @@
     "apocalism": "./bin/apocalism-cli.js"
   },
   "dependencies": {
-    "typogr": "0.6.x",
-    "hypher": "0.2.x",
-    "ent": "0.1.x",
-    "commander": "2.1.x",
-    "node-sass": "0.8.x",
-    "gm": "1.14.x",
-    "json2sass": "https://github.com/renancouto/json2sass/tarball/bb192bd3984cad70eae2424ed5fa4ec2dc0d36d0",
-    "case": "1.0.x",
-    "async": "0.2.x",
-    "fs-extra": "0.8.x",
-    "handlebars": "2.0.x",
     "arg-err": "0.0.x",
+    "async": "0.2.x",
+    "case": "1.0.x",
+    "commander": "2.1.x",
+    "fs-extra": "0.8.x",
+    "gm": "1.14.x",
+    "handlebars": "2.0.x",
+    "he": "0.4.x",
+    "hypher": "0.2.x",
+    "json2sass": "https://github.com/renancouto/json2sass/tarball/bb192bd3984cad70eae2424ed5fa4ec2dc0d36d0",
     "marked": "0.3.x",
+    "node-sass": "0.8.x",
     "phantomjs": "1.9.7-1",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "typogr": "0.6.x"
   },
   "devDependencies": {
     "mocha": "1.17.x",
