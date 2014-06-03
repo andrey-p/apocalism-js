@@ -157,6 +157,18 @@ describe("phantom-wrapper", function () {
         done();
       });
     });
+    it("should strip out empty <p> tags", function (done) {
+      args.markup = "<p></p><p>hello</p><p></p>";
+
+      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
+        should.not.exist(err);
+        should.exist(page);
+        should.exist(leftoverMarkup);
+
+        page.should.not.contain("<p></p>");
+        done();
+      });
+    });
     it("should not return comments in leftover", function (done) {
       args.markup = "<p>foo</p><!-- bar --><p>baz</p><!-- bla -->";
 
