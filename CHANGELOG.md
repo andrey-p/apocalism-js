@@ -1,3 +1,10 @@
+0.3.13
+===
+
+- merged in [pull request #23](https://github.com/andrey-p/apocalism-js/pull/23), changing to `he` for html entity encoding
+- added a couple of mixins for common tasks (see [#20](https://github.com/andrey-p/apocalism-js/issues/20))
+- added removing of empty `<p>` tags inside phantom-wrapper (see [#22](https://github.com/andrey-p/apocalism-js/issues/22))
+
 0.3.12
 ===
 
