@@ -1,0 +1,25 @@
+@mixin graphical-hr($content: "* * *", $width: 30mm) {
+  margin: 1em auto;
+  width: $width;
+  position: relative;
+  text-align: center;
+  color: black;
+  &:after {
+    font-family: "DejaVu Serif", sans-serif;
+    font-size: 12pt;
+    position: relative;
+    content: $content;
+  }
+}
+
+@mixin full-page-illustration($x-offset: 0, $y-offset: 0) {
+  .text-block {
+    position: static;
+    
+    img {
+      left: $x-offset * 1mm;
+      top: $y-offset * 1mm;
+      position: absolute;
+    }
+  }
+}

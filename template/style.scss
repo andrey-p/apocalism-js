@@ -1,3 +1,6 @@
+/* imports */
+@import "mixins.scss";
+
 /* vars */
 
 /*
@@ -46,15 +49,7 @@ body {
     }
   }
   &.front-cover, &.back-cover {
-    .text-block {
-      position: static;
-
-      img {
-        top: -$bleed * 1mm;
-        left: -$bleed * 1mm;
-        position: absolute;
-      }
-    }
+	@include full-page-illustration(-$bleed, -$bleed);
   }
   &.has-bleed {
 	padding-bottom: ($margin-bottom + $bleed + 1.7) * 1mm;
@@ -69,14 +64,8 @@ body {
 		padding-right: ($margin-spine + $bleed) * 1mm;
 	}
 	&.front-cover, &.back-cover {
-    .text-block {
-      img {
-        top: 0;
-        left: 0;
-      }
-    }
+		@include full-page-illustration;
 	}
-
   }
 }
 
@@ -154,15 +143,6 @@ hr {
   // hr at the beginning or end of page
   // needs to be graphical
   &:first-child, &:last-child {
-    margin: 1em auto;
-	width: 30mm;
-	position: relative;
-	text-align: center;
-	&:after {
-	  font-family: "DejaVu Serif", sans-serif;
-      font-size: 12pt;
-	  position: relative;
-      content: "* * *";
-    }
+	@include graphical-hr();
   }
 }
