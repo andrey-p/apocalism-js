@@ -1,3 +1,8 @@
+0.3.14
+===
+
+- updated phantomjs NPM module dependency to avoid [this bug](https://github.com/Medium/phantomjs/issues/161)
+
 0.3.13
 ===
 

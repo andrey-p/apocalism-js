@@ -1,6 +1,6 @@
 {
   "name": "apocalism-js",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "author": "Andrey Pissantchev",
   "description": "Automate your illustrated short story build process",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "json2sass": "https://github.com/renancouto/json2sass/tarball/bb192bd3984cad70eae2424ed5fa4ec2dc0d36d0",
     "marked": "0.3.x",
     "node-sass": "0.8.x",
-    "phantomjs": "1.9.7-1",
+    "phantomjs": "1.9.7-8",
     "socket.io": "~0.9.16",
     "typogr": "0.6.x"
   },
