@@ -27,7 +27,7 @@
     "handlebars": "2.0.x",
     "he": "0.4.x",
     "hypher": "0.2.x",
-    "json2sass": "https://github.com/renancouto/json2sass/tarball/bb192bd3984cad70eae2424ed5fa4ec2dc0d36d0",
+    "json2sass": "0.2.x",
     "marked": "0.3.x",
     "node-sass": "0.8.x",
     "phantomjs": "1.9.7-8",
