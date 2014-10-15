@@ -1,31 +1,40 @@
 "use strict";
 
 var should = require("should"),
-  phantomWrapper = require("../lib/phantom-wrapper.js"),
-  template = require("../lib/template.js"),
-  helper = require("./helper.js"),
+  phantomWrapper = require("../lib/wrappers/phantom-wrapper"),
+  htmlPage = require("../lib/html-page"),
+  async = require("async"),
+  helper = require("./helper"),
   fs = require("fs-extra"),
   os = require("os"),
   lipsum = require("lorem-ipsum"),
   opts = helper.getDefaultOpts(),
+  css = helper.getDefaultCss(),
+  dimensions = opts.dimensions,
   htmlMarkup;
 
 describe("phantom-wrapper", function () {
+  before(function (done) {
+    async.parallel([
+      async.apply(phantomWrapper.init, {}),
+      async.apply(htmlPage.init, { css: css })
+    ], done);
+
+  });
+  after(phantomWrapper.cleanup);
+
   describe("#createPage()", function () {
     var lipsumOptions,
       args;
 
-    before(function (done) {
+    before(function () {
       args = {
         dimensions: {
-          width: (opts.stock.width - opts.margin.outer * 2) * 300 / 25.4,
-          height: (opts.stock.height - opts.margin.outer * 2) * 300 / 25.4
-        }
+          width: (dimensions.stock.width - dimensions.margin.outer * 2) * 300 / 25.4,
+          height: (dimensions.stock.height - dimensions.margin.outer * 2) * 300 / 25.4
+        },
+        blankPage: htmlPage.getPageForPagination()
       };
-      template.init(opts, function () {
-        args.blankPage = template.getBlankPage("page");
-        phantomWrapper.initCreatePage(done);
-      });
     });
 
     beforeEach(function () {
@@ -33,10 +42,6 @@ describe("phantom-wrapper", function () {
         format: "html",
         units: "paragraph"
       };
-    });
-
-    after(function () {
-      phantomWrapper.cleanup();
     });
 
     it("should output a filled out page", function (done) {
@@ -123,40 +128,6 @@ describe("phantom-wrapper", function () {
         done();
       });
     });
-    it("should interpret a paragraph containing 3 or more eq signs and nothing else as a page break", function (done) {
-      args.markup = "<p>on page 1</p><p>==</p><p>on page 1</p><p>===</p><p>in leftover</p>";
-
-      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
-        should.not.exist(err);
-        should.exist(page);
-        should.exist(leftoverMarkup);
-
-        page.should.contain("<p>on page 1</p>");
-        page.should.contain("<p>==</p>");
-        page.should.not.contain("<p>===</p>");
-
-        leftoverMarkup.should.contain("<p>in leftover</p>");
-        leftoverMarkup.should.not.contain("<p>on page 1</p>");
-        leftoverMarkup.should.not.contain("<p>===</p>");
-
-        done();
-      });
-    });
-    it("should not continue adding stuff after an image and a page break followed by text", function (done) {
-      args.markup = "<img width=\"100\" height=\"100\" src=\"foo.png\" /><p>===</p><p>should be leftover</p>";
-
-      phantomWrapper.createPage(args, function (err, page, leftoverMarkup) {
-        should.not.exist(err);
-        should.exist(page);
-        should.exist(leftoverMarkup);
-
-        page.should.contain("<img width=\"100\" height=\"100\" src=\"foo.png\">");
-        page.should.not.contain("<p>should be leftover</p>");
-        leftoverMarkup.should.contain("<p>should be leftover</p>");
-
-        done();
-      });
-    });
     it("should strip out empty <p> tags", function (done) {
       args.markup = "<p></p><p>hello</p><p></p>";
 
@@ -165,7 +136,7 @@ describe("phantom-wrapper", function () {
         should.exist(page);
         should.exist(leftoverMarkup);
 
-        page.should.not.contain("<p></p>");
+        page.should.not.containEql("<p></p>");
         done();
       });
     });
@@ -177,11 +148,11 @@ describe("phantom-wrapper", function () {
         should.exist(page);
         should.exist(leftoverMarkup);
 
-        page.should.contain("<p>foo</p>");
-        page.should.contain("<p>baz</p>");
+        page.should.containEql("<p>foo</p>");
+        page.should.containEql("<p>baz</p>");
 
-        leftoverMarkup.should.not.contain("bar");
-        leftoverMarkup.should.not.contain("bla");
+        leftoverMarkup.should.not.containEql("bar");
+        leftoverMarkup.should.not.containEql("bla");
 
         done();
       });
@@ -217,7 +188,7 @@ describe("phantom-wrapper", function () {
   describe("#generatePdfPage()", function () {
     var args;
 
-    before(function (done) {
+    before(function () {
       // need this because the phantom script creates its own dir
       opts.pathToOutput = os.tmpdir() + "/apoc_out/";
 
@@ -225,15 +196,13 @@ describe("phantom-wrapper", function () {
         pathToPdf: opts.pathToOutput + "output.pdf",
         markup: "<p>Hello!</p>",
         dimensions: {
-          width: opts.stock.width + opts.bleed * 2,
-          height: opts.stock.height + opts.bleed * 2
+          width: dimensions.stock.width + dimensions.bleed * 2,
+          height: dimensions.stock.height + dimensions.bleed * 2
         }
       };
-      phantomWrapper.initCreatePdfPage(done);
     });
     after(function (done) {
       fs.remove(opts.pathToOutput, done);
-      phantomWrapper.cleanup();
     });
     it("should generate a pdf from an html string", function (done) {
       phantomWrapper.generatePdfPage(args, function (err) {
@@ -241,7 +210,7 @@ describe("phantom-wrapper", function () {
         // check if file is a pdf - this has the side effect of checking if file exists, too
         helper.getFileMimeType(opts.pathToOutput + "output.pdf", function (err, mimetype) {
           should.not.exist(err);
-          mimetype.should.include("application/pdf");
+          mimetype.should.containEql("application/pdf");
           done();
         });
       });
@@ -252,7 +221,7 @@ describe("phantom-wrapper", function () {
         helper.getPdfPaperSize(args.pathToPdf, function (err, paperSize) {
           should.not.exist(err);
           // 431 x 607 pts is 152 x 214.1mm, which is more or less A5 with 2mm bleed
-          paperSize.should.include("431 x 607");
+          paperSize.should.containEql("431 x 607");
           done();
         });
       });

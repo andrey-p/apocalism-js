@@ -1,3 +1,16 @@
+0.4.0
+===
+
+Massive massive rewrite!
+
+- updated all dependencies
+- moved all code that deals with modifying the text into a separate folder of single-purpose modules (see the `formatters` folder)
+- moved all code that outputs stuff to the output folder into a series of single-purpose modules (see the `outputters` folder)
+- generally cleaned up, streamlined and made everything loads more modular
+- streamlined CLI
+- switched to using `ectoplasm` for handling PhantomJS scripts
+- made sure everything is true async to avoid unleashing Zalgo
+
 0.3.14
 ===
 

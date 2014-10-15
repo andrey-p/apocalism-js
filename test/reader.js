@@ -4,6 +4,7 @@ var should = require("should"),
   reader = require("../lib/reader.js"),
   monkey = require("monkey-patch"),
   fs = require("fs"),
+  allSections = require("../lib/common-data/sections"),
   helper = require("./helper.js"),
   opts = helper.getDefaultOpts();
 
@@ -23,26 +24,23 @@ describe("reader", function () {
     afterEach(function () {
       monkey.unpatch(fs);
     });
-    it("should return a sections object containing strings", function (done) {
-      reader.read(function (err, sections) {
+    it("should return an array of text chunks formatted in the right way", function (done) {
+      reader.read(function (err, chunks) {
         should.not.exist(err);
-        should.exist(sections);
+        should.exist(chunks);
 
-        sections.should.be.type("object");
+        chunks.should.be.an.instanceOf(Array);
 
-        [
-          "front-cover",
-          "back-cover",
-          "inside-front-cover",
-          "inside-back-cover",
-          "front-matter",
-          "back-matter",
-          "body"
-        ].forEach(function (sectionName) {
-          sections.should.have.property(sectionName);
+        chunks.forEach(function (chunk) {
+          chunk.content.should.be.type("string");
+          chunk.section.should.be.type("string");
+          allSections.should.containEql(chunk.section);
+
+          if (chunk.section === "body") {
+            chunk.content.should.containEql("ipsum");
+          }
         });
 
-        sections.body.should.contain("ipsum");
         done();
       });
     });
@@ -69,11 +67,11 @@ describe("reader", function () {
     it("should read the secondary book files", function (done) {
       var filesLeftToRead = [
         "front-cover",
-        "back-cover",
         "inside-front-cover",
-        "inside-back-cover",
         "front-matter",
-        "back-matter"
+        "back-matter",
+        "inside-back-cover",
+        "back-cover"
       ];
 
       monkey.patch(fs, {
@@ -99,71 +97,11 @@ describe("reader", function () {
         done();
       });
     });
-    it("should fall back to images whenever a corresponding markdown file doesn't exist", function (done) {
-      // front-cover.md exists in the folder structure,
-      // so it shouldn't check for existing pngs
-      var filesLeftToRead = [
-        "back-cover",
-        "inside-front-cover",
-        "inside-back-cover"
-      ];
-
-      monkey.patch(fs, {
-        exists: function (filename, callback) {
-          var i;
-
-          // remove files that have been looked for
-          for (i = 0; i < filesLeftToRead.length; i += 1) {
-
-            if (filename.indexOf("front-matter.png") > -1) {
-              throw new Error("shouldn't be checking for front-matter since md file exists");
-            }
-
-            if (filename.indexOf(filesLeftToRead[i] + ".png") > -1) {
-              filesLeftToRead.splice(i, 1);
-              break;
-            }
-          }
-
-          // pass to patched method
-          fs.___monkey.exists(filename, callback);
-        }
-      });
-
-      reader.read(function (err) {
-        should.not.exist(err);
-        filesLeftToRead.length.should.equal(0);
-        done();
-      });
-    });
-    it("should be checking for a jpg file for the covers if a png doesn't exist", function (done) {
-      var hasLookedForFrontCoverJpg = false,
-        hasLookedForBackCoverJpg = false;
-
-      monkey.patch(fs, {
-        exists: function (filename, callback) {
-          if (filename.indexOf("front-cover.jpg") > -1) {
-            hasLookedForFrontCoverJpg = true;
-          } else if (filename.indexOf("back-cover.jpg") > -1) {
-            hasLookedForBackCoverJpg = true;
-          }
-
-          fs.___monkey.exists(filename, callback);
-        }
-      });
-
-      reader.read(function (err) {
-        should.not.exist(err);
-        hasLookedForFrontCoverJpg.should.equal(true);
-        hasLookedForBackCoverJpg.should.equal(true);
-        done();
-      });
-    });
     it("should throw an error if the content markdown file doesn't exist", function (done) {
       reader.init({ filename: "does-not-exist.md" }, function () {
         reader.read(function (err) {
           should.exist(err);
-          err.should.include("Could not find");
+          err.should.containEql("Could not find");
           done();
         });
       });

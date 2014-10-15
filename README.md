@@ -32,7 +32,8 @@ Requirements
 ----
 
 - NodeJS (tested on v0.10.22)
-- pdftk
+- [pdftk](https://www.pdflabs.com/tools/pdftk-server/)
+- [graphicsmagick](http://www.graphicsmagick.org/)
 
 Installation
 ----

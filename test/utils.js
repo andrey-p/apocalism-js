@@ -20,4 +20,29 @@ describe("utils", function () {
       result.should.equal("<h1>foo</h1><p>bar!</p>");
     });
   });
+  describe("#nextTick()", function () {
+    it("should call the callback passed with args", function (done) {
+      var callback = function (str1, str2) {
+        str1.should.equal("hello");
+        str2.should.equal("world");
+        done();
+      };
+
+      utils.nextTick(callback, "hello", "world");
+    });
+    it("should be true async", function (done) {
+      var str,
+        callback = function () {
+          str = "bar";
+        };
+
+      utils.nextTick(callback);
+      str = "foo";
+
+      setTimeout(function () {
+        str.should.equal("bar");
+        done();
+      }, 50);
+    });
+  });
 });

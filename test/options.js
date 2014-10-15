@@ -1,7 +1,6 @@
 "use strict";
 
 var should = require("should"),
-  template = require("../lib/template.js"),
   options = require("../lib/options.js");
 
 describe("options", function () {
@@ -11,7 +10,7 @@ describe("options", function () {
       validInput = {
         pathToOutput: "test/",
         pathToImages: "test/path/",
-        template: "pdf",
+        output: "pdf",
         filename: "test"
       };
       options.reset();

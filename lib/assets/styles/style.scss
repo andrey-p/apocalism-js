@@ -1,0 +1,150 @@
+/* vars */
+
+/*
+the following are injected before compiling:
+  $stock-width
+  $stock-height
+  $bleed
+  $margin-top
+  $margin-bottom
+  $margin-outer
+  $margin-spine
+*/
+
+/* page layout */
+
+$text-block-width: $stock-width - ($margin-outer + $margin-spine);
+$text-block-height: $stock-height - ($margin-top + $margin-bottom);
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page-container {
+  position: relative;
+  width: $text-block-width * 1mm;
+  height: $text-block-height * 1mm;
+  overflow: hidden;
+  padding-top: $margin-top * 1mm;
+
+  // the 0.6 is needed to resolve a rounding (?) issue with phantomjs - the page overflows otherwise
+  padding-bottom: ($margin-bottom - 0.6) * 1mm;
+	padding-left: $margin-outer * 1mm;
+	padding-right: $margin-outer * 1mm;
+  &.recto {
+    padding-left: $margin-spine * 1mm;
+    padding-right: $margin-outer * 1mm;
+  }
+  &.verso {
+    padding-left: $margin-outer * 1mm;
+    padding-right: $margin-spine * 1mm;
+  }
+  &.body, &.front-matter, &.back-matter {
+    img {
+      position: relative;
+    }
+  }
+  &.front-cover, &.back-cover {
+	@include full-page-illustration(-$bleed, -$bleed);
+  }
+  &.has-bleed {
+	padding-bottom: ($margin-bottom + $bleed + 1.7) * 1mm;
+	padding-left: ($margin-outer + $bleed) * 1mm;
+	padding-right: ($margin-outer + $bleed) * 1mm;
+	&.recto {
+		padding-left: ($margin-spine + $bleed) * 1mm;
+		padding-right: ($margin-outer + $bleed) * 1mm;
+	}
+	&.verso {
+		padding-left: ($margin-outer + $bleed) * 1mm;
+		padding-right: ($margin-spine + $bleed) * 1mm;
+	}
+	&.front-cover, &.back-cover {
+		@include full-page-illustration;
+	}
+  }
+}
+
+.text-block {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  position: relative;
+}
+
+.page-number {
+  font-family: "DejaVu Serif", sans-serif;
+  position: absolute;
+  bottom: ($margin-bottom / 2) * 1mm;
+  width: 10mm;
+  text-align: center;
+  left: 50%;
+  margin-left: -5mm;
+
+  .has-bleed & {
+    bottom: ($margin-bottom / 2 + $bleed) * 1mm;
+  }
+
+  // until I figure out some kind of pagination scheme for this
+  .front-cover &,
+  .back-cover &,
+  .inside-front-cover &,
+  .inside-back-cover &,
+  .front-matter &,
+  .back-matter & {
+    display: none;
+  }
+}
+
+/* styles */
+h1, h2, h3, h4, h5 {
+  font-family: "DejaVu Serif", sans-serif;
+}
+
+p {
+  font-family: "DejaVu Serif", sans-serif;
+  font-size: 12pt;
+  line-height: 1.5em;
+  text-indent: 1.5em;
+  padding: 0px;
+  margin: 0px;
+
+  hr + & {
+    text-indent: 0;
+  }
+
+  .body & {
+    &.contd, &.opening {
+      text-indent: 0;
+    }
+
+    &.opening {
+      position: relative;
+    }
+
+    &.opening .quo, &.opening .dquo {
+      position: absolute;
+      left: -7pt;
+    }
+
+    &.opening .cap {
+      float: left;
+      font-size: 58pt;
+      padding: 0 4pt 0 0;
+      line-height: 58pt;
+      margin-bottom: -10pt;
+    }
+  }
+}
+
+hr {
+  border: 0;
+  margin-bottom: 3em;
+
+  // hr at the beginning or end of page
+  // needs to be graphical
+  &:first-child, &:last-child {
+	@include graphical-hr();
+  }
+}

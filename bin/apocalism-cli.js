@@ -9,32 +9,47 @@ var program = require("commander"),
 
 program
   .version(version)
-  .option("-q, --quiet", "Don't output progress info")
-  .option("-d, --debug", "Output individual html pages in output/debug folder (useful for tweaking PDF layouts)")
-  .option("--ignore-blank", "Don't output blank pages")
-  .usage("[command] <file>");
+  .usage("[options] <file>")
+  .option("-q, --quiet", "don't output progress info")
+  .option("--ignore-blank", "don't output blank pages")
+  .option("--no-bleed", "don't add bleed")
+  .option("--no-concat", "output a file per page as opposed to a single file")
+  .option("--lo-res", "use low resolution images")
+  .option("-o, --output [format]", "output format, possible values pdf (default) and html", "pdf")
+  .option("--webpage", "shorthand for -o html --lo-res --no-bleed --ignore-blank")
+  .option("--download", "shorthand for -o pdf --lo-res --no-bleed --ignore-blank")
+  .option("--debug", "shorthand for -o html --no-concat (useful for debugging layout issues)")
+  .parse(process.argv);
 
-program
-  .option("--no-bleed", "PDF only: Don't add bleed")
-  .option("--lo-res", "PDF only: Use low resolution images")
-  .command("* <file>")
-  .action(function (filename, options) {
-    main.compilePdf(filename, {
-      quiet: program.quiet,
-      hasBleed: program.bleed,
-      loRes: program.loRes,
-      debug: program.debug,
-      ignoreBlank: program.ignoreBlank
-    });
-  });
+if (program.output !== "pdf" && program.output !== "html") {
+  console.error("Error: expected output format to be either pdf or html");
+  process.exit();
+}
 
-program
-  .command("webpage <file>")
-  .action(function (filename, option) {
-    main.compileWebpage(filename, {
-      quiet: program.quiet,
-      ignoreBlank: program.ignoreBlank
-    });
-  });
+if (program.webpage) {
+  program.output = "html";
+  program.loRes = true;
+  program.bleed = false;
+  program.ignoreBlank = true;
+}
 
-program.parse(process.argv);
+if (program.download) {
+  program.output = "pdf";
+  program.loRes = true;
+  program.bleed = false;
+  program.ignoreBlank = true;
+}
+
+if (program.debug) {
+  program.output = "html";
+  program.concat = false;
+}
+
+main.compile(program.args[0], {
+  output: program.output,
+  quiet: program.quiet,
+  hasBleed: program.bleed,
+  concat: program.concat,
+  loRes: program.loRes,
+  ignoreBlank: program.ignoreBlank
+});
