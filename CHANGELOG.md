@@ -1,3 +1,9 @@
+0.4.1
+===
+
+- added --no-images flag
+- added block-level style hooks for lists
+
 0.4.0
 ===
 
