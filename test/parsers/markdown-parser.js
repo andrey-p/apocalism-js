@@ -48,6 +48,18 @@ describe("markdown-parser", function () {
       result = parser.parseMarkdown(input);
       result.should.containEql("<em class=\"foo\">hello</em> <em class=\"bar baz\">hello</em>!");
     });
+    it("should add classes to unordered lists", function () {
+      var result, input;
+
+      input = "- foo\n"
+        + "- bar\n"
+        + "{baz}\n";
+
+      result = parser.parseMarkdown(input);
+      result.should.containEql("<ul class=\"baz\">");
+      result.should.containEql("<li>foo</li>");
+      result.should.containEql("<li>bar</li>");
+    });
     it("should NOT add '.opening' and cap to the first paragraph that's inside another element (ex. a blockquote)", function () {
       var result, input;
 
