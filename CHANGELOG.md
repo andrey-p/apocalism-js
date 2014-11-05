@@ -1,3 +1,8 @@
+0.4.2
+===
+
+- updated to latest version of ectoplasm (contains bugfixes, slightly different API)
+
 0.4.1
 ===
 
