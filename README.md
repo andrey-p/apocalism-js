@@ -53,15 +53,4 @@ Loads of useful info in the [wiki](https://github.com/andrey-p/apocalism-js/wiki
 But... why?
 ----
 
-Some time ago I started working on an illustrated short story thing called *Apocalism!*.
-The lack of suitable tools was at least part of the reason why I never managed to finish it.
-
-As a Linux user, I tried a couple of OSS desktop publishing tools.
-
-Scribus was ok but didn't fit in with the efficient command-line-based workflow I'd become used to as a programmer, and forced me to work on content and layout separately.
-
-LaTeX was a step in the right direction but was too restrictive. Creating anything that didn't look like a dissertation was a headache, and I gave up on it after spending an afternoon trying to move an image 3mm to the right.
-
-At the end I decided it would be loads easier to roll my own solution, and put this together.
-
-I named it `apocalism.js` in memory of that long-dead project.
+I've written up a [blog post](http://andrey-p.github.io/blog/2014/10/24/apocalism-js/) about how and why I wrote this tool.
