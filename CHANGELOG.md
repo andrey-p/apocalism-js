@@ -1,3 +1,8 @@
+0.4.3
+===
+
+- added output format to page classes
+
 0.4.2
 ===
 

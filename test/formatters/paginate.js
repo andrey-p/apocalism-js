@@ -25,7 +25,8 @@ describe("paginate", function () {
     args = {
       dimensions: opts.dimensions,
       hasBleed: true,
-      ignoreBlank: false
+      ignoreBlank: false,
+      output: "pdf"
     };
 
     veryLongText = lipsum({
@@ -202,6 +203,25 @@ describe("paginate", function () {
 
       pages.length.should.equal(1);
       pages[0].content.should.equal("<p>lorem ipsum</p>");
+
+      done();
+    });
+  });
+  it("should add the output format as a page class", function (done) {
+    var input = [{
+      content: "<p>lorem ipsum</p>",
+      classes: ["body"],
+      section: "body"
+    }];
+
+    args.output = "html";
+
+    paginate(args, input, function (err, pages) {
+      should.not.exist(err);
+      should.exist(pages);
+
+      pages.length.should.equal(1);
+      pages[0].classes.should.containEql("html");
 
       done();
     });
