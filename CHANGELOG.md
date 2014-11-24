@@ -1,3 +1,8 @@
+0.4.4
+===
+
+- minor performance increase for PDF generation
+
 0.4.3
 ===
 
