@@ -32,7 +32,6 @@ describe("reader", function () {
         chunks.should.be.an.instanceOf(Array);
 
         chunks.forEach(function (chunk) {
-          chunk.content.should.be.type("string");
           chunk.section.should.be.type("string");
           allSections.should.containEql(chunk.section);
 
@@ -40,6 +39,44 @@ describe("reader", function () {
             chunk.content.should.containEql("ipsum");
           }
         });
+
+        done();
+      });
+    });
+    it("should return null for sections that don't exist", function (done) {
+      reader.read(function (err, chunks) {
+        should.not.exist(err);
+        should.exist(chunks);
+
+        var hasBackMatter = false;
+
+        chunks.forEach(function (chunk) {
+          if (chunk.section === "back-matter") {
+            should(chunk.content).equal(null);
+            hasBackMatter = true;
+          }
+        });
+
+        hasBackMatter.should.equal(true);
+
+        done();
+      });
+    });
+    it("should return an empty string for sections that are empty files", function (done) {
+      reader.read(function (err, chunks) {
+        should.not.exist(err);
+        should.exist(chunks);
+
+        var hasFrontMatter = false;
+
+        chunks.forEach(function (chunk) {
+          if (chunk.section === "front-matter") {
+            chunk.content.should.equal("");
+            hasFrontMatter = true;
+          }
+        });
+
+        hasFrontMatter.should.equal(true);
 
         done();
       });
