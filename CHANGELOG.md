@@ -1,3 +1,9 @@
+0.5.0
+===
+
+- specified when an empty section does not generate an empty page [as mentioned here](https://github.com/andrey-p/apocalism-js/issues/31) (potentially breaking some styles)
+- fixed incorrect shebang for the executable (issue [here](https://github.com/andrey-p/apocalism-js/issues/30))
+
 0.4.4
 ===
 
