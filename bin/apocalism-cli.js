@@ -1,5 +1,4 @@
-#!/usr/bin/nodejs
-/*jslint indent: 2, node: true*/
+#!/usr/bin/env node
 "use strict";
 
 var program = require("commander"),
