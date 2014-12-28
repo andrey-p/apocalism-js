@@ -81,6 +81,25 @@ describe("reader", function () {
         done();
       });
     });
+    it("should return an empty string for image fallback sections", function (done) {
+      reader.read(function (err, chunks) {
+        should.not.exist(err);
+        should.exist(chunks);
+
+        var hasBackCover = false;
+
+        chunks.forEach(function (chunk) {
+          if (chunk.section === "back-cover") {
+            chunk.content.should.equal("");
+            hasBackCover = true;
+          }
+        });
+
+        hasBackCover.should.equal(true);
+
+        done();
+      });
+    });
     it("should read the main story file", function (done) {
       var fileHasBeenRead = false;
 

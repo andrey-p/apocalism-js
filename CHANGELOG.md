@@ -1,3 +1,8 @@
+0.5.1
+===
+
+- unbroke previous release (oops)
+
 0.5.0
 ===
 
