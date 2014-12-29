@@ -15,14 +15,14 @@ describe("markdown-parser", function () {
       result.should.containEql("&#8212;"); // em dash
       result.should.containEql("&#8230;"); // ellipsis
     });
-    it("should mark the first letter as the cap", function () {
+    it("should give a cap to any paragraph with a class of 'opening'", function () {
       var result,
         input = "# heading\n\n";
-      input += "para1\n\n";
+      input += "para1\n{opening}\n\n";
       input += "para2\n\n";
 
       result = parser.parseMarkdown(input);
-      result.should.containEql("<p><span class=\"cap\">p</span>ara1</p>");
+      result.should.containEql("<p class=\"opening\"><span class=\"cap\">p</span>ara1</p>");
       result.should.not.containEql("<p><span class=\"cap\">p</span>ara2</p>");
     });
     it("should add classes to block level elements properly", function () {
@@ -37,7 +37,7 @@ describe("markdown-parser", function () {
 
       result = parser.parseMarkdown(input);
       result.should.containEql("<h1 class=\"foo bar\">heading</h1>");
-      result.should.containEql("<p class=\"bar\"><span class=\"cap\">p</span>aragraph1</p>");
+      result.should.containEql("<p class=\"bar\">paragraph1</p>");
       result.should.containEql("<p class=\"baz\">paragraph2</p>");
     });
     it("should add classes to inline level elements properly", function () {
@@ -63,21 +63,21 @@ describe("markdown-parser", function () {
     it("should NOT add a cap to non-alphanumeric characters", function () {
       var result, input;
 
-      input = "===";
+      input = "===\n{opening}";
       result = parser.parseMarkdown(input);
-      result.should.not.containEql("<p><span class=\"cap\">=</span>==</p>");
-      result.should.containEql("<p>===</p>");
+      result.should.not.containEql("<p class=\"opening\"><span class=\"cap\">=</span>==</p>");
+      result.should.containEql("<p class=\"opening\">===</p>");
     });
     it("should add a cap and give a quotation mark the quo class if it the opening para begins with a quote", function () {
       var result, input;
 
-      input = "'Hello!'";
+      input = "'Hello!'\n{opening}";
       result = parser.parseMarkdown(input);
-      result.should.containEql("<p><span class=\"quo\">&#8216;</span><span class=\"cap\">H</span>ello!&#8217;</p>");
+      result.should.containEql("<p class=\"opening\"><span class=\"quo\">&#8216;</span><span class=\"cap\">H</span>ello!&#8217;</p>");
 
-      input = "\"Hello!\"";
+      input = "\"Hello!\"\n{opening}";
       result = parser.parseMarkdown(input);
-      result.should.containEql("<p><span class=\"dquo\">&#8220;</span><span class=\"cap\">H</span>ello!&#8221;</p>");
+      result.should.containEql("<p class=\"opening\"><span class=\"dquo\">&#8220;</span><span class=\"cap\">H</span>ello!&#8221;</p>");
     });
   });
 });
