@@ -1,3 +1,8 @@
+0.5.2
+===
+
+- temporary fix for [#34](https://github.com/andrey-p/apocalism-js/issues/34)
+
 0.5.1
 ===
 
