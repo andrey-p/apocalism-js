@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "0.11"
   - "0.10"
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y graphicsmagick pdftk
 before_script: make lint
 script: make test
 after_script: make example
