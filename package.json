@@ -22,7 +22,7 @@
     "async": "0.9.x",
     "case": "1.0.x",
     "commander": "2.3.x",
-    "ectoplasm": "^0.3.0",
+    "ectoplasm": "^0.3.1",
     "fs-extra": "0.12.x",
     "gm": "1.16.x",
     "handlebars": "2.0.x",
@@ -31,7 +31,7 @@
     "json2sass": "0.2.x",
     "marked": "0.3.x",
     "node-sass": "0.9.x",
-    "phantomjs": "^1.9.12",
+    "phantomjs": "1.9.15",
     "typogr": "0.6.x"
   },
   "devDependencies": {
