@@ -4,7 +4,7 @@ node_js:
   - "0.10"
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y graphicsmagick pdftk
+  - sudo apt-get install -y graphicsmagick pdftk poppler-utils
 before_script: make lint
 script: make test
 after_script: make example
