@@ -1,3 +1,9 @@
+0.5.4
+===
+
+- updated dependencies
+- added Travis CI integration
+
 0.5.3
 ===
 
