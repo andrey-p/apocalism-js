@@ -3,6 +3,8 @@ Apocalism.js
 
 Automate your short story build process
 
+[![Build Status](https://travis-ci.org/andrey-p/apocalism-js.svg?branch=master)](https://travis-ci.org/andrey-p/apocalism-js)
+
 What is this?
 ----
 
@@ -34,6 +36,7 @@ Requirements
 - NodeJS (tested on v0.10.22)
 - [pdftk](https://www.pdflabs.com/tools/pdftk-server/)
 - [graphicsmagick](http://www.graphicsmagick.org/)
+- pdfinfo (for local tests only - your distro might have this already)
 
 Installation
 ----
