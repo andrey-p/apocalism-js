@@ -1,3 +1,9 @@
+0.5.5
+===
+
+- updated dependencies
+- switched to markdown-it for markdown parsing
+
 0.5.4
 ===
 
