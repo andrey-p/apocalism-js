@@ -14,7 +14,7 @@ describe("toHtml", function () {
       should.exist(output);
       output.length.should.equal(1);
       // more detailed markdown parser tests are in the parsers folder
-      output[0].content.should.equal("<h1>heading</h1>");
+      output[0].content.should.equal("<h1>heading</h1>\n");
 
       done();
     });

@@ -28,7 +28,7 @@ describe("markdown-parser", function () {
     it("should add classes to block level elements properly", function () {
       var result, input;
 
-      input = "# heading\n";
+      input = "# heading ";
       input += "{foo bar}\n\n";
       input += "paragraph1\n";
       input += "{bar}\n\n";
