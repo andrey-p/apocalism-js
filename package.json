@@ -28,7 +28,8 @@
     "handlebars": "2.0.x",
     "he": "0.5.x",
     "json2sass": "0.2.x",
-    "marked": "0.3.x",
+    "markdown-it": "^3.0.4",
+    "markdown-it-classy": "0.0.1",
     "node-sass": "^2.0.0-beta",
     "phantomjs": "^1.9.15",
     "typogr": "0.6.x"
